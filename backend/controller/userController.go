@@ -16,7 +16,10 @@ func SignUp(c *gin.Context) {
 	//requested data
 
 	var req struct {
-		Email string
+		First_name string
+		Last_name string
+		Email string 
+		Phone string
 		Password string
 	}
 
@@ -38,7 +41,7 @@ func SignUp(c *gin.Context) {
 	}
 
 	//construct user
-	user := model.User{Email:req.Email, Password: string(hashed)}
+	user := model.User{First_name:req.First_name, Last_name:req.Last_name, Email:req.Email, Phone:req.Phone, Password: string(hashed)}
 
 	result := loader.DB.Create(&user)
 
