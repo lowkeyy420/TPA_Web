@@ -61,12 +61,11 @@ func SignUp(c *gin.Context) {
 
 func Login(c *gin.Context) {
 	//requested data
-
 	var req struct {
-		Email string
+		Email string 
 		Password string
 	}
-
+	// make sure its JSON
 	if c.Bind(&req) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
@@ -74,13 +73,14 @@ func Login(c *gin.Context) {
 		return;
 	}
 
-	//check user
+	//check user 
 	var user model.User
 	loader.DB.First(&user, "email = ?", req.Email)
+	
 
 	if user.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid email / pass",
+			"error": "Invalid account",
 		})
 		return;
 	}
@@ -112,7 +112,7 @@ func Login(c *gin.Context) {
 	}
 	//auto set cookie
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("auth", tokenString, 3600 * 24, "", "", false, true)
+	c.SetCookie("auth", tokenString, 3600 * 24, "", "", false, false)
 
 	//response
 	c.JSON(http.StatusOK, gin.H{

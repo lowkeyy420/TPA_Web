@@ -8,6 +8,6 @@ export interface IUserData {
 }
 
 export interface IUserLogin {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
