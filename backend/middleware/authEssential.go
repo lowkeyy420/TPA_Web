@@ -14,13 +14,20 @@ import (
 
 func RequireAuth(c *gin.Context) {
 	//get token
-	tokenString, err := c.Cookie("auth")
-	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
-	}
+	// tokenString, err := c.Cookie("Authorization")
+	var header = c.Request.Header.Get("Authorization")
+	fmt.Println("auth : " + header)
+	var tokenString = header[7:]
+	
+	
+	// if err != nil {
+		// fmt.Println(err)
+		// c.AbortWithStatus(http.StatusUnauthorized)
+	// }
 
+	
 	//validate token
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token,_ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
