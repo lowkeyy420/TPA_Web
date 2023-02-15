@@ -1,13 +1,12 @@
 import { useAxiosPost } from "@/hooks/useAxiosPost";
 import { IUserLogin } from "@/interfaces/IUserData";
-import { useRouter } from "next/router";
+import Head from "next/head";
 import { FormEvent, useRef } from "react";
 
 function Login() {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const url = process.env.BASE_URL + "login";
-  const nav = useRouter();
 
   const [loading, response, error, request] = useAxiosPost<IUserLogin>(
     {
@@ -30,6 +29,12 @@ function Login() {
 
   return (
     <>
+      <Head>
+        <title>Login</title>
+        <meta name="description" content="OldEgg PC Ecommerce" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <form onSubmit={submitHandler}>
         <h3>Sign In</h3>
         <input type="email" required ref={emailInputRef} />

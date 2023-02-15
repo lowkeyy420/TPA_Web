@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 //config example {method: 'GET', url : 'http://localhost:3000/users'}
 
@@ -11,20 +11,32 @@ export const useAxios = <T,>(
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<T>();
   const [error, setError] = useState("");
+  const token = useRef<string | null>("");
 
   useEffect(() => {
-    if (loadOnStart) sendRequest();
+    token.current = `bearer ${localStorage.getItem("token")}`;
+    if (loadOnStart) sendRequest(token.current);
     else setLoading(false);
   }, []);
 
   const request = () => {
-    sendRequest();
+    sendRequest(token.current);
   };
 
-  const sendRequest = () => {
+  const sendRequest = (tkn: any) => {
+    const header = {
+      Authorization: tkn,
+    };
+    const payload = {
+      ...config,
+      headers: {
+        ...header,
+      },
+    };
+
     setLoading(true);
 
-    axios(config)
+    axios(payload)
       .then((res) => {
         setError("");
         setData(res.data);

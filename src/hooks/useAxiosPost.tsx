@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { useEffect, useState } from "react";
+import AuthContext from "@/store/Authcontext";
+import axios, { AxiosRequestConfig } from "axios";
+import { useContext, useState } from "react";
 
 //config example {method: 'POST', url : 'http://localhost:3000/users'}
 
@@ -11,6 +12,7 @@ export const useAxiosPost = <T,>(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
   const [response, setResponse] = useState("");
+  const authCtx: any = useContext(AuthContext);
 
   const request = (data: T) => {
     sendRequest(data);
@@ -24,13 +26,17 @@ export const useAxiosPost = <T,>(
       data: { ...data },
     };
 
-    console.log(payload);
-
     axios(payload)
       .then((res) => {
         setError("");
         setResponse(res.data);
-        console.log(res);
+        if (type === "login") {
+          const token = res.data.token;
+          const expirationTime = new Date(
+            new Date().getTime() + res.data.expiresin * 100
+          );
+          authCtx.login(token, expirationTime);
+        }
       })
       .catch((error: unknown | any | string) => {
         const msg: string | unknown = error.response?.data["error"];

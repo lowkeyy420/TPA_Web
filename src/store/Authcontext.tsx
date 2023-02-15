@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { ProviderProps, useEffect, useState } from "react";
 
 let logoutTimer: any;
 
 const AuthContext: any = React.createContext({
   token: "",
   isLoggedIn: false,
-  login: (token: string) => {},
+  login: (token: string, expiration: any) => {},
   logout: () => {},
 });
 
@@ -20,8 +20,13 @@ const calculateRemainingTime = (expirationTime: any) => {
 };
 
 const retrieveStoredToken = () => {
-  const storedToken = localStorage.getItem("token");
-  const storedExpirationDate = localStorage.getItem("expirationTime");
+  let storedToken;
+  let storedExpirationDate;
+
+  if (typeof window !== "undefined") {
+    storedToken = localStorage.getItem("token");
+    storedExpirationDate = localStorage.getItem("expirationTime");
+  }
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
 
@@ -46,7 +51,6 @@ export const AuthContextProvider = (props: MyProps) => {
   let initialToken;
   if (tokenData) {
     initialToken = tokenData.token;
-    console.log(tokenData);
   }
   const [token, setToken] = useState(initialToken);
 
@@ -62,9 +66,9 @@ export const AuthContextProvider = (props: MyProps) => {
     }
   };
 
-  const loginHandler = (token: string, expirationTime: any) => {
-    setToken(token);
-    localStorage.setItem("token", token);
+  const loginHandler = (tkn: string, expirationTime: any) => {
+    setToken(tkn);
+    localStorage.setItem("token", tkn);
     localStorage.setItem("expirationTime", expirationTime);
 
     const remainingTime = calculateRemainingTime(expirationTime);
@@ -75,7 +79,6 @@ export const AuthContextProvider = (props: MyProps) => {
   //set timer kalau ada
   useEffect(() => {
     if (tokenData) {
-      console.log(tokenData.duration);
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
     }
   }, [tokenData]);

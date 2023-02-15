@@ -102,7 +102,7 @@ func Login(c *gin.Context) {
 	})
 
 	//sign and get
-	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	generatedToken, err := token.SignedString([]byte(os.Getenv("SECRET")))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -112,11 +112,16 @@ func Login(c *gin.Context) {
 	}
 	//auto set cookie
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("auth", tokenString, 3600 * 24, "", "", false, false)
+	
+	
+	//expiration time
+	exp := 3600*24
+	c.SetCookie("token", generatedToken, exp, "", "", false, false)
 
 	//response
 	c.JSON(http.StatusOK, gin.H{
-		"token" : tokenString,
+		"token" : generatedToken,
+		"expiresin" : exp,
 	})
 }
 

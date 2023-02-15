@@ -5,14 +5,8 @@ import Navbar from "../components/layout/Navbar";
 export default function Home() {
   return (
     <>
-      <Head>
-        <title>OldEgg</title>
-        <meta name="description" content="OldEgg PC Ecommerce" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
-      </Head>
       <Layout>
-        <h1>ASDsad</h1>
+        <h1>Home Page</h1>
       </Layout>
     </>
   );
