@@ -1,3 +1,4 @@
+import RoutingGuard from "@/other/RoutingGuard";
 import { AuthContextProvider } from "@/store/Authcontext";
 import type { AppProps } from "next/app";
 
@@ -5,7 +6,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthContextProvider>
-        <Component {...pageProps} />
+        <RoutingGuard>
+          <Component {...pageProps} />
+        </RoutingGuard>
       </AuthContextProvider>
     </>
   );

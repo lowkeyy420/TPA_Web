@@ -1,3 +1,4 @@
+import Layout from "@/components/layout/Layout";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
 import { IUserLogin } from "@/interfaces/IUserData";
 import Head from "next/head";
@@ -28,7 +29,7 @@ function Login() {
   }
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Login</title>
         <meta name="description" content="OldEgg PC Ecommerce" />
@@ -44,7 +45,7 @@ function Login() {
       {error && <h1>{error}</h1>}
       {loading && <h1>loading...</h1>}
       {response.token && <h1>Successfully Logged In {response.token}</h1>}
-    </>
+    </Layout>
   );
 }
 
