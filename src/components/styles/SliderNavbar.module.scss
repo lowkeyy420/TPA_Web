@@ -1,0 +1,27 @@
+@import "./colors.module.scss";
+
+.slider_nav_container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: hidden;
+}
+
+.slider_nav_container:hover {
+  overflow-x: scroll;
+}
+
+.slider_nav_container::-webkit-scrollbar {
+  height: 4px;
+  border-radius: 100px;
+}
+
+.slider_nav_container::-webkit-scrollbar-track {
+  background: orange;
+  border-radius: 100px;
+}
+
+.slider_nav_container::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+  border-radius: 100px;
+}
