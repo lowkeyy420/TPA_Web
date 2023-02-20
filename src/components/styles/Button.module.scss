@@ -1,0 +1,110 @@
+@import "./colors.module.scss";
+
+.navbar_supportBtn {
+  font-size: 0.75rem;
+  font-weight: bold;
+  width: fit-content;
+  white-space: nowrap;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  color: $white;
+  background-color: var(--navbar-button-color);
+  padding: 5px 15px;
+  border-radius: 34px;
+  transition: 0.1s linear;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar_supportBtn:hover {
+  transform: scale(1.05, 1.05);
+  cursor: pointer;
+}
+
+.nav_childsupportBtn {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+  text-align: center;
+}
+
+.icon {
+  height: 20px;
+}
+
+/*notif button*/
+.notificationBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  border: 2px solid var(--text-color);
+  transition: background-color 0.1s linear;
+  min-width: 35px;
+  height: 35px;
+}
+
+.notificationBtn:hover {
+  background-color: var(--hover-color);
+  cursor: pointer;
+}
+
+/*country button*/
+.countryBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  border: 2px solid var(--text-color);
+  transition: background-color 0.1s linear;
+  min-width: 35px;
+  height: 35px;
+}
+
+.countryBtn:hover {
+  background-color: var(--hover-color);
+  cursor: pointer;
+}
+
+/*return order btn*/
+
+.returnOrderBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 20px;
+  border-radius: 100px;
+  transition: background-color 0.1s linear;
+  font-family: $main-font;
+  font-size: 0.9rem;
+  min-width: 45px;
+  height: 45px;
+}
+
+.returnOrderBtn_bottom {
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.returnOrderBtn:hover {
+  background-color: var(--hover-color);
+  cursor: pointer;
+}
+
+/*cart button*/
+.cartBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50px;
+  height: 40px;
+  border-radius: 34px;
+}
+
+.cartBtn:hover {
+  background-color: var(--hover-color);
+  cursor: pointer;
+}

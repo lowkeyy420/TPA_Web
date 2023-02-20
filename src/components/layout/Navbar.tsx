@@ -1,7 +1,3 @@
-import {
-  faCommentAlt,
-  faCircleQuestion,
-} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import CartButton from "../actions/button/CartButton";
@@ -18,13 +14,46 @@ import SliderNavbar from "../ui/SliderNavbar";
 
 import style from "../styles/Navbar.module.scss";
 import btn from "../styles/Button.module.scss";
+import {
+  faCommentAlt,
+  faCircleQuestion,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
+import logoNav from "../../assets/logoNav.png";
+import { useContext } from "react";
+import AuthContext from "@/store/Authcontext";
 
 function Logo() {
-  return <Link href="/"></Link>;
+  return (
+    <Link href="/">
+      <div className={style.logo}>
+        <Image src={logoNav} alt="" className={style.image} height="50"></Image>
+      </div>
+    </Link>
+  );
 }
 
 function LoginRegisterButton() {
-  return <Link href="/register"></Link>;
+  const authCtx: any = useContext(AuthContext);
+  let username = "Sign In / Register";
+  authCtx.isLoggedIn ? (username = "usr") : (username = "Sign In / Register");
+
+  return (
+    <Link href="/auth/login">
+      <div className={style.loginBtn}>
+        <div className={style.loginBtn_left}>
+          <FontAwesomeIcon icon={faUser} className={style.loginBtn_icon} />
+        </div>
+        <div className={style.loginBtn_right}>
+          <div className={style.loginBtn_top}>
+            <p>Welcome</p>
+          </div>
+          <div className={style.loginBtn_bottom}>{username}</div>
+        </div>
+      </div>
+    </Link>
+  );
 }
 
 const FeedBackButton = () => {
