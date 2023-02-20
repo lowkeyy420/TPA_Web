@@ -1,20 +1,38 @@
-import React from "react";
+import React, { forwardRef, InputHTMLAttributes } from "react";
+import style from "../styles/Input.module.scss";
 
 interface MyProps {
-  email?: boolean;
-  password?: boolean;
-  number?: boolean;
-  area?: boolean;
+  id?: string;
+  type?: string;
   placeholder?: string;
-  height?: number;
-  width?: number;
+  height?: string | number;
+  width?: string | number;
   required?: boolean;
-  onChange: any;
-  value?: any;
+  ref?: any;
+  label?: string;
 }
 
-function AuthInputField() {
-  return <div>AuthInputField</div>;
-}
+const AuthInputField = forwardRef<HTMLInputElement, MyProps>((props, ref) => {
+  const size = {
+    height: props.height,
+    width: props.width,
+  };
+
+  return (
+    <div className={style.authField}>
+      <input
+        id={props.id}
+        type={props.type}
+        placeholder={props.placeholder}
+        style={size}
+        required={props.required}
+        ref={ref}
+      />
+      {props.label && <label htmlFor={props.id}>{props.label}</label>}
+    </div>
+  );
+});
+
+AuthInputField.displayName = "AuthInputField";
 
 export default AuthInputField;

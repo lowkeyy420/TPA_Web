@@ -1,0 +1,58 @@
+/*signup & signin*/
+
+.outerFormContainer_regis {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-top: 10px;
+  background-color: var(--primary-color-light);
+}
+
+.formContainer_regis {
+  height: 45rem;
+  width: 20.7rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  font-family: Open Sans, Helvetica, Arial, sans-serif;
+  line-height: 1.36;
+  background-color: var(--primary-color-light);
+}
+
+.signup_header p {
+  color: var(--text-color);
+}
+
+.signup_business {
+  color: var(--text-color);
+}
+
+.subscribeContainer {
+  padding-top: 20px;
+}
+
+.toggleAuthContainer {
+  height: 20px;
+}
+
+.horizontal_line_container {
+  hr {
+    width: 8rem;
+    opacity: 20%;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.errormsg {
+  color: red !important;
+}
+
+.statusmsg {
+  color: green !important;
+}

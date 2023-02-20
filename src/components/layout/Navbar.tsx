@@ -19,20 +19,10 @@ import {
   faCircleQuestion,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
-import logoNav from "../../assets/logoNav.png";
+
 import { useContext } from "react";
 import AuthContext from "@/store/Authcontext";
-
-function Logo() {
-  return (
-    <Link href="/">
-      <div className={style.logo}>
-        <Image src={logoNav} alt="" className={style.image} height="50"></Image>
-      </div>
-    </Link>
-  );
-}
+import Logo from "../ui/Logo";
 
 function LoginRegisterButton() {
   const authCtx: any = useContext(AuthContext);
@@ -80,7 +70,7 @@ export default function Navbar() {
     <nav className={style.navbar_container}>
       <div className={style.nav_top}>
         <HamburgerToggle />
-        <Logo />
+        <Logo height={50} />
         <SelectAddress />
         <SearchField />
         <NotifButton />

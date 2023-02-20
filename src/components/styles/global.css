@@ -6,6 +6,10 @@
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+body {
+  height: 100%;
+}
+
 a {
   text-decoration: none;
 }
@@ -52,7 +56,7 @@ h6 {
 :root[data-theme="dark"] {
   --background-color: #121212;
   --navbar-background-color: #050c2e;
-  --navbar-button-color: #9ebaf2;
+  --navbar-button-color: #5ccfef;
   --hover-color: #707270;
 
   --primary-color-light: #363636;

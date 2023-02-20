@@ -1,6 +1,6 @@
-/*Search Input*/
 @import "./colors.module";
 
+/*Search Input*/
 .searchfield_container {
   display: flex;
   align-items: center;
@@ -45,4 +45,38 @@
 .searchfieldBtn:hover {
   transform: scale(1.05, 1.05);
   cursor: pointer;
+}
+
+/*auth input field*/
+.authField input {
+  color: var(--text-color);
+  background-color: var(--primary-color-light);
+  font-size: 15px;
+  font-family: $main-font;
+  resize: none;
+  padding: 0px 5px 0px 10px;
+  border: 0.8px solid lightgray;
+  outline: none;
+  border-radius: 2px;
+}
+
+.authField input:focus {
+  border: 0.8px solid rgb(75, 137, 236);
+  box-shadow: 0 0 2px 0.2px gray;
+}
+
+.authField input::-webkit-inner-spin-button,
+.authField input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.authField {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.authField label {
+  padding-left: 10px;
 }

@@ -1,0 +1,58 @@
+/*auth footer*/
+.auth_footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  gap: 10px;
+  width: 100%;
+  height: 80px;
+  padding-top: 10vh;
+  bottom: 0;
+  background-color: var(--primary-color-light);
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: column;
+  bottom: 0;
+  justify-content: center;
+  // align-items: center;
+  background-color: var(--secondary-color-dark);
+  color: white !important;
+  width: 100%;
+  height: 270px;
+}
+
+.footerContainer a {
+  color: white !important;
+  text-decoration: none;
+  font-size: 10px;
+}
+
+.footerContainer p {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.footer_top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 15px;
+}
+
+.customer_service,
+.my_account,
+.company_information,
+.tools_resources,
+.shop_our_brand {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.footerContainer a:hover {
+  text-decoration: underline;
+}

@@ -1,9 +1,14 @@
-import Layout from "@/components/layout/Layout";
+import LoginTypeButton from "@/components/button/LoginTypeButton";
+import AuthInputField from "@/components/input/AuthInputField";
+import AuthFooter from "@/components/layout/AuthFooter";
+import Logo from "@/components/ui/Logo";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
 import { IUserLogin } from "@/interfaces/IUserData";
 import Head from "next/head";
 import Link from "next/link";
 import { FormEvent, useRef } from "react";
+import style from "../../components/styles/auth/AuthPage.module.scss";
+import btn from "../../components/styles/Button.module.scss";
 
 function Login() {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -32,22 +37,59 @@ function Login() {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Sign In</title>
         <meta name="description" content="OldEgg PC Ecommerce" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <form onSubmit={submitHandler}>
-        <h3>Sign In</h3>
-        <input type="email" required ref={emailInputRef} />
-        <input type="password" required ref={passwordInputRef} />
-        <button type="submit">Login</button>
 
-        <Link href="/auth/register">Register</Link>
-      </form>
-      {error && <h1>{error}</h1>}
-      {loading && <h1>loading...</h1>}
-      {response.token && <h1>Successfully Logged In {response.token}</h1>}
+      <main className={style.outerFormContainer_regis}>
+        <form onSubmit={submitHandler} className={style.formContainer_regis}>
+          <Logo height={65} />
+          <p className={style.signup_header}>Sign In</p>
+          <AuthInputField
+            required
+            height="40px"
+            width="100%"
+            placeholder="Email Address"
+            type="email"
+            ref={emailInputRef}
+          />
+          {error && <p className={style.errormsg}>{error}</p>}
+          {loading && <p className={style.statusmsg}>loading...</p>}
+          {response.token && (
+            <p className={style.statusmsg}>
+              Successfully Logged In {response.token}
+            </p>
+          )}
+          <AuthInputField
+            height="40px"
+            width="100%"
+            type="password"
+            placeholder="Password"
+            required
+            ref={passwordInputRef}
+          />
+          <button type="submit" className={btn.authBtn}>
+            SIGN IN
+          </button>
+          <LoginTypeButton text="GET ONE TIME SIGN IN CODE" />
+          <Link href="#">{"What's"} The One Time Code?</Link>
+          <div className={style.toggleAuthContainer}>
+            New to Newegg? <Link href="/auth/register">Sign Up</Link>
+          </div>
+
+          <div className={style.horizontal_line_container}>
+            <hr />
+            <p> OR </p>
+            <hr />
+          </div>
+
+          <LoginTypeButton mode="GOOGLE" />
+          <LoginTypeButton mode="APPLE" />
+        </form>
+      </main>
+      <AuthFooter />
     </>
   );
 }

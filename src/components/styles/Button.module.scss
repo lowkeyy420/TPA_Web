@@ -108,3 +108,40 @@
   background-color: var(--hover-color);
   cursor: pointer;
 }
+
+/*auth button*/
+
+.authBtn,
+.authBtn_login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 330px;
+  height: 44px;
+  font-family: $main-font;
+  font-weight: bold;
+  font-size: 15px;
+  border: 1px solid $brownish-orange;
+  background-color: $light-orange;
+  border-radius: 3px;
+  color: var(--text-color);
+}
+
+.authBtn:hover {
+  cursor: pointer;
+  border: 1px solid var(--secondary-color-dark);
+  color: var(--navbar-button-color);
+}
+
+.authBtn_login {
+  background-color: var(--secondary-color-dark);
+  border: 1px solid gray;
+}
+
+.authBtn_login:hover {
+  cursor: pointer;
+  color: rgb(75, 137, 236) !important;
+  border: 0.8px solid rgb(75, 137, 236);
+  box-shadow: 0 0 2px 0.2px gray;
+}
