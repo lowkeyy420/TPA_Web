@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useAxiosPost } from "@/hooks/useAxiosPost";
-import React, { ProviderProps, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 let logoutTimer: any;
 
@@ -74,6 +74,7 @@ type MyProps = {
 };
 
 export const AuthContextProvider = (props: MyProps) => {
+  const router = useRouter();
   let tokenData: any;
   let initialToken;
   if (tokenData) {
@@ -104,6 +105,8 @@ export const AuthContextProvider = (props: MyProps) => {
     setUser(user);
 
     logoutTimer = setTimeout(logoutHandler, remainingTime);
+
+    router.push("/");
   };
 
   //set timer kalau ada

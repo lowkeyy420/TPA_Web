@@ -6,7 +6,7 @@
   width: fit-content;
   white-space: nowrap;
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
-  color: $white;
+  color: var(--background-color) !important;
   background-color: var(--navbar-button-color);
   padding: 5px 15px;
   border-radius: 34px;
@@ -122,21 +122,25 @@
   font-family: $main-font;
   font-weight: bold;
   font-size: 15px;
+  border-radius: 3px;
+}
+
+.authBtn {
   border: 1px solid $brownish-orange;
   background-color: $light-orange;
-  border-radius: 3px;
-  color: var(--text-color);
+  color: black;
 }
 
 .authBtn:hover {
   cursor: pointer;
   border: 1px solid var(--secondary-color-dark);
-  color: var(--navbar-button-color);
+  color: var(--navbar-button-color) !important;
 }
 
 .authBtn_login {
-  background-color: var(--secondary-color-dark);
+  background-color: var(--primary-light-color);
   border: 1px solid gray;
+  color: var(--text-color);
 }
 
 .authBtn_login:hover {

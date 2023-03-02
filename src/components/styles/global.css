@@ -47,6 +47,8 @@ h6 {
 
   --text-color: black;
 
+  --footer-color: #1e44b6;
+
   --white: white;
   --light-gray: #f4f5f7;
   --dark-gray: #707270;
@@ -56,7 +58,7 @@ h6 {
 :root[data-theme="dark"] {
   --background-color: #121212;
   --navbar-background-color: #050c2e;
-  --navbar-button-color: #5ccfef;
+  --navbar-button-color: #9ebaf2;
   --hover-color: #707270;
 
   --primary-color-light: #363636;
@@ -69,6 +71,8 @@ h6 {
   --tertiary-color-dark: #c8611c;
 
   --text-color: white;
+
+  --footer-color: #121212;
 
   --white: white;
   --light-gray: #f4f5f7;

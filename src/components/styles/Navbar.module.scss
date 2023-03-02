@@ -23,7 +23,7 @@
 .nav_bottom {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 0px 15px 10px;
 }
 
@@ -63,4 +63,31 @@
 .loginBtn:hover {
   background-color: var(--hover-color);
   cursor: pointer;
+}
+
+.navbar_link,
+.navbar_link_red {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.navbar_link_business {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 13px;
+}
+
+.business_left {
+  color: var(--navbar-button-color);
+}
+
+.business_right {
+  color: var(--text-color);
+}
+
+.navbar_link_red {
+  color: red;
 }

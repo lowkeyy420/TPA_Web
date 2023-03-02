@@ -7,4 +7,5 @@ User:
 	- RoleID int --foreign,default:-
 	- SubscribeToEmail bool
 	- Status string
-
+	- country
+	- balance

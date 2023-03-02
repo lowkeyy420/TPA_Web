@@ -3,6 +3,7 @@ import { AuthContextProvider } from "@/store/Authcontext";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "../components/styles/global.css";
+import "../components/styles/theme.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

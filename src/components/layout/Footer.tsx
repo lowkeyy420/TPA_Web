@@ -1,3 +1,15 @@
+import {
+  faTwitter,
+  faFacebook,
+  faInstagram,
+  faLinkedin,
+  faPinterest,
+  faYoutube,
+  faTwitch,
+  faDiscord,
+  faTiktok,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import style from "../styles/Footer.module.scss";
 
@@ -68,7 +80,43 @@ export default function Footer() {
           <Link href="#">Rosewill</Link>
         </div>
       </div>
-      <div className={style.footer_bottom}></div>
+      <div className={style.footer_bottom}>
+        <div className={style.foot_bottom_left}>
+          <p>© 2000-2023 Newegg Inc. All rights reserved.</p>
+          <Link href="#">Terms & Conditions</Link>
+          <Link href="#">Privacy Policy</Link>
+          <Link href="#">Cookie Preferences</Link>
+        </div>
+        <div className={style.foot_bottom_right}>
+          <Link href="#">
+            <FontAwesomeIcon icon={faFacebook} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faTwitter} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faInstagram} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faLinkedin} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faPinterest} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faYoutube} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faTwitch} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faDiscord} className={style.icons} />
+          </Link>
+          <Link href="#">
+            <FontAwesomeIcon icon={faTiktok} className={style.icons} />
+          </Link>
+        </div>
+      </div>
     </footer>
   );
 }

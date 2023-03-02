@@ -27,6 +27,7 @@ export const useAxiosPost = <T,>(
   const sendRequest = (data: T) => {
     setLoading(true);
     setResponse("");
+    setError("");
 
     const header = {
       header: { Authorization: token.current },
@@ -62,6 +63,8 @@ export const useAxiosPost = <T,>(
         }
       })
       .catch((error: unknown | any | string) => {
+        console.log(error);
+
         const msg: string | unknown = error.response?.data["error"];
         setError(msg ? msg : "Error occured");
       })

@@ -14,8 +14,7 @@
   transition: background-color 0.1s linear;
 }
 .line {
-  //   background-color: var(--text-color);
-  background-color: blue;
+  background-color: var(--text-color);
   display: block;
   width: 20px;
   height: 3px;

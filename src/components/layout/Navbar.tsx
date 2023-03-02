@@ -38,7 +38,9 @@ function LoginRegisterButton() {
             <p>Welcome</p>
           </div>
           <div className={style.loginBtn_bottom}>
-            {authCtx.user ? authCtx.user["firstname"] : "Sign In / Register"}
+            {authCtx.isLoggedIn
+              ? authCtx.user["firstname"]
+              : "Sign In / Register"}
           </div>
         </div>
       </div>
