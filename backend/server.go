@@ -19,6 +19,7 @@ func main(){
 	r := gin.Default()
 	r.Use(middleware.SetCORSMiddleware())
 
+	r.POST("/getuser", controller.GetUser )
 	r.POST("/signup", controller.SignUp )
 	r.POST("/login", controller.Login )
 	r.GET("/test", middleware.RequireAuth,controller.Ping )

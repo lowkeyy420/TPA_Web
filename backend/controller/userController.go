@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -122,6 +123,7 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"token" : generatedToken,
 		"expiresin" : exp,
+		"user" : user,
 	})
 }
 
@@ -133,4 +135,60 @@ func Ping(c *gin.Context){
 		"message" : "You are logged in",
 		"user" : user,
 	})
+}
+
+func GetUser(c *gin.Context) {
+	//get token
+	// tokenString, err := c.Cookie("Authorization")
+	header := c.Request.Header.Get("Authorization")
+	if len(header) <= 7 {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return;
+	}
+
+	fmt.Println("TOKENPOST : " + header)
+	tokenString := header[7:]
+
+	token,_ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}	
+		return []byte(os.Getenv("SECRET")), nil
+	})
+	
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		//validate expiration
+		if float64(time.Now().Unix()) > claims["exp"].(float64) {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+		
+		//find user with token subject
+		var user model.User
+		loader.DB.First(&user, claims["sbj"])
+		
+		if user.ID == 0 {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+
+		//attach to request
+		c.Set("user", user)
+
+		//send user
+		c.JSON(http.StatusOK, gin.H{
+            "id": user.ID,
+            "email": user.First_name,
+            "firstname": user.First_name,
+            "lastname": user.Last_name,
+            "phone": user.Phone,
+            "role": user.Phone,
+            "status": user.Status,
+		})
+		c.Next();
+
+	} else {
+		c.AbortWithStatus(http.StatusUnauthorized)
+	}
+
+
+
 }

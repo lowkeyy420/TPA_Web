@@ -1,0 +1,10 @@
+User:
+    - First_name string
+	- Last_name string
+	- Email string --unique
+	- Phone string --default:-
+	- Password string
+	- RoleID int --foreign,default:-
+	- SubscribeToEmail bool
+	- Status string
+

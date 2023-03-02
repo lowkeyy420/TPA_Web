@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useAxiosPost } from "@/hooks/useAxiosPost";
 import React, { ProviderProps, useEffect, useState } from "react";
 
 let logoutTimer: any;
@@ -5,6 +7,7 @@ let logoutTimer: any;
 const AuthContext: any = React.createContext({
   token: "",
   isLoggedIn: false,
+  user: [],
   login: (token: string, expiration: any) => {},
   logout: () => {},
 });
@@ -42,17 +45,42 @@ const retrieveStoredToken = () => {
   };
 };
 
+const GetUser = (token: string | any, setuser: any) => {
+  const url = process.env.BASE_URL + "getuser";
+
+  const header = {
+    headers: { Authorization: token },
+  };
+
+  const config = {
+    method: "POST",
+    url: url,
+  };
+
+  const payload = {
+    ...config,
+    ...header,
+  };
+
+  axios(payload)
+    .then((res) => {
+      setuser(res.data);
+    })
+    .catch((error) => {});
+};
+
 type MyProps = {
   children: React.ReactNode;
 };
 
 export const AuthContextProvider = (props: MyProps) => {
-  const tokenData = retrieveStoredToken();
+  let tokenData: any;
   let initialToken;
   if (tokenData) {
     initialToken = tokenData.token;
   }
   const [token, setToken] = useState(initialToken);
+  const [user, setUser] = useState<any>([]);
 
   // if token is empty return false else true
   const userIsLoggedIn = !!token;
@@ -60,32 +88,40 @@ export const AuthContextProvider = (props: MyProps) => {
   const logoutHandler = () => {
     setToken(null);
     localStorage.removeItem("token");
-
+    setUser([]);
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
   };
 
-  const loginHandler = (tkn: string, expirationTime: any) => {
+  const loginHandler = (tkn: string, expirationTime: any, user: any) => {
     setToken(tkn);
     localStorage.setItem("token", tkn);
     localStorage.setItem("expirationTime", expirationTime);
 
     const remainingTime = calculateRemainingTime(expirationTime);
 
+    setUser(user);
+
     logoutTimer = setTimeout(logoutHandler, remainingTime);
   };
 
   //set timer kalau ada
   useEffect(() => {
+    tokenData = retrieveStoredToken();
+
     if (tokenData) {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
+      if (user && user.length < 1) {
+        GetUser("bearer " + tokenData.token, setUser);
+      }
     }
   }, [tokenData]);
 
   const contextValue = {
     token: token,
     isLoggedIn: userIsLoggedIn,
+    user: user,
     login: loginHandler,
     logout: logoutHandler,
   };

@@ -15,9 +15,14 @@ import (
 func RequireAuth(c *gin.Context) {
 	//get token
 	// tokenString, err := c.Cookie("Authorization")
-	var header = c.Request.Header.Get("Authorization")
+	header := c.Request.Header.Get("Authorization")
+	if len(header) <= 7 {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return;
+	}
+
 	fmt.Println("auth : " + header)
-	var tokenString = header[7:]
+	tokenString := header[7:]
 	
 	
 	// if err != nil {

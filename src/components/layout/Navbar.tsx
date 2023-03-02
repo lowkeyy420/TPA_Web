@@ -26,8 +26,6 @@ import Logo from "../ui/Logo";
 
 function LoginRegisterButton() {
   const authCtx: any = useContext(AuthContext);
-  let username = "Sign In / Register";
-  authCtx.isLoggedIn ? (username = "usr") : (username = "Sign In / Register");
 
   return (
     <Link href="/auth/login">
@@ -39,7 +37,9 @@ function LoginRegisterButton() {
           <div className={style.loginBtn_top}>
             <p>Welcome</p>
           </div>
-          <div className={style.loginBtn_bottom}>{username}</div>
+          <div className={style.loginBtn_bottom}>
+            {authCtx.user ? authCtx.user["firstname"] : "Sign In / Register"}
+          </div>
         </div>
       </div>
     </Link>

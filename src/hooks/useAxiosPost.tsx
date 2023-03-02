@@ -1,6 +1,6 @@
 import AuthContext from "@/store/Authcontext";
 import axios, { AxiosRequestConfig } from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 //config example {method: 'POST', url : 'http://localhost:3000/users'}
 
@@ -12,7 +12,13 @@ export const useAxiosPost = <T,>(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
   const [response, setResponse] = useState("");
+  const token = useRef<string | null>("");
+
   const authCtx: any = useContext(AuthContext);
+
+  useEffect(() => {
+    token.current = `bearer ${localStorage.getItem("token")}`;
+  }, []);
 
   const request = (data: T) => {
     sendRequest(data);
@@ -20,10 +26,16 @@ export const useAxiosPost = <T,>(
 
   const sendRequest = (data: T) => {
     setLoading(true);
+    setResponse("");
+
+    const header = {
+      header: { Authorization: token.current },
+    };
 
     const payload = {
       ...config,
       data: { ...data },
+      ...header,
     };
 
     axios(payload)
@@ -35,7 +47,18 @@ export const useAxiosPost = <T,>(
           const expirationTime = new Date(
             new Date().getTime() + res.data.expiresin * 100
           );
-          authCtx.login(token, expirationTime);
+
+          const user = {
+            id: res.data.user["ID"],
+            email: res.data.user["Email"],
+            firstname: res.data.user["First_name"],
+            lastname: res.data.user["Last_name"],
+            phone: res.data.user["Phone"],
+            role: res.data.user["RoleID"],
+            status: res.data.user["Status"],
+          };
+
+          authCtx.login(token, expirationTime, user);
         }
       })
       .catch((error: unknown | any | string) => {

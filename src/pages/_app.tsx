@@ -1,4 +1,4 @@
-import RoutingGuard from "@/other/RoutingGuard";
+import RoutingGuard from "@/middleware/RoutingGuard";
 import { AuthContextProvider } from "@/store/Authcontext";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -15,9 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <AuthContextProvider>
-        <RoutingGuard>
-          <Component {...pageProps} />
-        </RoutingGuard>
+        {/* <RoutingGuard> */}
+        <Component {...pageProps} />
+        {/* </RoutingGuard> */}
       </AuthContextProvider>
     </>
   );
