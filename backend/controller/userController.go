@@ -22,6 +22,7 @@ func SignUp(c *gin.Context) {
 		Email string 
 		Phone string
 		Password string
+		SubscribeToEmail bool
 	}
 
 	if c.Bind(&req) != nil {
@@ -42,7 +43,7 @@ func SignUp(c *gin.Context) {
 	}
 
 	//construct user
-	user := model.User{First_name:req.First_name, Last_name:req.Last_name, Email:req.Email, Phone:req.Phone, Password: string(hashed)}
+	user := model.User{First_name:req.First_name, Last_name:req.Last_name, Email:req.Email, Phone:req.Phone, Password: string(hashed), SubscribeToEmail:req.SubscribeToEmail}
 
 	result := loader.DB.Create(&user)
 
@@ -180,8 +181,10 @@ func GetUser(c *gin.Context) {
             "firstname": user.First_name,
             "lastname": user.Last_name,
             "phone": user.Phone,
-            "role": user.Phone,
+            "role": user.RoleID,
             "status": user.Status,
+			"country" : user.Country,
+			"balance" : user.Balance,
 		})
 		c.Next();
 

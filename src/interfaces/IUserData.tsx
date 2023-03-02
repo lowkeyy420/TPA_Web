@@ -1,12 +1,13 @@
 export interface IUserData {
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  phone?: string;
-  password?: string;
+  First_name?: string;
+  Last_name?: string;
+  Email?: string;
+  Phone?: string;
+  Password?: string;
+  SubscribeToEmail?: boolean;
 }
 
 export interface IUserLogin {
-  email?: string;
-  password?: string;
+  Email?: string;
+  Password?: string;
 }

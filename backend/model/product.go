@@ -1,8 +1,14 @@
 package model
 
+import "gorm.io/gorm"
+
 type Product struct {
-	Name    string
-	Category string
-	Price uint
-	StoreID uint
+	gorm.Model
+	StoreID             int
+	ProductCategoryID  int 
+	ProductName        string
+	ProductDescription string
+	ProductPrice  	   int
+	ProductStock       int
+	ProductDetails     string
 }

@@ -9,7 +9,9 @@ type User struct {
 	Email string `gorm:"unique"`
 	Phone string `gorm:"default:-"`;
 	Password string
-	RoleID int `gorm:"foreign_key:RoleID" gorm:"default:1"`
+	RoleID int `gorm:"default:1"`
 	SubscribeToEmail bool
-	Status string
+	Status string `gorm:"default:Active"`
+	Country string `gorm:"default:US"`
+	Balance int `gorm:"default:0"`
 }

@@ -7,18 +7,16 @@ function ThemeToggle() {
   useEffect(() => {
     let theme = localStorage.getItem("theme");
     theme === "dark" ? setChecked(true) : setChecked(false);
-    theme === "dark"
-      ? document.documentElement.setAttribute("data-theme", "dark")
-      : document.documentElement.setAttribute("data-theme", "light");
   }, []);
 
   const themeToggleHandler = () => {
-    checked
-      ? document.documentElement.setAttribute("data-theme", "light")
-      : document.documentElement.setAttribute("data-theme", "dark");
-    checked
-      ? localStorage.setItem("theme", "light")
-      : localStorage.setItem("theme", "dark");
+    if (checked) {
+      document.documentElement.setAttribute("data-theme", "light");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
+    }
 
     setChecked(!checked);
   };

@@ -1,4 +1,5 @@
 User:
+	`gorm model`
     - First_name string
 	- Last_name string
 	- Email string --unique
@@ -9,3 +10,15 @@ User:
 	- Status string
 	- country
 	- balance
+
+
+Product:
+	`gorm model`
+	-ShopID int 
+	-ProductName
+	-ProductDescription
+	-ProductCategory
+	-ProductPrice
+	-ProductStock
+	-ProductDetails
+	

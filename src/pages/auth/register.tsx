@@ -56,21 +56,15 @@ function Register() {
     const subscribe = subscribeInputRef.current?.checked;
 
     const user: IUserData = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      phone: phone,
-      password: pass,
+      First_name: firstName,
+      Last_name: lastName,
+      Email: email,
+      Phone: phone,
+      Password: pass,
+      SubscribeToEmail: subscribe,
     };
 
     request(user);
-
-    console.log(firstName);
-    console.log(lastName);
-    console.log(email);
-    console.log(phone);
-    console.log(pass);
-    console.log(subscribe);
 
     clearInput();
   }
@@ -164,7 +158,7 @@ function Register() {
         </form>
         {error && <h1>{error}</h1>}
         {loading && <h1>loading...</h1>}
-        {response.email && <h1>Successfully Registered {response.email}</h1>}
+        {response.email && <h3>Successfully Registered {response.email}</h3>}
       </main>
       <AuthFooter />
     </>

@@ -57,13 +57,16 @@ export const useAxiosPost = <T,>(
             phone: res.data.user["Phone"],
             role: res.data.user["RoleID"],
             status: res.data.user["Status"],
+            country: res.data.user["Country"],
+            balance: res.data.user["Balance"],
           };
 
           authCtx.login(token, expirationTime, user);
         }
+        console.log(res.data);
       })
       .catch((error: unknown | any | string) => {
-        console.log(error);
+        // console.log(error);
 
         const msg: string | unknown = error.response?.data["error"];
         setError(msg ? msg : "Error occured");

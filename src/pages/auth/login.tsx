@@ -29,8 +29,8 @@ function Login() {
     const pass = passwordInputRef.current?.value;
 
     request({
-      email: email,
-      password: pass,
+      Email: email,
+      Password: pass,
     });
   }
 

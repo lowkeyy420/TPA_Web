@@ -79,3 +79,7 @@ h6 {
   --dark-gray: #707270;
   --light-purplish-blue: #e8e6fb;
 }
+
+body {
+  background-color: var(--primary-color-light);
+}

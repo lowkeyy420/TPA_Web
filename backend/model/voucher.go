@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Voucher struct {
 	gorm.Model
-	VoucherCode        string `json:"voucher_code" gorm:"primary_key"`
-	VoucherDiscount    int64  `json:"voucher_discount"`
-	VoucherDescription string `json:"voucher_description"`
+	VoucherCode        string `gorm:"unique"`
+	VoucherDiscount    int64 
+	VoucherDescription string
 }

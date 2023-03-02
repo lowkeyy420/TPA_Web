@@ -1,7 +1,13 @@
 package model
 
+import "gorm.io/gorm"
+
 type Store struct {
-	ID      int `gorm:"primary_key"`
-	Name    string
-	Product []Product
+	gorm.Model
+	StoreName string
+	StoreEmail string `gorm:"unique"`
+	StorePassword string
+	StoreDescription string
+	Status string
+
 }

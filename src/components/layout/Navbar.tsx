@@ -23,10 +23,9 @@ import {
 import { useContext } from "react";
 import AuthContext from "@/store/Authcontext";
 import Logo from "../ui/Logo";
+import { IUserData } from "@/interfaces/IUserData";
 
-function LoginRegisterButton() {
-  const authCtx: any = useContext(AuthContext);
-
+function LoginRegisterButton({ first_name }: IUserData) {
   return (
     <Link href="/auth/login">
       <div className={style.loginBtn}>
@@ -38,9 +37,7 @@ function LoginRegisterButton() {
             <p>Welcome</p>
           </div>
           <div className={style.loginBtn_bottom}>
-            {authCtx.isLoggedIn
-              ? authCtx.user["firstname"]
-              : "Sign In / Register"}
+            {first_name ? first_name : "Sign In / Register"}
           </div>
         </div>
       </div>
@@ -68,6 +65,8 @@ const HelpCenterButton = () => {
 };
 
 export default function Navbar() {
+  const authCtx: any = useContext(AuthContext);
+
   return (
     <nav className={style.navbar_container}>
       <div className={style.nav_top}>
@@ -78,7 +77,7 @@ export default function Navbar() {
         <NotifButton />
         <CountryButton />
         <ThemeToggle />
-        <LoginRegisterButton />
+        <LoginRegisterButton first_name={authCtx.user["firstname"]} />
         <ReturnOrderButton />
         <CartButton />
       </div>

@@ -5,6 +5,7 @@ import (
 	"github.com/lowkeyy420/oldegg/controller"
 	"github.com/lowkeyy420/oldegg/loader"
 	"github.com/lowkeyy420/oldegg/middleware"
+	"github.com/lowkeyy420/oldegg/route"
 )
 
 
@@ -19,9 +20,9 @@ func main(){
 	r := gin.Default()
 	r.Use(middleware.SetCORSMiddleware())
 
-	r.POST("/getuser", controller.GetUser )
-	r.POST("/signup", controller.SignUp )
-	r.POST("/login", controller.Login )
+	route.UserRoute(r)
+	route.ChatRoute(r)
+
 	r.GET("/test", middleware.RequireAuth,controller.Ping )
 	r.Run() 
 }
