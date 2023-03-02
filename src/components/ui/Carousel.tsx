@@ -1,29 +1,27 @@
-import { useAxios } from "@/hooks/useAxios";
 import { ImageSlider, sliderAction } from "@/interfaces/ICarousel";
+import { faCaretSquareLeft } from "@fortawesome/free-regular-svg-icons";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import style from "../styles/Carousel.module.scss";
 
-const delay = 2500;
+const delay = 15000;
 
 function Carousel({ slides }: ImageSlider) {
   let [currIdx, setCurrIdx] = useState(0);
-
-  const url = process.env.BASE_URL + "getPromotion";
-  const [loading, data, error, request] = useAxios(
-    { method: "GET", url: url },
-    false
-  );
+  let [timeoutRefresh, setTimeoutRefresh] = useState(false);
 
   useEffect(() => {
     setTimeout(
       () =>
-        setCurrIdx((prevIndex) =>
-          prevIndex === slides.length - 1 ? 0 : prevIndex + 1
-        ),
+        setCurrIdx((prevIndex) => {
+          setTimeoutRefresh(!timeoutRefresh);
+          return prevIndex === slides.length - 1 ? 0 : prevIndex + 1;
+        }),
       delay
     );
-  }, [currIdx]);
+  }, [timeoutRefresh]);
 
   const changeSlideHandler = (type: sliderAction) => {
     switch (type) {
@@ -49,33 +47,50 @@ function Carousel({ slides }: ImageSlider) {
   return (
     <div className={style.carousel_container}>
       <button
-        className={style.carousel_button_left}
         onClick={() => {
           changeSlideHandler(sliderAction.SUBTRACT);
         }}
       >
-        &lt;
+        <FontAwesomeIcon
+          icon={faAngleLeft}
+          height={70}
+          className={style.carousel_button_left}
+        />
+        <span>
+          <FontAwesomeIcon
+            icon={faAngleLeft}
+            height={70}
+            className={style.left_abs}
+          />
+        </span>
       </button>
-      <Image src={slides[currIdx].url} alt={slides[currIdx].alt} />
-      {/* <div
-        style={{
-          backgroundImage: `url(${slides[currIdx].url})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transition: "background-image 0.3s ease-in-out",
-          width: "100vw",
-          height: "70vh",
-        }}
-      >
-      </div> */}
+
+      <Image
+        src={slides[currIdx].URL}
+        alt={slides[currIdx].Alt}
+        className={style.image}
+        height={1920}
+        width={1080}
+        quality={100}
+      />
+
       <button
-        className={style.carousel_button_right}
         onClick={() => {
           changeSlideHandler(sliderAction.ADD);
         }}
       >
-        &gt;
+        <FontAwesomeIcon
+          icon={faAngleRight}
+          height={70}
+          className={style.carousel_button_right}
+        />
+        <span>
+          <FontAwesomeIcon
+            icon={faAngleRight}
+            height={70}
+            className={style.right_abs}
+          />
+        </span>
       </button>
     </div>
   );

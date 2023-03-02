@@ -20,8 +20,7 @@ func main(){
 	r := gin.Default()
 	r.Use(middleware.SetCORSMiddleware())
 
-	route.UserRoute(r)
-	route.ChatRoute(r)
+	route.UseAllRoutes(r)
 
 	r.GET("/test", middleware.RequireAuth,controller.Ping )
 	r.Run() 

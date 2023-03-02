@@ -21,4 +21,11 @@ Product:
 	-ProductPrice
 	-ProductStock
 	-ProductDetails
-	
+
+Store:	
+
+Message:
+	`gorm model`
+	-SenderID
+	-RecipientID
+	-Message

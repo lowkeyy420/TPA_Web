@@ -1,13 +1,8 @@
 export interface ImageSlider {
   slides: {
-    url: string;
-    alt: string;
+    URL: string;
+    Alt: string;
   }[];
-}
-
-export interface CarouselResponse {
-  url: string;
-  alt: string;
 }
 
 export enum sliderAction {

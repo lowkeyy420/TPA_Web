@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 export const useAxios = <T,>(
   config: AxiosRequestConfig<any>,
   loadOnStart: boolean = true
-): [boolean, T | undefined, string, () => void] => {
+): [boolean, T | undefined | any, string, () => void] => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<T>();
   const [error, setError] = useState("");
