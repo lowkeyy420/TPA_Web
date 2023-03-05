@@ -34,8 +34,11 @@
   height: 20px;
 }
 
-/*notif button*/
-.notificationBtn {
+/*notif , country button*/
+
+.notificationBtn,
+.countryBtn,
+.roleBtn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,24 +49,9 @@
   height: 35px;
 }
 
-.notificationBtn:hover {
-  background-color: var(--hover-color);
-  cursor: pointer;
-}
-
-/*country button*/
-.countryBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 100px;
-  border: 2px solid var(--text-color);
-  transition: background-color 0.1s linear;
-  min-width: 35px;
-  height: 35px;
-}
-
-.countryBtn:hover {
+.notificationBtn:hover,
+.countryBtn:hover,
+.roleBtn:hover {
   background-color: var(--hover-color);
   cursor: pointer;
 }
@@ -148,4 +136,13 @@
   color: rgb(75, 137, 236) !important;
   border: 0.8px solid rgb(75, 137, 236);
   box-shadow: 0 0 2px 0.2px gray;
+}
+
+/* Alert Button*/
+
+.alertBtn {
+  height: 40px;
+  width: 8rem;
+  border: 1px solid black;
+  background-color: blue;
 }

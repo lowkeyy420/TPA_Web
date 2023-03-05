@@ -27,7 +27,7 @@ func AddProduct(c *gin.Context){
 	}
 
 	//check if store exists
-	var store model.Store
+	var store model.Shop
 	loader.DB.First(&store, "id =?", req.StoreID)
 
 	if store.ID == 0 {

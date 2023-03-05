@@ -1,10 +1,10 @@
 import { ImageSlider, sliderAction } from "@/interfaces/ICarousel";
-import { faCaretSquareLeft } from "@fortawesome/free-regular-svg-icons";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import style from "../styles/Carousel.module.scss";
+import emptypic from "../../assets/emptycarousel.jpg";
 
 const delay = 15000;
 
@@ -66,8 +66,8 @@ function Carousel({ slides }: ImageSlider) {
       </button>
 
       <Image
-        src={slides[currIdx].URL}
-        alt={slides[currIdx].Alt}
+        src={slides.length > 0 ? slides[currIdx]?.URL : emptypic}
+        alt={slides.length > 0 ? slides[currIdx]?.Alt : "No Promotions Yet.."}
         className={style.image}
         height={1920}
         width={1080}

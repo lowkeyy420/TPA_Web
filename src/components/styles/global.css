@@ -44,6 +44,7 @@ h6 {
 
   --tertiary-color-light: #fba33c;
   --tertiary-color-dark: #f06c00;
+  --tertiary-color: #1e44b6;
 
   --text-color: black;
 
@@ -70,6 +71,7 @@ h6 {
 
   --tertiary-color-light: #fba33c;
   --tertiary-color-dark: #c8611c;
+  --tertiary-color: #f06c00;
 
   --text-color: white;
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { ICurrUser } from "@/interfaces/IUserData";
 
 let logoutTimer: any;
 
@@ -95,7 +96,7 @@ export const AuthContextProvider = (props: MyProps) => {
     }
   };
 
-  const loginHandler = (tkn: string, expirationTime: any, user: any) => {
+  const loginHandler = (tkn: string, expirationTime: any, user: ICurrUser) => {
     setToken(tkn);
     localStorage.setItem("token", tkn);
     localStorage.setItem("expirationTime", expirationTime);
@@ -106,7 +107,7 @@ export const AuthContextProvider = (props: MyProps) => {
 
     logoutTimer = setTimeout(logoutHandler, remainingTime);
 
-    router.push("/");
+    user.RoleID === 4 ? router.push("/admin") : router.push("/");
   };
 
   //set timer kalau ada

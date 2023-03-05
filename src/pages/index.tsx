@@ -32,7 +32,8 @@ export default function HomePage() {
           <HomeCategory title="Toys, Drones & Maker" />
         </div>
         {slides && <Carousel slides={slides} />}
-        {loading && <h2>Loading...</h2>}
+        {error && <h1>{error}</h1>}
+        {loading && <h1>Loading...</h1>}
         <h1>Home Page</h1>
       </Layout>
     </>

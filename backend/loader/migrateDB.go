@@ -4,7 +4,7 @@ import "github.com/lowkeyy420/oldegg/model"
 
 func SyncDatabase() {
 	DB.AutoMigrate(&model.User{})
-	DB.AutoMigrate(&model.Store{})
+	DB.AutoMigrate(&model.Shop{})
 	DB.AutoMigrate(&model.Message{})
 	DB.AutoMigrate(&model.ProductCategory{})
 	DB.AutoMigrate(&model.Product{})

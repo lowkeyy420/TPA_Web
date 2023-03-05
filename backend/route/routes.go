@@ -25,8 +25,29 @@ func PromotionRoute(r *gin.Engine){
 	r.GET("/promotion/get-all-promotion",  controller.GetAllPromotions)
 }
 
+func ShopController(r *gin.Engine){
+	r.GET("/shop/get-all-shop",  )
+	r.GET("/shop/showdetails",)
+}
+
 
 func AdminRoute(r *gin.Engine){
+	//user
+	r.GET("/admin/get-all-user", middleware.AdminAuth, controller.GetAllUser )
+	r.POST("/admin/update-user-status", middleware.AdminAuth, )
+	
+	//voucher
+	r.POST("/admin/add-voucher", middleware.AdminAuth, )
+	r.GET("/admin/get-all-voucher", middleware.AdminAuth, )
+	r.POST("/admin/update-voucher", middleware.AdminAuth, )
+	
+	//shop
+	r.POST("/admin/add-shop", middleware.AdminAuth, )
+	r.POST("/admin/update-shop-status", middleware.AdminAuth, )
+	
+	//etc
+	r.POST("/admin/send-email-to-subscriber", middleware.AdminAuth, )
+	r.GET("/admin/get-customer-service-review", middleware.AdminAuth, )
 }
 
 func ChatRoute(r *gin.Engine){

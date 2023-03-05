@@ -1,4 +1,4 @@
-import LoginTypeButton from "@/components/button/LoginTypeButton";
+import LoginTypeButton from "@/components/actions/button/LoginTypeButton";
 import AuthInputField from "@/components/input/AuthInputField";
 import AuthFooter from "@/components/layout/AuthFooter";
 import Logo from "@/components/ui/Logo";

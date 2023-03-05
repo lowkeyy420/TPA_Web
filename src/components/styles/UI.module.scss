@@ -1,9 +1,10 @@
+/* Home page categories slider*/
 .category_outer_container {
   position: absolute;
   z-index: 3;
   height: 70vh;
   margin-left: 2vw;
-  width: 18vw;
+  width: 19vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,4 +54,33 @@
   color: var(--auth-link-color);
   width: 15px;
   height: 15px;
+}
+
+/* Data visualization*/
+.datavisual_container {
+  height: 26vh;
+  padding: 20px 10px;
+  color: var(--text-color);
+}
+
+/* Manage User Page Container*/
+.mu_container {
+  width: 100%;
+  height: 100vh;
+}
+
+/* User Grid*/
+
+.user_grid_container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 18%);
+  row-gap: 9.3%;
+  column-gap: 9.3%;
+}
+
+/* User Item*/
+.user_container {
+  padding: 20px;
+  background-color: var(--category-color) !important;
 }

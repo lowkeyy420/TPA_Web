@@ -1,3 +1,4 @@
+import { ICurrUser } from "@/interfaces/IUserData";
 import AuthContext from "@/store/Authcontext";
 import axios, { AxiosRequestConfig } from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -49,16 +50,16 @@ export const useAxiosPost = <T,>(
             new Date().getTime() + res.data.expiresin * 100
           );
 
-          const user = {
-            id: res.data.user["ID"],
-            email: res.data.user["Email"],
-            firstname: res.data.user["First_name"],
-            lastname: res.data.user["Last_name"],
-            phone: res.data.user["Phone"],
-            role: res.data.user["RoleID"],
-            status: res.data.user["Status"],
-            country: res.data.user["Country"],
-            balance: res.data.user["Balance"],
+          const user: ICurrUser = {
+            ID: res.data.user["ID"],
+            Email: res.data.user["Email"],
+            First_name: res.data.user["First_name"],
+            Last_name: res.data.user["Last_name"],
+            Phone: res.data.user["Phone"],
+            RoleID: res.data.user["RoleID"],
+            Status: res.data.user["Status"],
+            Country: res.data.user["Country"],
+            Balance: res.data.user["Balance"],
           };
 
           authCtx.login(token, expirationTime, user);

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -83,6 +84,13 @@ func Login(c *gin.Context) {
 	if user.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid account",
+		})
+		return;
+	}
+
+	if user.Status == "Banned" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "User Banned",
 		})
 		return;
 	}
@@ -176,15 +184,15 @@ func GetUser(c *gin.Context) {
 
 		//send user
 		c.JSON(http.StatusOK, gin.H{
-            "id": user.ID,
-            "email": user.First_name,
-            "firstname": user.First_name,
-            "lastname": user.Last_name,
-            "phone": user.Phone,
-            "role": user.RoleID,
-            "status": user.Status,
-			"country" : user.Country,
-			"balance" : user.Balance,
+            "ID": user.ID,
+            "Email": user.Email,
+            "First_name": user.First_name,
+            "Last_name": user.Last_name,
+            "Phone": user.Phone,
+            "RoleID": user.RoleID,
+            "Status": user.Status,
+			"Country" : user.Country,
+			"Balance" : user.Balance,
 		})
 		c.Next();
 
@@ -192,6 +200,28 @@ func GetUser(c *gin.Context) {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 
+}
 
+func GetAllUser(c *gin.Context){
+	
+	startIndex, err := strconv.Atoi(c.Query("_start"))
+	if err != nil {
+		startIndex = 0
+	}
 
+	endIndex, err := strconv.Atoi(c.Query("_end"))
+	if err != nil {
+		endIndex = loader.ITEM_PER_PAGE
+	}
+
+	var users []model.User
+	loader.DB.Offset(startIndex).Limit(endIndex - startIndex).Find(&users)
+	
+	var count int64
+	loader.DB.Model(&model.User{}).Count(&count)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : users,
+		"count" : count,
+	})
 }

@@ -23,9 +23,16 @@ import {
 import { useContext } from "react";
 import AuthContext from "@/store/Authcontext";
 import Logo from "../ui/Logo";
-import { IUserData } from "@/interfaces/IUserData";
+import { ICurrUser } from "@/interfaces/IUserData";
+import RoleOnlyButton from "../actions/button/RoleOnlyButton";
 
-function LoginRegisterButton({ first_name }: IUserData) {
+function LoginRegisterButton({
+  First_name,
+  Last_name,
+}: {
+  First_name: string;
+  Last_name: string;
+}) {
   return (
     <Link href="/auth/login">
       <div className={style.loginBtn}>
@@ -37,7 +44,8 @@ function LoginRegisterButton({ first_name }: IUserData) {
             <p>Welcome</p>
           </div>
           <div className={style.loginBtn_bottom}>
-            {first_name ? first_name : "Sign In / Register"}
+            {First_name ? First_name : "Sign In / Register"}{" "}
+            {Last_name ? Last_name : null}
           </div>
         </div>
       </div>
@@ -77,7 +85,13 @@ export default function Navbar() {
         <NotifButton />
         <CountryButton />
         <ThemeToggle />
-        <LoginRegisterButton first_name={authCtx.user["firstname"]} />
+        {authCtx.user["RoleID"] > 1 && (
+          <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
+        )}
+        <LoginRegisterButton
+          First_name={authCtx.user["First_name"]}
+          Last_name={authCtx.user["Last_name"]}
+        />
         <ReturnOrderButton />
         <CartButton />
       </div>
