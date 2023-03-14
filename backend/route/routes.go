@@ -34,7 +34,7 @@ func ShopController(r *gin.Engine){
 func AdminRoute(r *gin.Engine){
 	//user
 	r.GET("/admin/get-all-user", middleware.AdminAuth, controller.GetAllUser )
-	r.POST("/admin/update-user-status", middleware.AdminAuth, )
+	r.PUT("/admin/update-user-status", middleware.AdminAuth, )
 	
 	//voucher
 	r.POST("/admin/add-voucher", middleware.AdminAuth, )

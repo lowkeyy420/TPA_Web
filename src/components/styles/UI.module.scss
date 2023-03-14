@@ -83,4 +83,51 @@
 .user_container {
   padding: 20px;
   background-color: var(--category-color) !important;
+  color: var(--text-color) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 8px;
+
+  border-radius: 10px;
+}
+
+.user_action_container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.user_action_container button {
+  height: 40px;
+  width: 80px;
+}
+
+.user_action_container button:hover {
+  cursor: pointer;
+}
+
+.user_action_container .banBtn {
+  background-color: rgb(87, 134, 209) !important;
+}
+
+.user_action_container .banBtn:hover {
+  background-color: rgba(87, 134, 209, 0.502) !important;
+}
+
+.user_action_container .unbanBtn {
+  background-color: rgb(251, 179, 53) !important;
+}
+.user_action_container .unbanBtn:hover {
+  background-color: rgba(251, 178, 53, 0.452) !important;
+}
+
+.user_action_container .disabledBtn {
+  background-color: rgba(145, 193, 236, 0.313);
+}
+
+.user_action_container .disabledBtn:hover {
+  cursor: not-allowed;
 }

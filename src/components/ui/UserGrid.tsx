@@ -7,7 +7,27 @@ interface Mydata {
 }
 
 const UserGrid = (props: Mydata) => {
-  console.log(props);
+  const URL = process.env.BASE_URL + "admin/update-user-status";
+
+  function unBanHandler(ID: number) {
+    // axios.patch(
+    //   URL,
+    //   {
+    //     id: ID,
+    //     status: "Active",
+    //   },
+    //   {
+    //     params: {
+    //       id: ID,
+    //     },
+    //   }
+    // ).then(res => {
+    // });
+  }
+
+  function banHandler(ID: number) {
+    console.log(ID);
+  }
 
   return (
     <div className={style.user_grid_container}>
@@ -22,6 +42,7 @@ const UserGrid = (props: Mydata) => {
             Phone={usr.Phone}
             RoleID={usr.RoleID}
             Status={usr.Status}
+            SubscribeToEmail={usr.SubscribeToEmail}
             Country={usr.Country}
             Balance={usr.Balance}
           />

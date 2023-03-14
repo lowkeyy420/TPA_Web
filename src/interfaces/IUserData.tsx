@@ -1,3 +1,4 @@
+//signup
 export interface IUserData {
   First_name?: string;
   Last_name?: string;
@@ -7,11 +8,13 @@ export interface IUserData {
   SubscribeToEmail?: boolean;
 }
 
+//signin
 export interface IUserLogin {
   Email?: string;
   Password?: string;
 }
 
+//current user
 export interface ICurrUser {
   ID: number;
   Email: string;
@@ -21,5 +24,6 @@ export interface ICurrUser {
   RoleID: number;
   Status: string;
   Country: string;
+  SubscribeToEmail: boolean;
   Balance: number;
 }

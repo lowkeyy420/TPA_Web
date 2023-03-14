@@ -15,9 +15,9 @@ function ManageUser() {
   return (
     <Layout>
       <main className={style.mu_container}>
-        {user && <UserGrid data={user} />}
+        {loading && <h1>Loading...</h1>}
         {error && error}
-        {/* <SendAlertButton name="Send Alert" /> */}
+        {user && <UserGrid data={user} />}
       </main>
     </Layout>
   );

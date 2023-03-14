@@ -225,3 +225,7 @@ func GetAllUser(c *gin.Context){
 		"count" : count,
 	})
 }
+
+func UpdateUserStatus(c *gin.Context){
+	c.Query("id")
+}

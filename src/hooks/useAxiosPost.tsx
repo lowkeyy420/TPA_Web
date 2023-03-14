@@ -58,6 +58,7 @@ export const useAxiosPost = <T,>(
             Phone: res.data.user["Phone"],
             RoleID: res.data.user["RoleID"],
             Status: res.data.user["Status"],
+            SubscribeToEmail: res.data.user["SubscribeToEmail"],
             Country: res.data.user["Country"],
             Balance: res.data.user["Balance"],
           };
