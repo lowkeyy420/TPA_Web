@@ -8,7 +8,7 @@ import (
 )
 
 var DB *gorm.DB
-var ITEM_PER_PAGE = 10
+var ITEM_PER_PAGE = 8
 
 func ConnectDB() {
 	var err error

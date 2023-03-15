@@ -24,6 +24,7 @@ function User(props: MyProps) {
         }
       )
       .then((res) => {
+        console.log("res", res.data);
         props.reload();
       })
       .catch((err) => {
@@ -48,7 +49,12 @@ function User(props: MyProps) {
         }
       )
       .then((res) => {
+        console.log("res", res.data);
+
         props.reload();
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

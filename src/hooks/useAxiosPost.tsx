@@ -65,7 +65,6 @@ export const useAxiosPost = <T,>(
 
           authCtx.login(token, expirationTime, user);
         }
-        console.log(res.data);
       })
       .catch((error: unknown | any | string) => {
         // console.log(error);

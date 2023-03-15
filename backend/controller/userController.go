@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -204,23 +205,35 @@ func GetUser(c *gin.Context) {
 
 func GetAllUser(c *gin.Context){
 	
-	startIndex, err := strconv.Atoi(c.Query("_start"))
-	if err != nil {
-		startIndex = 0
-	}
+    page, err := strconv.Atoi(c.Query("page"))
+    if err != nil || page < 1 {
+        c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "Invalid page number",
+        })
+        return
+    }
 
-	endIndex, err := strconv.Atoi(c.Query("_end"))
-	if err != nil {
-		endIndex = loader.ITEM_PER_PAGE
-	}
-
-	var users []model.User
-	loader.DB.Offset(startIndex).Limit(endIndex - startIndex).Find(&users)
-	
 	var count int64
 	loader.DB.Model(&model.User{}).Count(&count)
 
-	c.Header("Cache-Control", "max-age=300");
+
+	offset := (page - 1) *  loader.ITEM_PER_PAGE
+	limit :=  loader.ITEM_PER_PAGE
+
+	max := int(math.Ceil(float64(count) / float64(limit)))
+
+	fmt.Println("max ", max, " page ", page)
+
+	if page >  max {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "Invalid page number",
+        })
+        return
+	}
+
+	var users []model.User
+	loader.DB.Offset(offset).Limit(limit).Find(&users)
+	
 
 	c.JSON(http.StatusOK, gin.H{
 		"data" : users,

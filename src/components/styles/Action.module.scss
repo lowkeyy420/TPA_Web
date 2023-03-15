@@ -109,3 +109,24 @@
 .themeToggle input:checked + .themeToggle_background_slider::before {
   transform: translateX(25px);
 }
+
+/* page selection*/
+.page_action_container {
+  width: 15rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  padding: 20px 30px;
+  color: var(--text-color);
+  font-size: 20px;
+  text-decoration: underline;
+
+  button {
+    background-color: transparent;
+    color: var(--tertiary-color);
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
+}
