@@ -18,7 +18,7 @@ export const useAxiosPost = <T,>(
   const authCtx: any = useContext(AuthContext);
 
   useEffect(() => {
-    token.current = `bearer ${localStorage.getItem("token")}`;
+    token.current = `Bearer ${localStorage.getItem("token")}`;
   }, []);
 
   const request = (data: T) => {

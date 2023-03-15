@@ -1,9 +1,9 @@
 import SendAlertButton from "@/components/actions/button/SendAletrButton";
 import Layout from "@/components/layout/Layout";
 import style from "@/components/styles/UI.module.scss";
+import Loading from "@/components/ui/Loading";
 import UserGrid from "@/components/ui/UserGrid";
 import { useAxios } from "@/hooks/useAxios";
-import { useEffect } from "react";
 
 function ManageUser() {
   const url = process.env.BASE_URL + "admin/get-all-user";
@@ -15,7 +15,7 @@ function ManageUser() {
   return (
     <Layout>
       <main className={style.mu_container}>
-        {loading && <h1>Loading...</h1>}
+        {loading && <Loading />}
         {error && error}
         {user && <UserGrid data={user} reload={request} />}
       </main>

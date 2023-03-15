@@ -18,10 +18,16 @@ function User(props: MyProps) {
           params: {
             id: ID,
           },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       )
       .then((res) => {
         props.reload();
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -36,6 +42,9 @@ function User(props: MyProps) {
           params: {
             id: ID,
           },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       )
       .then((res) => {
@@ -44,7 +53,13 @@ function User(props: MyProps) {
   }
 
   return (
-    <div className={style.user_container}>
+    <div
+      className={style.user_container}
+      style={{
+        backgroundColor:
+          props.Status === "Active" ? "" : "rgba(233, 60, 22, 0.303)",
+      }}
+    >
       <h2>ID : {props.ID}</h2>
       <p>Email : {props.Email}</p>
       <p>First Name : {props.First_name}</p>

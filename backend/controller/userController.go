@@ -220,6 +220,8 @@ func GetAllUser(c *gin.Context){
 	var count int64
 	loader.DB.Model(&model.User{}).Count(&count)
 
+	c.Header("Cache-Control", "max-age=300");
+
 	c.JSON(http.StatusOK, gin.H{
 		"data" : users,
 		"count" : count,

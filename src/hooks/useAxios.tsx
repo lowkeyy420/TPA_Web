@@ -14,7 +14,7 @@ export const useAxios = <T,>(
   const token = useRef<string | null>("");
 
   useEffect(() => {
-    token.current = `bearer ${localStorage.getItem("token")}`;
+    token.current = `Bearer ${localStorage.getItem("token")}`;
     if (loadOnStart) sendRequest(token.current);
     else setLoading(false);
   }, []);
