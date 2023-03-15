@@ -66,17 +66,35 @@
 /* Manage User Page Container*/
 .mu_container {
   width: 100%;
-  height: 100vh;
+  height: auto;
 }
 
 /* User Grid*/
 
 .user_grid_container {
+  height: auto;
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(4, 18%);
-  row-gap: 9.3%;
+  row-gap: 2rem;
   column-gap: 9.3%;
+}
+
+@media (min-width: 100px) {
+  .user_grid_container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (min-width: 640px) {
+  .user_grid_container {
+    grid-template-columns: repeat(2, 2fr);
+  }
+}
+
+@media (min-width: 1008px) {
+  .user_grid_container {
+    grid-template-columns: repeat(4, 4fr);
+  }
 }
 
 /* User Item*/
@@ -88,7 +106,6 @@
   flex-direction: column;
   justify-content: space-evenly;
   gap: 8px;
-
   border-radius: 10px;
 }
 

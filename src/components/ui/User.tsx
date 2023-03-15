@@ -2,15 +2,16 @@ import { ICurrUser } from "@/interfaces/IUserData";
 import axios from "axios";
 import style from "../styles/UI.module.scss";
 
-function User(props: ICurrUser) {
+type MyProps = ICurrUser | any;
+
+function User(props: MyProps) {
   const URL = process.env.BASE_URL + "admin/update-user-status";
 
   function unBanHandler(ID: number) {
     axios
-      .patch(
+      .put(
         URL,
         {
-          id: ID,
           status: "Active",
         },
         {
@@ -19,13 +20,27 @@ function User(props: ICurrUser) {
           },
         }
       )
-      .then((res) => {});
-    props.Status = "Active";
+      .then((res) => {
+        props.reload();
+      });
   }
 
   function banHandler(ID: number) {
-    console.log(ID);
-    props.Status = "Banned";
+    axios
+      .put(
+        URL,
+        {
+          status: "Banned",
+        },
+        {
+          params: {
+            id: ID,
+          },
+        }
+      )
+      .then((res) => {
+        props.reload();
+      });
   }
 
   return (

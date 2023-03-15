@@ -17,7 +17,7 @@ function ManageUser() {
       <main className={style.mu_container}>
         {loading && <h1>Loading...</h1>}
         {error && error}
-        {user && <UserGrid data={user} />}
+        {user && <UserGrid data={user} reload={request} />}
       </main>
     </Layout>
   );

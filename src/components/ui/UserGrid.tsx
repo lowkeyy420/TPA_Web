@@ -4,31 +4,10 @@ import User from "./User";
 
 interface Mydata {
   data: ICurrUser[] | any;
+  reload: any;
 }
 
 const UserGrid = (props: Mydata) => {
-  const URL = process.env.BASE_URL + "admin/update-user-status";
-
-  function unBanHandler(ID: number) {
-    // axios.patch(
-    //   URL,
-    //   {
-    //     id: ID,
-    //     status: "Active",
-    //   },
-    //   {
-    //     params: {
-    //       id: ID,
-    //     },
-    //   }
-    // ).then(res => {
-    // });
-  }
-
-  function banHandler(ID: number) {
-    console.log(ID);
-  }
-
   return (
     <div className={style.user_grid_container}>
       {props.data["data"].map((usr: any) => {
@@ -45,6 +24,7 @@ const UserGrid = (props: Mydata) => {
             SubscribeToEmail={usr.SubscribeToEmail}
             Country={usr.Country}
             Balance={usr.Balance}
+            reload={props.reload}
           />
         );
       })}

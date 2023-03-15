@@ -227,5 +227,45 @@ func GetAllUser(c *gin.Context){
 }
 
 func UpdateUserStatus(c *gin.Context){
-	c.Query("id")
+	id := c.Query("id")
+	var user model.User
+
+	//check user exists
+	result := loader.DB.First(&user, id)
+
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	//read body
+
+	var req struct {
+		Status string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	fmt.Println("Status : ", req.Status)
+
+	//update
+	user.Status = req.Status
+
+	if err := loader.DB.Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to update user",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+
 }
