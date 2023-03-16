@@ -18,11 +18,12 @@ export interface IUserLogin {
 export interface ICurrUser {
   ID: number;
   Email: string;
-  First_name: string;
-  Last_name: string;
-  Phone: string;
+  Name?: string;
+  First_name?: string;
+  Last_name?: string;
+  Phone?: string;
   RoleID: number;
   Status: string;
-  SubscribeToEmail: boolean;
-  Balance: number;
+  SubscribeToEmail?: boolean;
+  Balance?: number;
 }

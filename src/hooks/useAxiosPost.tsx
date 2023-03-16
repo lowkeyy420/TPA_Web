@@ -1,3 +1,4 @@
+import { ICurrShop } from "@/interfaces/IShop";
 import { ICurrUser } from "@/interfaces/IUser";
 import AuthContext from "@/store/Authcontext";
 import axios, { AxiosRequestConfig } from "axios";
@@ -50,19 +51,33 @@ export const useAxiosPost = <T,>(
             new Date().getTime() + res.data.expiresin * 100
           );
 
-          const user: ICurrUser = {
-            ID: res.data.user["ID"],
-            Email: res.data.user["Email"],
-            First_name: res.data.user["First_name"],
-            Last_name: res.data.user["Last_name"],
-            Phone: res.data.user["Phone"],
-            RoleID: res.data.user["RoleID"],
-            Status: res.data.user["Status"],
-            SubscribeToEmail: res.data.user["SubscribeToEmail"],
-            Balance: res.data.user["Balance"],
-          };
+          if (res.data.user["RoleID"] === 2) {
+            const user: ICurrShop = {
+              ID: res.data.user["ID"],
+              Email: res.data.user["Email"],
+              Name: res.data.user["Name"],
+              RoleID: res.data.user["RoleID"],
+              Status: res.data.user["Status"],
+              Description: res.data.user["Description"],
+              Image: res.data.user["Image"],
+            };
+            authCtx.login(token, expirationTime, user);
+          } else {
+            const user: ICurrUser = {
+              ID: res.data.user["ID"],
+              Email: res.data.user["Email"],
+              Name: res.data.user["First_name"] + res.data.user["Last_name"],
+              First_name: res.data.user["First_name"],
+              Last_name: res.data.user["Last_name"],
+              Phone: res.data.user["Phone"],
+              RoleID: res.data.user["RoleID"],
+              Status: res.data.user["Status"],
+              SubscribeToEmail: res.data.user["SubscribeToEmail"],
+              Balance: res.data.user["Balance"],
+            };
 
-          authCtx.login(token, expirationTime, user);
+            authCtx.login(token, expirationTime, user);
+          }
         }
       })
       .catch((error: unknown | any | string) => {

@@ -2,9 +2,9 @@
 export interface IShopData {
   Name?: string;
   Email?: string;
-  Phone?: string;
   Password?: string;
-  SubscribeToEmail?: boolean;
+  Description?: string;
+  Image?: string;
 }
 
 //signin
@@ -17,12 +17,9 @@ export interface IShopLogin {
 export interface ICurrShop {
   ID: number;
   Email: string;
-  First_name: string;
-  Last_name: string;
-  Phone: string;
+  Name?: string;
   RoleID: number;
   Status: string;
-  Country: string;
-  SubscribeToEmail: boolean;
-  Balance: number;
+  Description?: string;
+  Image?: string;
 }
