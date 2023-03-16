@@ -1,6 +1,7 @@
 import HomeCategory from "@/components/actions/HomeCategory";
 import Layout from "@/components/layout/Layout";
 import Carousel from "@/components/ui/Carousel";
+import Loading from "@/components/ui/Loading";
 import { useAxios } from "@/hooks/useAxios";
 import style from "../components/styles/UI.module.scss";
 
@@ -33,7 +34,7 @@ export default function HomePage() {
         </div>
         {slides && <Carousel slides={slides} />}
         {error && <h1>{error}</h1>}
-        {loading && <h1>Loading...</h1>}
+        {loading && <Loading />}
         <h1>Home Page</h1>
       </Layout>
     </>

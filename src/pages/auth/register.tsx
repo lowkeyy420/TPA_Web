@@ -2,7 +2,7 @@ import AuthInputField from "@/components/input/AuthInputField";
 import AuthFooter from "@/components/layout/AuthFooter";
 import Logo from "@/components/ui/Logo";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
-import { IUserData } from "@/interfaces/IUserData";
+import { IUserData } from "@/interfaces/IUser";
 import Head from "next/head";
 import Link from "next/link";
 import React, { FormEvent, useRef } from "react";

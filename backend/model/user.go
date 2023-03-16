@@ -12,6 +12,5 @@ type User struct {
 	RoleID int `gorm:"default:1"`
 	SubscribeToEmail bool
 	Status string `gorm:"default:Active"`
-	Country string `gorm:"default:US"`
 	Balance int `gorm:"default:0"`
 }

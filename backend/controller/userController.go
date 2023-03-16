@@ -192,7 +192,6 @@ func GetUser(c *gin.Context) {
             "Phone": user.Phone,
             "RoleID": user.RoleID,
             "Status": user.Status,
-			"Country" : user.Country,
 			"Balance" : user.Balance,
 		})
 		c.Next();
@@ -232,7 +231,7 @@ func GetAllUser(c *gin.Context){
 	}
 
 	var users []model.User
-	loader.DB.Offset(offset).Limit(limit).Find(&users)
+	loader.DB.Offset(offset).Order("id").Limit(limit).Find(&users)
 	
 
 	c.JSON(http.StatusOK, gin.H{
@@ -269,7 +268,6 @@ func UpdateUserStatus(c *gin.Context){
 		return;
 	}
 
-	fmt.Println("Status : ", req.Status)
 
 	//update
 	user.Status = req.Status

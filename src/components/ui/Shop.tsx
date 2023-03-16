@@ -1,11 +1,11 @@
-import { ICurrUser } from "@/interfaces/IUser";
+import { ICurrShop } from "@/interfaces/IShop";
 import axios from "axios";
 import style from "../styles/UI.module.scss";
 
-type MyProps = ICurrUser | any;
+type MyProps = ICurrShop | any;
 
-function User(props: MyProps) {
-  const URL = process.env.BASE_URL + "admin/update-user-status";
+function Shop(props: MyProps) {
+  const URL = process.env.BASE_URL + "admin/update-shop-status";
 
   function unBanHandler(ID: number) {
     axios
@@ -60,7 +60,7 @@ function User(props: MyProps) {
 
   return (
     <div
-      className={style.user_container}
+      className={style.shop_container}
       style={{
         backgroundColor:
           props.Status === "Active" ? "" : "rgba(233, 60, 22, 0.303)",
@@ -73,7 +73,7 @@ function User(props: MyProps) {
       <p>Phone Number : {props.Phone}</p>
       <p>Subscribed : {props.SubscribeToEmail ? "True" : "False"}</p>
       <p>Status : {props.Status}</p>
-      <div className={style.user_action_container}>
+      <div className={style.shop_action_container}>
         {props.Status === "Active" ? (
           <button className={style.banBtn} onClick={() => banHandler(props.ID)}>
             Ban
@@ -97,4 +97,4 @@ function User(props: MyProps) {
   );
 }
 
-export default User;
+export default Shop;

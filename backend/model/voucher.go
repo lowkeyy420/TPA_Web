@@ -7,4 +7,5 @@ type Voucher struct {
 	VoucherCode        string `gorm:"unique"`
 	VoucherDiscount    int64 
 	VoucherDescription string
+	VoucherCount int 
 }

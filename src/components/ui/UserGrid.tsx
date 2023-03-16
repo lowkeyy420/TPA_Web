@@ -1,4 +1,4 @@
-import { ICurrUser } from "@/interfaces/IUserData";
+import { ICurrUser } from "@/interfaces/IUser";
 import style from "../styles/UI.module.scss";
 import User from "./User";
 
@@ -9,7 +9,7 @@ interface Mydata {
 
 const UserGrid = (props: Mydata) => {
   return (
-    <div className={style.user_grid_container}>
+    <div className={style.data_grid_container}>
       {props.data["data"].map((usr: any) => {
         return (
           <User
@@ -22,7 +22,6 @@ const UserGrid = (props: Mydata) => {
             RoleID={usr.RoleID}
             Status={usr.Status}
             SubscribeToEmail={usr.SubscribeToEmail}
-            Country={usr.Country}
             Balance={usr.Balance}
             reload={props.reload}
           />

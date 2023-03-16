@@ -3,7 +3,7 @@ import AuthInputField from "@/components/input/AuthInputField";
 import AuthFooter from "@/components/layout/AuthFooter";
 import Logo from "@/components/ui/Logo";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
-import { IUserLogin } from "@/interfaces/IUserData";
+import { IUserLogin } from "@/interfaces/IUser";
 import Head from "next/head";
 import Link from "next/link";
 import { FormEvent, useRef } from "react";

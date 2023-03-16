@@ -1,4 +1,4 @@
-import { ITEM_PER_PAGE } from "@/interfaces/IGlobal";
+import { ITEM_PER_PAGE } from "@/interfaces/Config";
 import {
   faAngleDoubleLeft,
   faAngleDoubleRight,

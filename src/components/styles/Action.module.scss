@@ -120,6 +120,9 @@
   color: var(--text-color);
   font-size: 20px;
   text-decoration: underline;
+  background-color: rgba(176, 216, 234, 0.4);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 
   button {
     background-color: transparent;

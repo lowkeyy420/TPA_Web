@@ -23,7 +23,7 @@ import {
 import { useContext } from "react";
 import AuthContext from "@/store/Authcontext";
 import Logo from "../ui/Logo";
-import { ICurrUser } from "@/interfaces/IUserData";
+import { ICurrUser } from "@/interfaces/IUser";
 import RoleOnlyButton from "../actions/button/RoleOnlyButton";
 
 function LoginRegisterButton({

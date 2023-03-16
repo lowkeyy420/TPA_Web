@@ -4,10 +4,11 @@ import "gorm.io/gorm"
 
 type Shop struct {
 	gorm.Model
-	ShopName string
-	ShopEmail string `gorm:"unique"`
-	ShopPassword string
-	ShopDescription string
+	Name string
+	Email string `gorm:"unique"`
+	Password string
+	Description string
 	Status string
-	Rating int
+	Image string 
+	RoleID int `gorm:"default:2"`
 }

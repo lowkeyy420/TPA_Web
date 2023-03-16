@@ -43,10 +43,11 @@ func AdminRoute(r *gin.Engine){
 	
 	//shop
 	r.POST("/admin/add-shop", middleware.AdminAuth, )
+	r.POST("/admin/notify-shop", middleware.AdminAuth, )
 	r.POST("/admin/update-shop-status", middleware.AdminAuth, )
 	
 	//etc
-	r.POST("/admin/send-email-to-subscriber", middleware.AdminAuth, )
+	r.POST("/admin/send-email-to-subscriber", middleware.AdminAuth, controller.SendNewsToSubcriber)
 	r.GET("/admin/get-customer-service-review", middleware.AdminAuth, )
 }
 

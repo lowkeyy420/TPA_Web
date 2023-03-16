@@ -23,7 +23,6 @@ export interface ICurrUser {
   Phone: string;
   RoleID: number;
   Status: string;
-  Country: string;
   SubscribeToEmail: boolean;
   Balance: number;
 }

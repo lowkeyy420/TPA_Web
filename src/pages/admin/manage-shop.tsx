@@ -2,14 +2,14 @@ import SendAlertButton from "@/components/actions/button/SendAlertButton";
 import SelectPage from "@/components/actions/SelectPage";
 import Layout from "@/components/layout/Layout";
 import style from "@/components/styles/UI.module.scss";
-import UserGrid from "@/components/ui/UserGrid";
+import ShopGrid from "@/components/ui/ShopGrid";
 import { useAxios } from "@/hooks/useAxios";
-import { ICurrUser } from "@/interfaces/IUser";
+import { ICurrShop } from "@/interfaces/IShop";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
 interface MyProps {
-  user: ICurrUser;
+  shop: ICurrShop;
   count: number;
 }
 
@@ -17,11 +17,11 @@ interface Props {
   page: number;
 }
 
-const ManageUser: NextPage<Props> = ({ page }) => {
+const ManageShop: NextPage<Props> = ({ page }) => {
   const [currentPage, setCurrentPage] = useState(page);
-  let url = process.env.BASE_URL + `admin/get-all-user?page=${currentPage}`;
+  let url = process.env.BASE_URL + `admin/get-all-shop?page=${currentPage}`;
 
-  const [loading, user, error, request] = useAxios({
+  const [loading, shop, error, request] = useAxios({
     method: "GET",
     url: url,
   });
@@ -32,13 +32,13 @@ const ManageUser: NextPage<Props> = ({ page }) => {
 
   return (
     <Layout>
-      <div className={style.manage_top_action}>
-        {user && (
+      <div className={style.top_action}>
+        {shop && (
           <SelectPage
             currentPage={currentPage}
             setPage={setCurrentPage}
             reload={request}
-            count={user.count}
+            count={shop.count}
           />
         )}
 
@@ -50,18 +50,18 @@ const ManageUser: NextPage<Props> = ({ page }) => {
         />
       </div>
 
-      <main className={style.manage_container}>
+      <main className={style.mu_container}>
         {error && error}
-        {user && <UserGrid data={user} reload={request} />}
+        {shop && <ShopGrid data={shop} reload={request} />}
       </main>
     </Layout>
   );
 };
 
-ManageUser.getInitialProps = async ({ query }) => {
+ManageShop.getInitialProps = async ({ query }) => {
   const { page = "1" } = query;
   const pageNumber = parseInt(page as string, 10);
   return { page: pageNumber };
 };
 
-export default ManageUser;
+export default ManageShop;

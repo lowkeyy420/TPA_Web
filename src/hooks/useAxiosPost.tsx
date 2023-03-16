@@ -1,4 +1,4 @@
-import { ICurrUser } from "@/interfaces/IUserData";
+import { ICurrUser } from "@/interfaces/IUser";
 import AuthContext from "@/store/Authcontext";
 import axios, { AxiosRequestConfig } from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -59,7 +59,6 @@ export const useAxiosPost = <T,>(
             RoleID: res.data.user["RoleID"],
             Status: res.data.user["Status"],
             SubscribeToEmail: res.data.user["SubscribeToEmail"],
-            Country: res.data.user["Country"],
             Balance: res.data.user["Balance"],
           };
 
