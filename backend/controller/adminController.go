@@ -13,7 +13,6 @@ import (
 
 func SendNewsToSubcriber(c *gin.Context) {
 	var req struct{
-		From string
 		Subject string
 		Body string
 	}
@@ -26,8 +25,6 @@ func SendNewsToSubcriber(c *gin.Context) {
 	}
 
 
-	// smtpHost := "smtp.gmail.com:"
-	// smtpPort := "587"
 	smtpUsername := os.Getenv("EMAIL")
 	smtpPassword := os.Getenv("PASS")
 
@@ -36,6 +33,15 @@ func SendNewsToSubcriber(c *gin.Context) {
 	loader.DB.Model(model.User{}).Where("subscribe_to_email = ?", "true").Find(&subscribers)
 
 	len := len(subscribers)
+
+	if len < 1 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error" : "No subscribers",
+		})
+		return
+	}
+
+
 	var to []string
 
 	for i := 0; i < len; i++ { to = append(to, subscribers[i].Email) }

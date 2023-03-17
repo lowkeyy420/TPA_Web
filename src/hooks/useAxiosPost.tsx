@@ -9,7 +9,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 //generic type T to define what data i want to returned , ex : type User { name : name , email : email, password : password}
 export const useAxiosPost = <T,>(
   config: AxiosRequestConfig<any>,
-  type: string
+  type?: string
 ): [boolean, any, string, (data: T) => void] => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
@@ -32,7 +32,7 @@ export const useAxiosPost = <T,>(
     setError("");
 
     const header = {
-      header: { Authorization: token.current },
+      headers: { Authorization: token.current },
     };
 
     const payload = {
@@ -66,7 +66,8 @@ export const useAxiosPost = <T,>(
             const user: ICurrUser = {
               ID: res.data.user["ID"],
               Email: res.data.user["Email"],
-              Name: res.data.user["First_name"] + res.data.user["Last_name"],
+              Name:
+                res.data.user["First_name"] + " " + res.data.user["Last_name"],
               First_name: res.data.user["First_name"],
               Last_name: res.data.user["Last_name"],
               Phone: res.data.user["Phone"],
@@ -85,6 +86,7 @@ export const useAxiosPost = <T,>(
 
         const msg: string | unknown = error.response?.data["error"];
         setError(msg ? msg : "Error occured");
+        console.log(error);
       })
       .finally(() => setLoading(false));
   };

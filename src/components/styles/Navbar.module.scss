@@ -4,7 +4,7 @@
   position: sticky;
   width: 100%;
   top: 0;
-  z-index: 99;
+  z-index: 4;
   background-color: var(--navbar-background-color);
   color: var(--text-color);
   margin: (heigth);
@@ -90,4 +90,37 @@
 
 .navbar_link_red {
   color: red;
+}
+
+@media (min-width: 100px) {
+  .data_grid_container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .manage_top_action {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 640px) {
+  .data_grid_container {
+    grid-template-columns: repeat(2, 2fr);
+  }
+
+  .manage_top_action {
+    justify-content: space-between;
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1008px) {
+  .data_grid_container {
+    grid-template-columns: repeat(3, 3fr);
+  }
+}
+
+@media (min-width: 1366px) {
+  .data_grid_container {
+    grid-template-columns: repeat(4, 4fr);
+  }
 }

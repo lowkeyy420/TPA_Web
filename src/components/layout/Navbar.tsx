@@ -26,13 +26,7 @@ import Logo from "../ui/Logo";
 import { ICurrUser } from "@/interfaces/IUser";
 import RoleOnlyButton from "../actions/button/RoleOnlyButton";
 
-function LoginRegisterButton({
-  First_name,
-  Last_name,
-}: {
-  First_name: string;
-  Last_name: string;
-}) {
+function LoginRegisterButton({ Name }: { Name: string }) {
   return (
     <Link href="/auth/login">
       <div className={style.loginBtn}>
@@ -44,8 +38,7 @@ function LoginRegisterButton({
             <p>Welcome</p>
           </div>
           <div className={style.loginBtn_bottom}>
-            {First_name ? First_name : "Sign In / Register"}{" "}
-            {Last_name ? Last_name : null}
+            {Name ? Name : "Sign In / Register"}
           </div>
         </div>
       </div>
@@ -75,6 +68,8 @@ const HelpCenterButton = () => {
 export default function Navbar() {
   const authCtx: any = useContext(AuthContext);
 
+  // console.log(authCtx.user);
+
   return (
     <nav className={style.navbar_container}>
       <div className={style.nav_top}>
@@ -88,10 +83,7 @@ export default function Navbar() {
         {authCtx.user["RoleID"] > 1 && (
           <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
         )}
-        <LoginRegisterButton
-          First_name={authCtx.user["First_name"]}
-          Last_name={authCtx.user["Last_name"]}
-        />
+        <LoginRegisterButton Name={authCtx.user["Name"]} />
         <ReturnOrderButton />
         <CartButton />
       </div>

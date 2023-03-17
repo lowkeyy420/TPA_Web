@@ -5,12 +5,12 @@ import style from "../../styles/Button.module.scss";
 interface Myprops {
   name?: string;
   email?: boolean;
-  foo?: any;
+  onClick?: any;
 }
 
 function SendAlertButton(props: Myprops) {
   function clickHandler() {
-    props.foo();
+    props.onClick();
   }
 
   return (

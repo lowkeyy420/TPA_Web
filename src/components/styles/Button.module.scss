@@ -153,3 +153,29 @@
 .alertBtn:hover {
   cursor: pointer;
 }
+
+/* modal buttons */
+.modalBtn {
+  font: inherit;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: var(--tertiary-color) !important;
+  color: white;
+  margin: 0 1rem;
+}
+
+.modalBtn:hover {
+  background-color: #9c1458;
+  border-color: #9c1458;
+}
+
+.modalBtn_ok {
+  padding: 0.5rem 1.5rem;
+  background-color: transparent;
+  color: #800040;
+}
+
+.modalBtn_ok:hover {
+  background-color: #f8dae9;
+}

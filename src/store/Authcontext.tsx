@@ -66,7 +66,12 @@ const GetUser = (token: string | any, setuser: any) => {
 
   axios(payload)
     .then((res) => {
-      setuser(res.data);
+      const user = {
+        ...res.data,
+        Name: res.data["First_name"] + " " + res.data["Last_name"],
+      };
+
+      setuser(user);
     })
     .catch((error) => {});
 };
