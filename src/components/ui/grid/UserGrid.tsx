@@ -1,6 +1,6 @@
 import { ICurrUser } from "@/interfaces/IUser";
-import style from "../styles/UI.module.scss";
-import User from "./User";
+import style from "../../styles/UI.module.scss";
+import User from "../item/User";
 
 interface Mydata {
   data: ICurrUser[] | any;

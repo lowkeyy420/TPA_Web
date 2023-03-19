@@ -166,8 +166,8 @@
 }
 
 .modalBtn:hover {
-  background-color: #9c1458;
-  border-color: #9c1458;
+  background-color: var(--hover-color) !important;
+  cursor: pointer;
 }
 
 .modalBtn_ok {
@@ -177,5 +177,6 @@
 }
 
 .modalBtn_ok:hover {
+  cursor: pointer;
   background-color: #f8dae9;
 }

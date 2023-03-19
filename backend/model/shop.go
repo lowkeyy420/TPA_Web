@@ -8,7 +8,7 @@ type Shop struct {
 	Email string `gorm:"unique"`
 	Password string
 	Description string
-	Status string
+	Status string `gorm:"default:Active"`
 	Image string 
 	RoleID int `gorm:"default:2"`
 }

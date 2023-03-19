@@ -2,7 +2,7 @@ import SendAlertButton from "@/components/actions/button/SendAlertButton";
 import SelectPage from "@/components/actions/SelectPage";
 import Layout from "@/components/layout/Layout";
 import style from "@/components/styles/UI.module.scss";
-import ShopGrid from "@/components/ui/ShopGrid";
+import ShopGrid from "@/components/ui/grid/ShopGrid";
 import { useAxios } from "@/hooks/useAxios";
 import { ICurrShop } from "@/interfaces/IShop";
 import { NextPage } from "next";
@@ -41,18 +41,11 @@ const ManageShop: NextPage<Props> = ({ page }) => {
             count={shop.count}
           />
         )}
-
-        <SendAlertButton
-          email
-          foo={() => {
-            console.log("test");
-          }}
-        />
       </div>
 
       <main className={style.mu_container}>
         {error && error}
-        {shop && <ShopGrid data={shop} reload={request} />}
+        {shop && <ShopGrid />}
       </main>
     </Layout>
   );

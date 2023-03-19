@@ -1,6 +1,6 @@
 import { ICurrUser } from "@/interfaces/IUser";
 import axios from "axios";
-import style from "../styles/UI.module.scss";
+import style from "../../styles/UI.module.scss";
 
 type MyProps = ICurrUser | any;
 
@@ -24,7 +24,6 @@ function User(props: MyProps) {
         }
       )
       .then((res) => {
-        console.log("res", res.data);
         props.reload();
       })
       .catch((err) => {
@@ -49,8 +48,6 @@ function User(props: MyProps) {
         }
       )
       .then((res) => {
-        console.log("res", res.data);
-
         props.reload();
       })
       .catch((err) => {

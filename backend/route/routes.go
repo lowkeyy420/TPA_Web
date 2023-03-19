@@ -13,7 +13,7 @@ func UserRoute(r *gin.Engine) {
 }
 
 func ProductRoute(r *gin.Engine){
-	r.GET("/product/get", controller.GetUser )
+	r.GET("/product/get", )
 	r.POST("/product/insert-new-product", middleware.RequireAuth,)
 	r.POST("/product/update-product", middleware.RequireAuth, )
 	r.POST("/product/remove-product", middleware.RequireAuth,)
@@ -26,8 +26,11 @@ func PromotionRoute(r *gin.Engine){
 }
 
 func ShopController(r *gin.Engine){
-	r.GET("/shop/get-all-shop",  )
-	r.GET("/shop/showdetails",)
+	r.GET("/shop/get-all-shop",  controller.GetAllShop)
+	r.GET("/shop/get-shop", controller.GetShopById)
+	
+	r.GET("/shop/get-shop-rating", controller.GetShopById)
+
 }
 
 
@@ -42,9 +45,9 @@ func AdminRoute(r *gin.Engine){
 	r.POST("/admin/update-voucher", middleware.AdminAuth, )
 	
 	//shop
-	r.POST("/admin/add-shop", middleware.AdminAuth, )
+	r.POST("/admin/add-shop", middleware.AdminAuth, controller.CreateShop)
 	r.POST("/admin/notify-shop", middleware.AdminAuth, )
-	r.POST("/admin/update-shop-status", middleware.AdminAuth, )
+	r.POST("/admin/update-shop-status", middleware.AdminAuth, controller.UpdateShopStatus)
 	
 	//etc
 	r.POST("/admin/send-email-to-subscriber", middleware.AdminAuth, controller.SendNewsToSubcriber)

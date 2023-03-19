@@ -65,14 +65,26 @@ function Carousel({ slides }: ImageSlider) {
         </span>
       </button>
 
-      <Image
-        src={slides.length > 0 ? slides[currIdx]?.URL : emptypic}
-        alt={slides.length > 0 ? slides[currIdx]?.Alt : "No Promotions Yet.."}
-        className={style.image}
-        height={1920}
-        width={1080}
-        quality={100}
-      />
+      {slides && slides.length > 0 ? (
+        <Image
+          priority
+          src={slides[currIdx].URL}
+          alt={slides[currIdx].Alt}
+          className={style.image}
+          height={1920}
+          width={1080}
+        />
+      ) : (
+        <Image
+          priority
+          src={emptypic}
+          alt="No Promotions Yet.."
+          className={style.image}
+          height={1920}
+          width={1080}
+          quality={100}
+        />
+      )}
 
       <button
         onClick={() => {

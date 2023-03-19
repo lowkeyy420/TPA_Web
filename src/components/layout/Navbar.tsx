@@ -23,7 +23,6 @@ import {
 import { useContext } from "react";
 import AuthContext from "@/store/Authcontext";
 import Logo from "../ui/Logo";
-import { ICurrUser } from "@/interfaces/IUser";
 import RoleOnlyButton from "../actions/button/RoleOnlyButton";
 
 function LoginRegisterButton({ Name }: { Name: string }) {
@@ -67,8 +66,6 @@ const HelpCenterButton = () => {
 
 export default function Navbar() {
   const authCtx: any = useContext(AuthContext);
-
-  // console.log(authCtx.user);
 
   return (
     <nav className={style.navbar_container}>

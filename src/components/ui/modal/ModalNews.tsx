@@ -1,6 +1,6 @@
 import { FormEvent, useRef } from "react";
-import style from "../styles/UI.module.scss";
-import btn from "../styles/Button.module.scss";
+import style from "../../styles/UI.module.scss";
+import btn from "../../styles/Button.module.scss";
 
 type MyProps = {
   action?: string;
