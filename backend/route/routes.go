@@ -12,6 +12,14 @@ func UserRoute(r *gin.Engine) {
 	r.POST("/login", controller.Login )
 }
 
+func ShopRoute(r *gin.Engine){
+	r.GET("/shop/get-all-shop",  controller.GetAllShop)
+	r.GET("/shop/get-shop", controller.GetShopById)
+	
+	r.GET("/shop/get-shop-rating", controller.GetShopById)
+
+}
+
 func ProductRoute(r *gin.Engine){
 	r.GET("/product/get", )
 	r.POST("/product/insert-new-product", middleware.RequireAuth,)
@@ -25,13 +33,6 @@ func PromotionRoute(r *gin.Engine){
 	r.GET("/promotion/get-all-promotion",  controller.GetAllPromotions)
 }
 
-func ShopController(r *gin.Engine){
-	r.GET("/shop/get-all-shop",  controller.GetAllShop)
-	r.GET("/shop/get-shop", controller.GetShopById)
-	
-	r.GET("/shop/get-shop-rating", controller.GetShopById)
-
-}
 
 
 func AdminRoute(r *gin.Engine){
@@ -63,6 +64,7 @@ func ChatRoute(r *gin.Engine){
 
 func UseAllRoutes(r *gin.Engine){
 	UserRoute(r)
+	ShopRoute(r)
 	ProductRoute(r)
 	PromotionRoute(r)
 	AdminRoute(r)

@@ -17,7 +17,6 @@ import (
 
 func CreateShop(c *gin.Context) {
 	//requested data
-
 	var req struct {
 		Name    	string
 		Email		string
@@ -61,6 +60,10 @@ func CreateShop(c *gin.Context) {
 	})
 
 }
+
+
+		
+
 
 func GetShop(c *gin.Context) {
 	//get token

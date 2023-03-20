@@ -25,7 +25,7 @@ function ModalNews({ action = "add", onConfirm, onCancel }: MyProps) {
   return (
     <div className={style.modal}>
       <form className={style.modal_form_container} onSubmit={confirmHandler}>
-        <p>send news</p>
+        <p>Send News To Subscribers</p>
 
         <input
           type="text"
