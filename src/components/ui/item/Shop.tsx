@@ -1,6 +1,7 @@
 import { ICurrShop } from "@/interfaces/IShop";
 import axios from "axios";
-import style from "../styles/UI.module.scss";
+import Image from "next/image";
+import style from "../../styles/UI.module.scss";
 
 type MyProps = ICurrShop | any;
 
@@ -24,7 +25,6 @@ function Shop(props: MyProps) {
         }
       )
       .then((res) => {
-        console.log("res", res.data);
         props.reload();
       })
       .catch((err) => {
@@ -49,8 +49,6 @@ function Shop(props: MyProps) {
         }
       )
       .then((res) => {
-        console.log("res", res.data);
-
         props.reload();
       })
       .catch((err) => {
@@ -66,12 +64,21 @@ function Shop(props: MyProps) {
           props.Status === "Active" ? "" : "rgba(233, 60, 22, 0.303)",
       }}
     >
-      <h2>ID : {props.ID}</h2>
+      {props.Image && (
+        <Image
+          priority
+          src={props.Image}
+          alt={props.ID}
+          width="200"
+          height="200"
+          className={style.image}
+        />
+      )}
+
+      <p>ID : {props.ID}</p>
       <p>Email : {props.Email}</p>
-      <p>First Name : {props.First_name}</p>
-      <p>Last Name :{props.Last_name}</p>
-      <p>Phone Number : {props.Phone}</p>
-      <p>Subscribed : {props.SubscribeToEmail ? "True" : "False"}</p>
+      <p>Name :{props.Name}</p>
+      <p>Description : {props.Description}</p>
       <p>Status : {props.Status}</p>
       <div className={style.shop_action_container}>
         {props.Status === "Active" ? (

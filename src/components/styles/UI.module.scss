@@ -195,6 +195,8 @@
 
 @media (min-width: 100px) {
   .data_grid_container {
+    align-items: center;
+    justify-items: center;
     grid-template-columns: repeat(1, 1fr);
   }
 

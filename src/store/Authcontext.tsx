@@ -66,12 +66,17 @@ const GetUser = (token: string | any, setuser: any) => {
 
   axios(payload)
     .then((res) => {
-      const user = {
-        ...res.data,
-        Name: res.data["First_name"] + " " + res.data["Last_name"],
-      };
+      console.log(res);
+      if (res.data["RoleID"] == 2) {
+        setuser(res.data);
+      } else {
+        const user = {
+          ...res.data,
+          Name: res.data["First_name"] + " " + res.data["Last_name"],
+        };
 
-      setuser(user);
+        setuser(user);
+      }
     })
     .catch((error) => {});
 };
@@ -120,7 +125,7 @@ export const AuthContextProvider = (props: MyProps) => {
     if (user.RoleID === 4) {
       router.push("/admin");
     } else if (user.RoleID === 2) {
-      router.push("/shop");
+      router.push("/");
     } else {
       router.push("/");
     }
@@ -134,6 +139,7 @@ export const AuthContextProvider = (props: MyProps) => {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
       if (user && user.length < 1) {
         GetUser("bearer " + tokenData.token, setUser);
+        console.log("geting user...");
       }
     }
   }, [tokenData]);

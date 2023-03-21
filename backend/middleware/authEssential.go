@@ -24,11 +24,6 @@ func RequireAuth(c *gin.Context) {
 	fmt.Println("auth : " + header)
 	tokenString := header[7:]
 	
-	
-	// if err != nil {
-		// fmt.Println(err)
-		// c.AbortWithStatus(http.StatusUnauthorized)
-	// }
 
 	
 	//validate token
@@ -50,6 +45,7 @@ func RequireAuth(c *gin.Context) {
 		var user model.User
 		loader.DB.First(&user, claims["sbj"])
 		
+
 		if user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

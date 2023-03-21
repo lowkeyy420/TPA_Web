@@ -26,6 +26,7 @@ const ManageShop: NextPage<Props> = ({ page }) => {
 
   let url = process.env.BASE_URL + `shop/get-all-shop?page=${currentPage}`;
   let url2 = process.env.BASE_URL + `admin/add-shop`;
+  let url3 = process.env.BASE_URL + `admin/notify-created-shop`;
 
   const [loading, shop, error, request] = useAxios({
     method: "GET",
@@ -37,6 +38,11 @@ const ManageShop: NextPage<Props> = ({ page }) => {
     url: url2,
   });
 
+  const [requestloading, sucess, failed, sendemail] = useAxiosPost({
+    method: "POST",
+    url: url3,
+  });
+
   useEffect(() => {
     request();
   }, [currentPage, response]);
@@ -44,12 +50,23 @@ const ManageShop: NextPage<Props> = ({ page }) => {
   useEffect(() => {
     if (response) {
       alert("Created shop for " + response["email"]);
+      closeModalHandler();
+      sendemail({ email: response["email"] });
     }
 
     if (errorshop) {
       alert(errorshop);
     }
   }, [response, errorshop]);
+
+  useEffect(() => {
+    if (sucess) {
+      alert("Successfuly notified" + response["email"]);
+    }
+    if (failed) {
+      alert("Failed notifying");
+    }
+  }, [sucess, failed]);
 
   function openModalHandler() {
     setModalIsOpen(true);
@@ -72,13 +89,12 @@ const ManageShop: NextPage<Props> = ({ page }) => {
       Password: password,
       Description: description,
       Image:
-        "https://www.google.co.id/images/branding/googlelogo/2x/googlelogo_color_160x56dp.png",
+        "https://firebasestorage.googleapis.com/v0/b/tpa-web-a33b2.appspot.com/o/promotions%2Ffilename?alt=media",
     });
   }
 
   return (
     <Layout>
-      {loading && <h1>Loading</h1>}
       {modalIsOpen && (
         <ModalShop onCancel={closeModalHandler} onConfirm={newShopHandler} />
       )}
@@ -98,7 +114,7 @@ const ManageShop: NextPage<Props> = ({ page }) => {
 
       <main className={style.mu_container}>
         {error && error}
-        {shop && <ShopGrid />}
+        {shop && <ShopGrid data={shop} reload={request} />}
       </main>
     </Layout>
   );

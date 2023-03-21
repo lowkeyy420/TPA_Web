@@ -32,6 +32,16 @@ func CreateShop(c *gin.Context) {
 		return
 	}
 
+	//check if email exists in user throw error
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error == nil {
+        c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "Email already exists as a user",
+        })
+        return
+    }
+
+
 	//password hashing
 	hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), 10)
 
@@ -57,12 +67,12 @@ func CreateShop(c *gin.Context) {
 	//response
 	c.JSON(http.StatusOK, gin.H{
 		"email": req.Email,
+		"id" : shop.ID,
 	})
 
 }
 
 
-		
 
 
 func GetShop(c *gin.Context) {

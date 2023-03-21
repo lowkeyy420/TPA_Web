@@ -34,6 +34,16 @@ func SignUp(c *gin.Context) {
 		return;
 	}
 
+	//check if email exists in shop throw error
+	var shop model.Shop
+	if result := loader.DB.First(&shop, "email = ?", req.Email); result.Error == nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Email already exists in shop",
+		})
+		return
+	}
+
+
 	//password hashing
 	hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password),10)
 
@@ -80,16 +90,18 @@ func Login(c *gin.Context) {
 	//check user 
 	var user model.User
 	loader.DB.First(&user, "email = ?", req.Email)
-	
 
-	if user.ID == 0 {
+	var shop model.Shop
+	loader.DB.First(&shop, "email = ?", req.Email)
+
+	if user.ID == 0 && shop.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid account",
 		})
 		return;
 	}
 
-	if user.Status == "Banned" {
+	if user.Status == "Banned" || shop.Status == "Banned" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "User Banned",
 		})
@@ -97,44 +109,94 @@ func Login(c *gin.Context) {
 	}
 
 	//compare hash and password
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid email / pass",
+
+	
+	if shop.ID != 0 {
+		err := bcrypt.CompareHashAndPassword([]byte(shop.Password), []byte(req.Password))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Invalid email / pass",
+			})
+			return;
+		}
+		
+		//create jwt
+	
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"sbj" : shop.ID, //subject
+			"role" : shop.RoleID,
+			"exp" : time.Now().Add(time.Hour * 24 * 30).Unix(),  //expiration
+		})
+	
+		//sign and get
+		generatedToken, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Failed creating token",
+			})
+			return;
+		}
+		
+		//auto set cookie
+		c.SetSameSite(http.SameSiteLaxMode)
+		
+		
+		//expiration time
+		exp := 3600*24
+		c.SetCookie("token", generatedToken, exp, "", "", false, false)
+	
+		//response
+		c.JSON(http.StatusOK, gin.H{
+			"token" : generatedToken,
+			"expiresin" : exp,
+			"user" : shop,
 		})
 		return;
+	} else if user.ID != 0 {
+		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"error": "Invalid email / pass",
+				})
+				return;
+			}
+			
+			//create jwt
+		
+			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+				"sbj" : user.ID, //subject
+				"role" : user.RoleID,
+				"exp" : time.Now().Add(time.Hour * 24 * 30).Unix(),  //expiration
+			})
+		
+			//sign and get
+			generatedToken, err := token.SignedString([]byte(os.Getenv("SECRET")))
+		
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"error": "Failed creating token",
+				})
+				return;
+			}
+			
+			//auto set cookie
+			c.SetSameSite(http.SameSiteLaxMode)
+			
+			
+			//expiration time
+			exp := 3600*24
+			c.SetCookie("token", generatedToken, exp, "", "", false, false)
+		
+			//response
+			c.JSON(http.StatusOK, gin.H{
+				"token" : generatedToken,
+				"expiresin" : exp,
+				"user" : user,
+			})
+			return;
 	}
-	
-	//create jwt
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sbj" : user.ID, //subject
-		"exp" : time.Now().Add(time.Hour * 24 * 30).Unix(),  //expiration
-	})
-
-	//sign and get
-	generatedToken, err := token.SignedString([]byte(os.Getenv("SECRET")))
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed creating token",
-		})
-		return;
-	}
-	//auto set cookie
-	c.SetSameSite(http.SameSiteLaxMode)
-	
-	
-	//expiration time
-	exp := 3600*24
-	c.SetCookie("token", generatedToken, exp, "", "", false, false)
-
-	//response
-	c.JSON(http.StatusOK, gin.H{
-		"token" : generatedToken,
-		"expiresin" : exp,
-		"user" : user,
-	})
 }
 
 func Ping(c *gin.Context){
@@ -162,38 +224,78 @@ func GetUser(c *gin.Context) {
 	token,_ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}	
-		return []byte(os.Getenv("SECRET")), nil
-	})
-	
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		//validate expiration
+			}	
+			return []byte(os.Getenv("SECRET")), nil
+		})
+		
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			//validate expiration
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		
-		//find user with token subject
-		var user model.User
-		loader.DB.First(&user, claims["sbj"])
-		
-		if user.ID == 0 {
+
+		role := claims["role"].(float64)
+
+		if role == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return;
 		}
+		
+		if role == 2 {
+			fmt.Println("MASUK Get shop")
 
-		//attach to request
-		c.Set("user", user)
+			var shop model.Shop;
+			loader.DB.First(&shop, claims["sbj"])
 
-		//send user
-		c.JSON(http.StatusOK, gin.H{
-            "ID": user.ID,
-            "Email": user.Email,
-            "First_name": user.First_name,
-            "Last_name": user.Last_name,
-            "Phone": user.Phone,
-            "RoleID": user.RoleID,
-            "Status": user.Status,
-			"Balance" : user.Balance,
-		})
+			if shop.ID == 0 {
+				c.AbortWithStatus(http.StatusUnauthorized)
+				return;
+			}
+
+			
+			//attach to request
+			c.Set("user", shop)
+	
+			//send user
+			c.JSON(http.StatusOK, gin.H{
+				"ID": shop.ID,
+				"Name": shop.Name,
+				"Email": shop.Email,
+				"Description": shop.Description,
+				"Status": shop.Status,
+				"Image": shop.Image,
+				"RoleID": shop.RoleID,
+			})
+
+
+		} else {
+			fmt.Println("MASUK Get User")
+
+			var user model.User
+			//find user with token subject
+			loader.DB.First(&user, claims["sbj"])
+			
+			if user.ID == 0 {
+				c.AbortWithStatus(http.StatusUnauthorized)
+				return;
+			}
+	
+			//attach to request
+			c.Set("user", user)
+	
+			//send user
+			c.JSON(http.StatusOK, gin.H{
+				"ID": user.ID,
+				"Email": user.Email,
+				"First_name": user.First_name,
+				"Last_name": user.Last_name,
+				"Phone": user.Phone,
+				"RoleID": user.RoleID,
+				"Status": user.Status,
+				"Balance" : user.Balance,
+			})
+		}
+		
 		c.Next();
 
 	} else {

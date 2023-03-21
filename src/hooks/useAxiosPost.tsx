@@ -84,7 +84,7 @@ export const useAxiosPost = <T,>(
       .catch((error: unknown | any | string) => {
         // console.log(error);
 
-        const msg: string | unknown = error.response?.data["error"];
+        const msg: string | unknown = error.response.data.error;
         setError(msg ? msg : "Error occured");
         console.log(error);
       })
