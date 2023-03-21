@@ -22,9 +22,10 @@ interface Props {
 
 const ManageShop: NextPage<Props> = ({ page }) => {
   const [currentPage, setCurrentPage] = useState(page);
+  const [filter, setFilter] = useState("get-all-shop");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  let url = process.env.BASE_URL + `shop/get-all-shop?page=${currentPage}`;
+  let url = process.env.BASE_URL + `shop/${filter}?page=${currentPage}`;
   let url2 = process.env.BASE_URL + `admin/add-shop`;
   let url3 = process.env.BASE_URL + `admin/notify-created-shop`;
 
@@ -45,7 +46,7 @@ const ManageShop: NextPage<Props> = ({ page }) => {
 
   useEffect(() => {
     request();
-  }, [currentPage, response]);
+  }, [currentPage, response, filter]);
 
   useEffect(() => {
     if (response) {
@@ -74,6 +75,21 @@ const ManageShop: NextPage<Props> = ({ page }) => {
 
   function closeModalHandler() {
     setModalIsOpen(false);
+  }
+
+  function filterByBanned() {
+    setFilter("get-banned-shop");
+    setCurrentPage(1);
+  }
+
+  function filterByActive() {
+    setFilter("get-active-shop");
+    setCurrentPage(1);
+  }
+
+  function unsetFilter() {
+    setFilter("get-all-shop");
+    setCurrentPage(1);
   }
 
   function newShopHandler(
@@ -110,9 +126,14 @@ const ManageShop: NextPage<Props> = ({ page }) => {
         )}
 
         <ActionButton onClick={openModalHandler} add />
+        <div className={style.filter_container}>
+          <ActionButton onClick={unsetFilter} text="Unset" />
+          <ActionButton onClick={filterByBanned} text="Banned" />
+          <ActionButton onClick={filterByActive} text="Active" />
+        </div>
       </div>
 
-      <main className={style.mu_container}>
+      <main className={style.manage_container}>
         {error && error}
         {shop && <ShopGrid data={shop} reload={request} />}
       </main>

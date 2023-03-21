@@ -20,6 +20,7 @@ function ShopGrid(props: Mydata) {
             Name={usr.Name}
             Image={usr.Image}
             Status={usr.Status}
+            Description={usr.Description}
             RoleID={usr.RoleID}
             reload={props.reload}
           />

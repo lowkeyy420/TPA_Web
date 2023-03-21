@@ -63,10 +63,17 @@
   color: var(--text-color);
 }
 
-/* Manage User Page Container*/
+/* Manage Page Container*/
 .manage_container {
   width: 100%;
   height: auto;
+}
+
+.filter_container {
+  width: 15rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 /* User Grid*/
@@ -77,6 +84,7 @@
   display: grid;
   row-gap: 2rem;
   column-gap: 9.3%;
+  justify-content: center;
 }
 
 /* User Item / Shop Item */
@@ -91,7 +99,28 @@
   border-radius: 10px;
 }
 
-.user_action_container {
+.shop_outer_container {
+  padding: 20px 8px;
+  width: 14rem;
+  background-color: var(--navbar-background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 5px 2px 10px 1px rgba(40, 37, 37, 0.672);
+}
+
+.shop_container {
+  background-color: unset;
+  color: var(--text-color) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 8px;
+  border-radius: 10px;
+}
+
+.user_action_container,
+.shop_action_container {
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -99,34 +128,42 @@
   padding-top: 20px;
 }
 
-.user_action_container button {
+.user_action_container button,
+.shop_action_container button {
   height: 40px;
   width: 80px;
 }
 
-.user_action_container button:hover {
+.user_action_container button:hover,
+.shop_action_container button:hover {
   cursor: pointer;
 }
 
-.user_action_container .banBtn {
+.user_action_container .banBtn,
+.shop_action_container .banBtn {
   background-color: rgb(87, 134, 209) !important;
 }
 
-.user_action_container .banBtn:hover {
+.user_action_container .banBtn:hover,
+.shop_action_container .banBtn:hover {
   background-color: rgba(87, 134, 209, 0.502) !important;
 }
 
-.user_action_container .unbanBtn {
+.user_action_container .unbanBtn,
+.shop_action_container .unbanBtn {
   background-color: rgb(251, 179, 53) !important;
 }
-.user_action_container .unbanBtn:hover {
+.user_action_container .unbanBtn:hover,
+.shop_action_container .unbanBtn:hover {
   background-color: rgba(251, 178, 53, 0.452) !important;
 }
 
+.user_action_container .disabledBtn,
 .user_action_container .disabledBtn {
   background-color: rgba(145, 193, 236, 0.313);
 }
 
+.user_action_container .disabledBtn:hover,
 .user_action_container .disabledBtn:hover {
   cursor: not-allowed;
 }
@@ -203,6 +240,10 @@
   .manage_top_action {
     flex-direction: column;
   }
+
+  .filter_container {
+    width: 15rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -213,6 +254,10 @@
   .manage_top_action {
     justify-content: space-between;
     flex-direction: row;
+  }
+
+  .filter_container {
+    width: 18rem;
   }
 }
 

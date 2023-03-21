@@ -2,9 +2,11 @@ package controller
 
 import (
 	"fmt"
+	"math"
 	"net/http"
 	"net/smtp"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lowkeyy420/oldegg/loader"
@@ -108,5 +110,75 @@ func NotifyCreatedShop(c *gin.Context){
 
 	c.JSON(http.StatusOK, gin.H{
 		"message" : "Successfully Sent Email...",
+	})
+}
+
+func GetShopByBanned(c *gin.Context){
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil || page < 1 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	var count int64
+	loader.DB.Model(&model.Shop{}).Where("status = ?", "Banned").Count(&count)
+
+	offset := (page - 1) * loader.ITEM_PER_PAGE
+	limit := loader.ITEM_PER_PAGE
+
+	max := int(math.Ceil(float64(count) / float64(limit)))
+
+	fmt.Println("max ", max, " page ", page)
+
+	if page > max {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	var shops []model.Shop
+	loader.DB.Offset(offset).Where("status = ?", "Banned").Order("id").Limit(limit).Find(&shops)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":  shops,
+		"count": count,
+	})
+}
+
+func GetShopByActive(c *gin.Context){
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil || page < 1 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	var count int64
+	loader.DB.Model(&model.Shop{}).Where("status = ?", "Active").Count(&count)
+
+	offset := (page - 1) * loader.ITEM_PER_PAGE
+	limit := loader.ITEM_PER_PAGE
+
+	max := int(math.Ceil(float64(count) / float64(limit)))
+
+	fmt.Println("max ", max, " page ", page)
+
+	if page > max {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	var shops []model.Shop
+	loader.DB.Offset(offset).Where("status = ?", "Active").Order("id").Limit(limit).Find(&shops)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":  shops,
+		"count": count,
 	})
 }

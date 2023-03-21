@@ -58,47 +58,52 @@ function Shop(props: MyProps) {
 
   return (
     <div
-      className={style.shop_container}
+      className={style.shop_outer_container}
       style={{
         backgroundColor:
           props.Status === "Active" ? "" : "rgba(233, 60, 22, 0.303)",
       }}
     >
-      {props.Image && (
-        <Image
-          priority
-          src={props.Image}
-          alt={props.ID}
-          width="200"
-          height="200"
-          className={style.image}
-        />
-      )}
-
-      <p>ID : {props.ID}</p>
-      <p>Email : {props.Email}</p>
-      <p>Name :{props.Name}</p>
-      <p>Description : {props.Description}</p>
-      <p>Status : {props.Status}</p>
-      <div className={style.shop_action_container}>
-        {props.Status === "Active" ? (
-          <button className={style.banBtn} onClick={() => banHandler(props.ID)}>
-            Ban
-          </button>
-        ) : (
-          <button className={style.disabledBtn} disabled></button>
+      <div className={style.shop_container}>
+        {props.Image && (
+          <Image
+            priority
+            src={props.Image}
+            alt={props.ID}
+            width="200"
+            height="200"
+            className={style.image}
+          />
         )}
 
-        {props.Status === "Banned" ? (
-          <button
-            className={style.unbanBtn}
-            onClick={() => unBanHandler(props.ID)}
-          >
-            UnBan
-          </button>
-        ) : (
-          <button className={style.disabledBtn} disabled></button>
-        )}
+        <p>ID : {props.ID}</p>
+        <p>Email : {props.Email}</p>
+        <p>Name :{props.Name}</p>
+        <p>Description : {props.Description}</p>
+        <p>Status : {props.Status}</p>
+        <div className={style.shop_action_container}>
+          {props.Status === "Active" ? (
+            <button
+              className={style.banBtn}
+              onClick={() => banHandler(props.ID)}
+            >
+              Ban
+            </button>
+          ) : (
+            <button className={style.disabledBtn} disabled></button>
+          )}
+
+          {props.Status === "Banned" ? (
+            <button
+              className={style.unbanBtn}
+              onClick={() => unBanHandler(props.ID)}
+            >
+              UnBan
+            </button>
+          ) : (
+            <button className={style.disabledBtn} disabled></button>
+          )}
+        </div>
       </div>
     </div>
   );

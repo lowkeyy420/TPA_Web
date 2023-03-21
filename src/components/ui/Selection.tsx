@@ -16,6 +16,10 @@ const AdminSelections = [
     link: "/admin/manage-promotion",
   },
   {
+    title: "Add Voucher",
+    link: "/admin/add-voucher",
+  },
+  {
     title: "Customer Service Review",
     link: "/admin/customer-service-review",
   },

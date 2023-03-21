@@ -49,7 +49,8 @@ func AdminRoute(r *gin.Engine){
 	r.POST("/admin/add-shop", middleware.AdminAuth, controller.CreateShop)
 	r.POST("/admin/notify-created-shop", middleware.AdminAuth, controller.NotifyCreatedShop )
 	r.PUT("/admin/update-shop-status", middleware.AdminAuth, controller.UpdateShopStatus)
-	r.GET("/shop/get-filtered-shop",  middleware.AdminAuth,controller.GetAllShop)
+	r.GET("/shop/get-active-shop",  middleware.AdminAuth,controller.GetShopByActive)
+	r.GET("/shop/get-banned-shop",  middleware.AdminAuth,controller.GetShopByBanned)
 	
 	//etc
 	r.POST("/admin/send-email-to-subscriber", middleware.AdminAuth, controller.SendNewsToSubcriber)

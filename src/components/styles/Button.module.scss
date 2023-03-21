@@ -148,6 +148,10 @@
   color: white;
   margin: 10px;
   margin-right: 25px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .alertBtn:hover {
@@ -185,13 +189,11 @@
   .alertBtn {
     margin: 0px;
     margin-top: 10px;
-    margin-right: 0px;
   }
 }
 
 @media (min-width: 640px) {
   .alertBtn {
     margin: 10px;
-    margin-right: 25px;
   }
 }
