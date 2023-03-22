@@ -60,7 +60,7 @@ func AdminRoute(r *gin.Engine){
 	
 	//etc
 	r.POST("/admin/send-email-to-subscriber", middleware.AdminAuth, controller.SendNewsToSubcriber)
-	r.GET("/admin/get-customer-service-review", middleware.AdminAuth, )
+	r.GET("/admin/get-customer-service-review", middleware.AdminAuth, controller.GetCustomerServiceReview )
 }
 
 func ChatRoute(r *gin.Engine){

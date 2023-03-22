@@ -182,3 +182,26 @@ func GetShopByActive(c *gin.Context){
 		"count": count,
 	})
 }
+
+func GetCustomerServiceReview(c *gin.Context){
+
+	type ReviewWithUser struct {
+		ID        uint   `json:"id"`
+		UserID    uint   `json:"user_id"`
+		Content   string `json:"content"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+	}
+
+    var reviews []ReviewWithUser
+
+    loader.DB.Table("customer_reviews").
+        Select("customer_reviews.*, users.first_name, users.last_name").
+        Joins("left join users on users.id = customer_reviews.user_id").
+        Scan(&reviews)
+
+    // return the customer reviews as JSON
+    c.JSON(200, gin.H{
+        "reviews": reviews,
+    })
+}
