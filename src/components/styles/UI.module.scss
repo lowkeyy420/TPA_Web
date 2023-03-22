@@ -206,12 +206,14 @@
 
     input {
       padding: 10px;
+      border: 1px solid black;
     }
 
     textarea {
       resize: none;
       padding: 10px;
       height: 40px;
+      border: 1px solid black;
     }
   }
 

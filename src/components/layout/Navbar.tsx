@@ -50,7 +50,7 @@ const FeedBackButton = () => {
     <div className={btn.nav_childsupportBtn}>
       {/* <FontAwesomeIcon icon="comment-alt-smile" /> */}
       <FontAwesomeIcon icon={faCommentAlt} className={btn.icon} />
-      FEEDBACK
+      <p>FEEDBACK</p>
     </div>
   );
 };
@@ -59,7 +59,7 @@ const HelpCenterButton = () => {
   return (
     <div className={btn.nav_childsupportBtn}>
       <FontAwesomeIcon icon={faCircleQuestion} className={btn.icon} />
-      HELP CENTER
+      <p>HELP CENTER</p>
     </div>
   );
 };

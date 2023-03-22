@@ -30,7 +30,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 170px;
   height: 45px;
   border-radius: 100px;
   transition: background-color 0.1s linear;
@@ -132,4 +131,25 @@
   button:hover {
     cursor: pointer;
   }
+}
+
+@media (min-width: 100px) {
+  .address_left {
+    display: initial;
+  }
+  .address_right {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) {
+}
+
+@media (min-width: 1008px) {
+  .address_right {
+    display: initial;
+  }
+}
+
+@media (min-width: 1366px) {
 }

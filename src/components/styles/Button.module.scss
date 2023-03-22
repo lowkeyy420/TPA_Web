@@ -63,18 +63,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 0 20px;
+  // padding: 0 px;
   border-radius: 100px;
   transition: background-color 0.1s linear;
   font-family: $main-font;
   font-size: 0.9rem;
-  min-width: 45px;
   height: 45px;
 }
 
 .returnOrderBtn_bottom {
   font-weight: bold;
-  font-size: 0.8rem;
 }
 
 .returnOrderBtn:hover {
@@ -186,14 +184,45 @@
 }
 
 @media (min-width: 100px) {
+  .nav_childsupportBtn {
+    p {
+      display: none;
+    }
+  }
+
   .alertBtn {
     margin: 0px;
     margin-top: 10px;
   }
+
+  .returnOrderBtn,
+  .returnOrderBtn_bottom {
+    display: none;
+  }
+
+  .notificationBtn {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {
+  .nav_childsupportBtn {
+    p {
+      display: initial;
+    }
+  }
+
   .alertBtn {
     margin: 10px;
+  }
+
+  .returnOrderBtn,
+  .returnOrderBtn_bottom {
+    display: initial;
+    font-size: 0.9rem;
+  }
+
+  .notificationBtn {
+    display: flex;
   }
 }

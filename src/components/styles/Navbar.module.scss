@@ -16,7 +16,6 @@
   align-items: center;
   height: 80px;
   background-color: var(--navbar-background-color);
-  padding: 0 15px;
   gap: 4px;
 }
 
@@ -37,10 +36,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
   border-radius: 100px;
   transition: background-color 0.1s linear;
-  min-width: 130px;
   height: 45px;
   color: black;
   color: var(--text-color) !important;
@@ -93,13 +90,51 @@
 }
 
 @media (min-width: 100px) {
+  .nav_top {
+    padding: 0px 0px;
+  }
+
+  .nav_bottom {
+    padding: 0px 3px 10px;
+  }
+
+  .loginBtn_right {
+    display: none;
+  }
+  .logo {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {
+  .loginBtn {
+    padding-left: 10px;
+  }
+
+  .nav_top {
+    padding: 0 15px;
+  }
+
+  .nav_bottom {
+    padding: 0 15px 10px;
+  }
 }
 
 @media (min-width: 1008px) {
+  .logo {
+    display: unset;
+  }
+  .loginBtn {
+    padding-left: unset;
+  }
+  .loginBtn_right {
+    display: unset;
+    max-width: 40%;
+  }
 }
 
 @media (min-width: 1366px) {
+  .loginBtn_right {
+    max-width: unset;
+  }
 }
