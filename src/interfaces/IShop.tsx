@@ -1,10 +1,10 @@
 //signup
 export interface IShopData {
-  Name?: string;
-  Email?: string;
-  Password?: string;
-  Description?: string;
-  Image?: string;
+  Name: string;
+  Email: string;
+  Password: string;
+  Description: string;
+  Image: string;
 }
 
 //signin

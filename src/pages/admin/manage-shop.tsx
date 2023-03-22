@@ -7,7 +7,7 @@ import ShopGrid from "@/components/ui/grid/ShopGrid";
 import ModalShop from "@/components/ui/modal/ModalShop";
 import { useAxios } from "@/hooks/useAxios";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
-import { ICurrShop } from "@/interfaces/IShop";
+import { ICurrShop, IShopData } from "@/interfaces/IShop";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
@@ -25,6 +25,9 @@ const ManageShop: NextPage<Props> = ({ page }) => {
   const [filter, setFilter] = useState("get-all-shop");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const [newShop, setNewShop] = useState<IShopData>();
+  const [uploadStatus, setUploadStatus] = useState("");
+
   let url = process.env.BASE_URL + `shop/${filter}?page=${currentPage}`;
   let url2 = process.env.BASE_URL + `admin/add-shop`;
   let url3 = process.env.BASE_URL + `admin/notify-created-shop`;
@@ -34,40 +37,48 @@ const ManageShop: NextPage<Props> = ({ page }) => {
     url: url,
   });
 
-  const [shoploading, response, errorshop, shoprequest] = useAxiosPost({
+  const [shopLoading, successShop, errorShop, shopRequest] = useAxiosPost({
     method: "POST",
     url: url2,
   });
 
-  const [requestloading, sucess, failed, sendemail] = useAxiosPost({
+  const [requestloading, successEmail, errorEmail, sendEmail] = useAxiosPost({
     method: "POST",
     url: url3,
   });
 
   useEffect(() => {
     request();
-  }, [currentPage, response, filter]);
+  }, [currentPage, successShop, filter]);
 
   useEffect(() => {
-    if (response) {
-      alert("Created shop for " + response["email"]);
+    if (successShop) {
+      alert("Created shop for " + successShop["email"]);
       closeModalHandler();
-      sendemail({ email: response["email"] });
+      // sendEmail({ email: successShop["email"] });
     }
 
-    if (errorshop) {
-      alert(errorshop);
+    if (errorShop) {
+      alert(errorShop);
     }
-  }, [response, errorshop]);
+  }, [successShop, errorShop]);
 
   useEffect(() => {
-    if (sucess) {
-      alert("Successfuly notified" + response["email"]);
+    if (successEmail) {
+      alert("Successfuly notified" + successShop["email"]);
     }
-    if (failed) {
+    if (errorEmail) {
       alert("Failed notifying");
     }
-  }, [sucess, failed]);
+  }, [successEmail, errorEmail]);
+
+  useEffect(() => {
+    if (uploadStatus === "Success") {
+      shopRequest(newShop);
+    } else if (uploadStatus === "Error") {
+      alert("Failed uploading image...");
+    }
+  }, [uploadStatus]);
 
   function openModalHandler() {
     setModalIsOpen(true);
@@ -96,23 +107,28 @@ const ManageShop: NextPage<Props> = ({ page }) => {
     name: string,
     email: string,
     password: string,
-    description: string,
-    image: string
+    description: string
   ) {
-    shoprequest({
+    const link =
+      process.env.STORAGE_URL + "shop%2F" + email + "%2Fimage?alt=media";
+
+    setNewShop({
       Name: name,
       Email: email,
       Password: password,
       Description: description,
-      Image:
-        "https://firebasestorage.googleapis.com/v0/b/tpa-web-a33b2.appspot.com/o/promotions%2Ffilename?alt=media",
+      Image: link,
     });
   }
 
   return (
     <Layout>
       {modalIsOpen && (
-        <ModalShop onCancel={closeModalHandler} onConfirm={newShopHandler} />
+        <ModalShop
+          onCancel={closeModalHandler}
+          onConfirm={newShopHandler}
+          setUploadStatus={setUploadStatus}
+        />
       )}
       {modalIsOpen && <Backdrop exitHandler={closeModalHandler} />}
       <div className={style.manage_top_action}>

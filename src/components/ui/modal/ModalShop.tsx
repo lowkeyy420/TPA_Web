@@ -1,18 +1,27 @@
-import React, { FormEvent, useRef } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import style from "../../styles/UI.module.scss";
 import btn from "../../styles/Button.module.scss";
+import FileUpload from "../FileUploader";
 
 type MyProps = {
   action?: string;
   onConfirm?: any;
   onCancel: any;
+  setUploadStatus: any;
 };
 
-function ModalShop({ action = "add", onConfirm, onCancel }: MyProps) {
+function ModalShop({
+  action = "add",
+  onConfirm,
+  onCancel,
+  setUploadStatus,
+}: MyProps) {
   const nameInputRef = useRef<HTMLInputElement | any>();
-  const emailInputRef = useRef<HTMLInputElement | any>();
+  const [email, setEmail] = useState("");
   const passwordInputRef = useRef<HTMLInputElement | any>();
   const descriptionInputRef = useRef<HTMLInputElement | any>();
+
+  const [reload, setReload] = useState(false);
 
   function exitHandler() {
     onCancel();
@@ -20,17 +29,14 @@ function ModalShop({ action = "add", onConfirm, onCancel }: MyProps) {
 
   function confirmHandler(e: FormEvent) {
     e.preventDefault();
-    console.log(nameInputRef.current.value);
-    console.log(emailInputRef.current.value);
-    console.log(passwordInputRef.current.value);
-    console.log(descriptionInputRef.current.value);
 
     onConfirm(
       nameInputRef.current.value,
-      emailInputRef.current.value,
+      email,
       passwordInputRef.current.value,
       descriptionInputRef.current.value
     );
+    setReload(!reload);
   }
 
   return (
@@ -39,7 +45,14 @@ function ModalShop({ action = "add", onConfirm, onCancel }: MyProps) {
         <p>Add New Shop</p>
 
         <input type="text" placeholder="Name" ref={nameInputRef} required />
-        <input type="email" placeholder="Email" ref={emailInputRef} required />
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          required
+        />
         <input
           type="password"
           placeholder="Password"
@@ -51,6 +64,12 @@ function ModalShop({ action = "add", onConfirm, onCancel }: MyProps) {
           placeholder="Description"
           ref={descriptionInputRef}
           required
+        />
+
+        <FileUpload
+          email={email}
+          setUploadStatus={setUploadStatus}
+          reload={reload}
         />
 
         <div className={style.modal_form_action}>

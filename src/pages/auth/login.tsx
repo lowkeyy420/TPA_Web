@@ -58,9 +58,7 @@ function Login() {
           {error && <p className={style.errormsg}>{error}</p>}
           {loading && <p className={style.statusmsg}>loading...</p>}
           {response.token && (
-            <p className={style.statusmsg}>
-              Successfully Logged In {response.token}
-            </p>
+            <p className={style.statusmsg}>Successfully Logged In</p>
           )}
           <AuthInputField
             height="40px"
