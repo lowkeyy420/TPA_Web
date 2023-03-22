@@ -66,7 +66,6 @@ const GetUser = (token: string | any, setuser: any) => {
 
   axios(payload)
     .then((res) => {
-      console.log(res);
       if (res.data["RoleID"] == 2) {
         setuser(res.data);
       } else {
@@ -139,7 +138,6 @@ export const AuthContextProvider = (props: MyProps) => {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
       if (user && user.length < 1) {
         GetUser("bearer " + tokenData.token, setUser);
-        console.log("geting user...");
       }
     }
   }, [tokenData]);

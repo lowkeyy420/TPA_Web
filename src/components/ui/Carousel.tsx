@@ -1,16 +1,45 @@
 import { ImageSlider, sliderAction } from "@/interfaces/ICarousel";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faMinus,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "../styles/Carousel.module.scss";
 import emptypic from "../../assets/emptycarousel.jpg";
+import AuthContext from "@/store/Authcontext";
+import Backdrop from "./Backdrop";
+import ModalPromotion from "./modal/ModalPromotion";
+import axios from "axios";
+import { useAxiosPost } from "@/hooks/useAxiosPost";
 
 const delay = 15000;
 
-function Carousel({ slides }: ImageSlider) {
+function Carousel({ slides, reload }: ImageSlider) {
   let [currIdx, setCurrIdx] = useState(0);
+  let [modalIsOpen, setModalIsOpen] = useState(false);
+  let [file, setFile] = useState<any>();
   let [timeoutRefresh, setTimeoutRefresh] = useState(false);
+
+  const url = process.env.BASE_URL + "promotion/insert-new-promotion";
+  const url2 = process.env.BASE_URL + "promotion/remove-promotion";
+
+  const [promotionLoading, successPromotion, errorPromotion, promotionRequest] =
+    useAxiosPost({
+      method: "POST",
+      url: url,
+    });
+
+  const [deleteLoading, successDelete, errorDelete, deleteRequest] =
+    useAxiosPost({
+      method: "POST",
+      url: url2,
+    });
+
+  const authCtx: any = useContext(AuthContext);
 
   useEffect(() => {
     setTimeout(
@@ -22,6 +51,26 @@ function Carousel({ slides }: ImageSlider) {
       delay
     );
   }, [timeoutRefresh]);
+
+  useEffect(() => {
+    if (successPromotion) {
+      alert("Successfully Added New Promotion");
+      reload();
+      closeModalHandler();
+    } else if (errorPromotion) {
+      alert("Failed To Add New Promotion...");
+    }
+  }, [successPromotion, errorPromotion]);
+
+  useEffect(() => {
+    if (successDelete) {
+      alert("Successfully Deleted");
+      setCurrIdx(0);
+      reload();
+    } else if (errorDelete) {
+      alert("Failed To Delete");
+    }
+  }, [successDelete, errorDelete]);
 
   const changeSlideHandler = (type: sliderAction) => {
     switch (type) {
@@ -44,8 +93,51 @@ function Carousel({ slides }: ImageSlider) {
     }
   };
 
+  function showModalHandler() {
+    setModalIsOpen(true);
+  }
+
+  function closeModalHandler() {
+    setModalIsOpen(false);
+  }
+
+  function uploadHandler(Alt: string) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const storageURL: any = process.env.STORAGE_URL + "promotion%2F" + Alt;
+    const newURL = storageURL + "?alt=media";
+
+    axios({
+      method: "POST",
+      url: storageURL,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then((res: any) => {
+        promotionRequest({
+          url: newURL,
+          alt: Alt,
+        });
+      })
+      .catch((err: any) => alert("Failed Uploading Picture"));
+  }
+
+  function deletePromotionHandler(ID: number) {
+    deleteRequest({ id: ID });
+  }
+
   return (
     <div className={style.carousel_container}>
+      {modalIsOpen && <Backdrop exitHandler={closeModalHandler} />}
+      {modalIsOpen && (
+        <ModalPromotion
+          add
+          onConfirm={uploadHandler}
+          onCancel={closeModalHandler}
+          setFile={setFile}
+        />
+      )}
       <button
         onClick={() => {
           changeSlideHandler(sliderAction.SUBTRACT);
@@ -84,6 +176,21 @@ function Carousel({ slides }: ImageSlider) {
           width={1080}
           quality={100}
         />
+      )}
+
+      {authCtx.user["RoleID"] === 4 && (
+        <div className={style.carousel_adminBtn_container}>
+          <button onClick={showModalHandler}>
+            <FontAwesomeIcon icon={faPlus} height={70} className={style.icon} />
+          </button>
+          <button onClick={() => deletePromotionHandler(slides[currIdx].ID)}>
+            <FontAwesomeIcon
+              icon={faMinus}
+              height={70}
+              className={style.icon}
+            />
+          </button>
+        </div>
       )}
 
       <button

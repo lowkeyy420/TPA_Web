@@ -15,7 +15,8 @@
 }
 
 .carousel_button_left,
-.carousel_button_right {
+.carousel_button_right,
+.carousel_adminBtn_container {
   background: rgba(72, 67, 67, 0.048);
   font-size: 100px;
   font-weight: 100;
@@ -41,6 +42,28 @@
 .carousel_button_right {
   right: 0%;
   margin-right: 30px;
+}
+
+.carousel_adminBtn_container {
+  right: 0;
+  top: 0;
+  width: 10rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 10px;
+
+  button {
+    background-color: transparent;
+    display: flex;
+  }
+
+  .icon {
+    padding: 2px;
+    background-color: rgba(255, 255, 255, 0.041);
+    border-radius: 10%;
+    color: var(--tertiary-color) !important;
+  }
 }
 
 .left_abs,

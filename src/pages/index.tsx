@@ -49,7 +49,7 @@ export default function HomePage() {
           <HomeCategory logo={sport} title="Health & Sports" />
           <HomeCategory logo={drone} title="Toys, Drones & Maker" />
         </div>
-        {slides && <Carousel slides={slides} />}
+        {slides && <Carousel slides={slides} reload={request} />}
         {error && <h1>{error}</h1>}
         {loading && <Loading />}
         <h1>Home Page</h1>

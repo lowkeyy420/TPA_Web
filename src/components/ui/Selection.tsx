@@ -12,10 +12,6 @@ const AdminSelections = [
     link: "/admin/manage-shop",
   },
   {
-    title: "Manage Promotions",
-    link: "/admin/manage-promotion",
-  },
-  {
     title: "Add Voucher",
     link: "/admin/add-voucher",
   },
