@@ -173,6 +173,53 @@
   align-items: center;
 }
 
+/* Add Voucher*/
+.add_voucher_outercontainer {
+  height: 50vh;
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    text-align: center;
+  }
+
+  .add_voucher_container {
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    text-align: center;
+    font-size: 18px;
+    color: var(--text-color);
+  }
+
+  .add_voucher_input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+
+    input {
+      padding: 10px;
+    }
+
+    textarea {
+      resize: none;
+      padding: 10px;
+      height: 40px;
+    }
+  }
+
+  button {
+    align-self: center;
+  }
+}
+
 /* Backdrop */
 .backdrop {
   position: fixed;

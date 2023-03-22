@@ -7,7 +7,7 @@ interface MyProps {
   add?: boolean;
   update?: boolean;
   text?: string;
-  onClick: any;
+  onClick?: any;
 }
 
 function ActionButton({

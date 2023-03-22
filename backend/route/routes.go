@@ -28,22 +28,28 @@ func ProductRoute(r *gin.Engine){
 }
 
 func PromotionRoute(r *gin.Engine){
-	r.POST("/promotion/insert-new-promotion", middleware.AdminAuth, controller.AddPromotion)
-	r.POST("/promotion/remove-promotion", middleware.AdminAuth, controller.DeletePromotion)
 	r.GET("/promotion/get-all-promotion",  controller.GetAllPromotions)
 }
 
-
+func VoucherRoute(r *gin.Engine){
+	r.GET("/voucher-info", controller.GetVoucherByCode)
+}
 
 func AdminRoute(r *gin.Engine){
 	//user
 	r.GET("/admin/get-all-user", middleware.AdminAuth, controller.GetAllUser )
 	r.PUT("/admin/update-user-status", middleware.AdminAuth, controller.UpdateUserStatus)
 	
+
+	//promotion
+	r.POST("/promotion/insert-new-promotion", middleware.AdminAuth, controller.AddPromotion)
+	r.POST("/promotion/remove-promotion", middleware.AdminAuth, controller.DeletePromotion)
+
+
 	//voucher
-	r.POST("/admin/add-voucher", middleware.AdminAuth, )
-	r.GET("/admin/get-all-voucher", middleware.AdminAuth, )
-	r.POST("/admin/update-voucher", middleware.AdminAuth, )
+	r.POST("/admin/add-voucher", middleware.AdminAuth, controller.AddVoucher )
+	r.GET("/admin/get-all-voucher", middleware.AdminAuth, controller.GetAllVoucher )
+	r.POST("/admin/update-voucher", middleware.AdminAuth, controller.UpdateVoucher)
 	
 	//shop
 	r.POST("/admin/add-shop", middleware.AdminAuth, controller.CreateShop)
@@ -69,6 +75,7 @@ func UseAllRoutes(r *gin.Engine){
 	ShopRoute(r)
 	ProductRoute(r)
 	PromotionRoute(r)
+	VoucherRoute(r)
 	AdminRoute(r)
 	ChatRoute(r)
 }
