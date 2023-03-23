@@ -221,8 +221,10 @@ func GetProductsByShopID (c *gin.Context){
 	var count int64
 	loader.DB.Model(&model.Product{}).Where("shop_id = ?", id).Count(&count)
 
-	offset := (page - 1) * loader.ITEM_PER_PAGE
-	limit := loader.ITEM_PER_PAGE
+	PRODUCT_PER_PAGE := 50
+
+	offset := (page - 1) * PRODUCT_PER_PAGE
+	limit := PRODUCT_PER_PAGE
 
 	max := int(math.Ceil(float64(count) / float64(limit)))
 
@@ -287,4 +289,60 @@ func GetCategories(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{
 		"data" : categories,
 	})
+}
+
+
+func GetRecommendedProducts(c *gin.Context){
+
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil || page < 1 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	var count int64
+	loader.DB.Model(&model.Product{}).Count(&count)
+
+	
+	offset := (page - 1) * loader.ITEM_PER_PAGE
+	limit := loader.ITEM_PER_PAGE
+
+	max := int(math.Ceil(float64(count) / float64(limit)))
+
+	if page > max {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	type ProductWithCategory struct {
+		ID					int
+		ShopID             int
+		ProductCategoryID  int 
+		Name               string
+		Image              string
+		Description        string
+		Price              int
+		Stock              int
+		Details            string
+		ProductCategoryName string
+	}
+
+	var products []ProductWithCategory
+	
+	if err := loader.DB.Table("products").Select("products.*, product_categories.product_category_name as product_category_name").Joins("JOIN product_categories ON products.product_category_id = product_categories.id").Offset(offset).Order("products.stock DESC").Limit(limit).Find(&products).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Error occured",
+		})
+		return;
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":  products,
+		"count": count,
+	})
+
 }

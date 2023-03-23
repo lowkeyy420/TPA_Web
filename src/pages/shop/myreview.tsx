@@ -1,7 +1,10 @@
 import SearchField from "@/components/actions/SearchField";
 import Layout from "@/components/layout/Layout";
 import { useAxios } from "@/hooks/useAxios";
+import { useAxiosPost } from "@/hooks/useAxiosPost";
 import AuthContext from "@/store/Authcontext";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import style from "../../components/styles/Shop.module.scss";
@@ -10,14 +13,14 @@ function ShopReviewPage() {
   const authCtx: any = useContext(AuthContext);
 
   const [search, setSearch] = useState("");
-  let url =
-    process.env.BASE_URL +
-    `shop/get-review?id=${authCtx.user["ID"]}?search=${search}`;
+  const [date, setDate] = useState("");
+
+  let url = process.env.BASE_URL + "shop/get-review";
   let url2 = process.env.BASE_URL + `shop/get-shop?id=${authCtx.user["ID"]}`;
 
   //get reviews
-  const [reviewLoading, review, reviewError, reviewRequest] = useAxios({
-    method: "GET",
+  const [reviewLoading, review, reviewError, reviewRequest] = useAxiosPost({
+    method: "POST",
     url: url,
   });
 
@@ -28,8 +31,12 @@ function ShopReviewPage() {
   });
 
   useEffect(() => {
-    reviewRequest();
-  }, [search]);
+    reviewRequest({
+      ShopID: authCtx.user["ID"],
+      ReviewDate: date,
+      ReviewKeyword: search,
+    });
+  }, [search, date, authCtx.user["ID"]]);
 
   return (
     <Layout>
@@ -55,9 +62,22 @@ function ShopReviewPage() {
             </div>
           </div>
           <h2>Shop Reviews</h2>
-          <SearchField reload={reviewRequest} search setSearch={setSearch} />
+          <input type="date" onChange={(e) => setDate(e.target.value)} />
+          <div className={style.search}>
+            <input
+              type="text"
+              id="search"
+              name="search"
+              placeholder="Search Store.."
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <label htmlFor="search">
+              <FontAwesomeIcon icon={faSearch} className={style.logo} />
+            </label>
+          </div>
         </div>
         {search}
+        {review && review.data === null && <h2>No Reviews yet...</h2>}
       </main>
     </Layout>
   );

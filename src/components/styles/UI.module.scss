@@ -93,6 +93,7 @@
   row-gap: 2rem;
   column-gap: 9.3%;
   justify-content: center;
+  color: var(--text-color);
 }
 
 /* User Item / Shop Item / Product Item */
@@ -130,7 +131,7 @@
 .product_outer_container {
   padding: 20px 15px 40px;
   width: 80%;
-  background-color: var(--navbar-background-color);
+  background-color: var(--primary-color-light);
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -159,7 +160,7 @@
       width: 120px;
       border: 1px solid black;
       border-radius: 30px;
-      background-color: white;
+      background-color: var(--background-color);
       color: var(--text-color);
       font-weight: bold;
     }

@@ -2,8 +2,6 @@ import { useAxiosPost } from "@/hooks/useAxiosPost";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import style from "../styles/Action.module.scss";
-
 interface MyProps {
   email: string | undefined;
   setUploadStatus: any;

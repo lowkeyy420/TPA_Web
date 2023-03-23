@@ -141,10 +141,9 @@ func GetAllShop(c *gin.Context) {
 	var count int64
 	loader.DB.Model(&model.Shop{}).Count(&count)
 
-	SHOP_PER_PAGE := 50
 
-	offset := (page - 1) * SHOP_PER_PAGE
-	limit := SHOP_PER_PAGE
+	offset := (page - 1) * loader.ITEM_PER_PAGE
+	limit := loader.ITEM_PER_PAGE
 
 	max := int(math.Ceil(float64(count) / float64(limit)))
 
@@ -364,3 +363,123 @@ func ChangeShopPassword(c *gin.Context){
 	})
 
 }
+
+func GetShopReviews( c *gin.Context){
+	var req struct {
+		ShopID        int    
+		ReviewDate    string 
+		ReviewKeyword string 
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	query := `
+		SELECT shop_id,
+				P.name,
+				R.details,
+				R.rating,
+				U.first_name,
+				R.id,
+				R.updated_at
+		FROM reviews R 
+			JOIN transaction_details TD ON R.transaction_detail_id = TD.ID
+			JOIN products P ON TD.product_id = p.id
+			JOIN transaction_headers TH ON TH.id = TD.transaction_header_id
+			JOIN users U ON U.id = TH.user_id
+		WHERE R.details ILIKE '%` + req.ReviewKeyword + `%'
+			AND shop_id = 
+	` + strconv.Itoa(req.ShopID)
+
+	rows, _ := loader.DB.Raw(query).Rows()
+
+	type Result struct {
+		ShopID      string 
+		ProductName string 
+		Details     string 
+		Rating      int    
+		FirstName   string 
+		ReviewID    int    
+		ReviewDate  string 
+	}
+
+	var result []Result
+
+	for rows.Next() {
+
+		var row Result
+		err := rows.Scan(&row.ShopID, &row.ProductName, &row.Details, &row.Rating, &row.FirstName, &row.ReviewID, &row.ReviewDate)
+		if err != nil {
+			panic(err)
+		}
+
+		if req.ReviewDate != "" {
+			if req.ReviewDate == row.ReviewDate[:10] {
+				result = append(result, row)
+			}
+		} else {
+			result = append(result, row)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : result,
+	})
+
+}
+
+
+func GetTopShops(c *gin.Context) {
+
+	limit := c.Query("limit")
+	if limit == "" {
+		limit = "3"
+	}
+	
+	// Top With Most Items Sold
+	query := `
+		SELECT SUM(quantity), shop_id
+		FROM (
+			SELECT TD.product_id,
+				SUM(quantity) AS quantity,
+				shop_id
+			FROM order_details TD JOIN products PS ON
+				TD.product_id = PS.id
+			GROUP BY TD.product_id, shop_id
+		) AS sub
+		GROUP BY shop_id
+		ORDER BY SUM(quantity) DESC
+		LIMIT ` + limit
+
+	rows, _ := loader.DB.Raw(query).Rows()
+
+	type Result struct {
+		Sum    int  `json:"sum"`
+		ShopID uint `json:"shop_id"`
+	}
+
+	var shopIds []uint
+
+	for rows.Next() {
+
+		var row Result
+		err := rows.Scan(&row.Sum, &row.ShopID)
+		if err != nil {
+			panic(err)
+		}
+		shopIds = append(shopIds, row.ShopID)
+	}
+
+	var shops []model.Shop
+	loader.DB.Model(model.Shop{}).Where("id IN ?", shopIds).Find(&shops)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : shops,
+	} )
+
+}
+

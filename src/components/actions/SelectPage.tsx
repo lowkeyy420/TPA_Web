@@ -18,9 +18,10 @@ interface MyProps {
 
 function SelectPage(props: MyProps) {
   let totalPage: number = Math.ceil(props.count / ITEM_PER_PAGE);
+  const PRODUCT_PER_PAGE = 50;
 
   if (props.shop) {
-    totalPage = Math.ceil(props.count / 50);
+    totalPage = Math.ceil(props.count / PRODUCT_PER_PAGE);
   }
 
   function previousPageHandler(jump?: boolean | any) {

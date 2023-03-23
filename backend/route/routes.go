@@ -23,9 +23,12 @@ func UserRoute(r *gin.Engine) {
 func ShopRoute(r *gin.Engine){
 	r.GET("/shop/get-all-shop",  controller.GetAllShop)
 	r.GET("/shop/get-shop", controller.GetShopById)
-	r.GET("/shop/get-shop-rating", controller.GetShopById)
 	r.POST("/shop/update-shop", middleware.RequireAuth,controller.UpdateShopInfo)
 	r.POST("/shop/change-password",middleware.RequireAuth, controller.ChangeShopPassword)
+	r.POST("/shop/get-review",middleware.RequireAuth, controller.GetShopReviews)
+
+	//now
+	r.POST("/shop/get-top-shop",middleware.RequireAuth, controller.GetTopShops)
 }
 
 func ProductRoute(r *gin.Engine){
@@ -34,6 +37,8 @@ func ProductRoute(r *gin.Engine){
 	r.POST("/product/insert-new-product", middleware.RequireAuth, controller.AddProduct)
 	r.POST("/product/update-product", middleware.RequireAuth, controller.UpdateProduct)
 	r.POST("/product/remove-product", middleware.RequireAuth, controller.DeleteProduct)
+
+	r.GET("/product/get-recommended", controller.GetRecommendedProducts)
 }
 
 func PromotionRoute(r *gin.Engine){

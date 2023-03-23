@@ -21,13 +21,64 @@ import automotive from "../assets/categories/automotive.png";
 import home from "../assets/categories/house.png";
 import sport from "../assets/categories/sport.png";
 import drone from "../assets/categories/camera-drone.png";
+import ProductGrid from "@/components/ui/grid/ProductGrid";
+import { useEffect, useState } from "react";
+import HomeHeader from "@/components/ui/HomeHeader";
+import SubscribeEmail from "@/components/ui/SubscribeEmail";
 
-export default function HomePage() {
+function HomePage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loadedProducts, setLoadedProducts] = useState<any>();
+
   const url = process.env.BASE_URL + "promotion/get-all-promotion";
+  const url2 =
+    process.env.BASE_URL + `product/get-recommended?page=${currentPage}`;
+
   const [loading, slides, error, request] = useAxios({
     method: "GET",
     url: url,
   });
+
+  const [productLoading, product, productError, productRequest] = useAxios({
+    method: "GET",
+    url: url2,
+  });
+
+  useEffect(() => {
+    productRequest();
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (!productLoading) {
+      setLoadedProducts((prevState: any) => ({
+        data: Array.isArray(prevState?.data)
+          ? [...prevState.data, ...product.data]
+          : [...product.data],
+      }));
+    }
+  }, [productLoading]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        const totalPage = Math.ceil(product.count / 8);
+        if (currentPage >= totalPage) {
+          return;
+        } else {
+          setCurrentPage(currentPage + 1);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [productLoading]);
 
   return (
     <>
@@ -52,8 +103,22 @@ export default function HomePage() {
         {slides && <Carousel slides={slides} reload={request} />}
         {error && <h1>{error}</h1>}
         {loading && <Loading />}
-        <h1>Home Page</h1>
+
+        <HomeHeader text="Popular Categories" />
+
+        <HomeHeader text="Featured Brand" />
+        <HomeHeader text="Top Shop" />
+
+        <HomeHeader text="Products" />
+
+        {loadedProducts && (
+          <ProductGrid data={loadedProducts} reload={productRequest} cart />
+        )}
+
+        <SubscribeEmail />
       </Layout>
     </>
   );
 }
+
+export default HomePage;
