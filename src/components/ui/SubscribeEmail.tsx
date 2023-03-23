@@ -20,7 +20,7 @@ function SubscribeEmail() {
   }, [response]);
 
   function subscribeHandler() {
-    if (authCtx.user["SubscribedToEmail"]) {
+    if (authCtx.user["SubscribeToEmail"]) {
       alert("You are already subscribed!");
       return;
     }
@@ -32,9 +32,10 @@ function SubscribeEmail() {
 
   return (
     <div className={style.subscribe_email_container}>
-      {authCtx.user &&
+      {authCtx.isLoggedIn &&
+        authCtx.user &&
         authCtx.user["RoleID"] != 2 &&
-        !authCtx.user["SubscribedToEmail"] && (
+        !authCtx.user["SubscribeToEmail"] && (
           <>
             <p>Subcribe to our email for exclusive promo and offers !</p>
             <button onClick={subscribeHandler}>Subscribe</button>
@@ -43,11 +44,13 @@ function SubscribeEmail() {
 
       {authCtx.user &&
         authCtx.user["RoleID"] != 2 &&
-        authCtx.user["SubscribedToEmail"] && (
+        authCtx.user["SubscribeToEmail"] && (
           <>
             <p>Thank you for subscribing to our email !</p>
           </>
         )}
+
+      {!authCtx.isLoggedIn && <p>Log In First</p>}
     </div>
   );
 }

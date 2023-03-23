@@ -1,14 +1,22 @@
 import { IProductData } from "@/interfaces/IProduct";
+import AuthContext from "@/store/Authcontext";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
 import style from "../../styles/UI.module.scss";
 import Backdrop from "../Backdrop";
+import ModalProductDetail from "../modal/ModalProductDetail";
 import ModalUpdateProduct from "../modal/ModalUpdateProduct";
 
 type MyProps = IProductData | any;
 
 function Product(props: MyProps) {
+  const router = useRouter();
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const authCtx: any = useContext(AuthContext);
+
+  const [detailModalIsOpen, setDetailModalIsOpen] = useState(false);
+  let timeout: any = null;
 
   function toggleModalHandler() {
     setModalIsOpen(!modalIsOpen);
@@ -19,15 +27,39 @@ function Product(props: MyProps) {
   }
 
   function addCartHandler(ID: number) {
+    if (!authCtx.isLoggedIn) {
+      alert("Please login first");
+      return;
+    }
+
     console.log(ID);
+  }
+
+  function redirectPageHandler(ID: number) {
+    router.push(`/product/${ID}`);
   }
 
   function refreshPage() {
     props.reload();
   }
 
+  const handleMouseEnter = () => {
+    timeout = setTimeout(() => {
+      setDetailModalIsOpen(true);
+    }, 2000); // Show modal after 2 seconds
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(timeout);
+    setDetailModalIsOpen(false);
+  };
+
   return (
-    <div className={style.product_outer_container}>
+    <div
+      className={style.product_outer_container}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {modalIsOpen && <Backdrop exitHandler={closeModalHandler} />}
       {modalIsOpen && (
         <ModalUpdateProduct
@@ -36,7 +68,17 @@ function Product(props: MyProps) {
           refreshPage={refreshPage}
         />
       )}
+
       <div className={style.product_container}>
+        {detailModalIsOpen && (
+          <ModalProductDetail
+            ID={props.ID}
+            Details={props.Details}
+            Image={props.Image}
+            Name={props.Name}
+            Description={props.Description}
+          />
+        )}
         {props.Image && (
           <Image
             priority
@@ -45,6 +87,7 @@ function Product(props: MyProps) {
             width="200"
             height="200"
             className={style.image}
+            onClick={() => redirectPageHandler(props.ID)}
           />
         )}
         <p>{props.ProductCategoryName}</p>

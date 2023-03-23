@@ -36,6 +36,9 @@ func ShopRoute(r *gin.Engine){
 
 func ProductRoute(r *gin.Engine){
 	r.GET("/product/get", controller.GetProductsByShopID)
+	r.GET("/product/get-item", controller.GetProductByID)
+
+
 	r.GET("/product/get-categories", controller.GetCategories)
 	r.POST("/product/insert-new-product", middleware.RequireAuth, controller.AddProduct)
 	r.POST("/product/update-product", middleware.RequireAuth, controller.UpdateProduct)
@@ -52,6 +55,11 @@ func PromotionRoute(r *gin.Engine){
 func VoucherRoute(r *gin.Engine){
 	r.GET("/voucher-info", controller.GetVoucherByCode)
 	r.POST("/user-voucher", )
+}
+
+func TransactionRoute(r *gin.Engine){
+	r.POST("/product/add-to-cart", controller.AddToCart)
+
 }
 
 func AdminRoute(r *gin.Engine){

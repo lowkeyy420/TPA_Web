@@ -414,3 +414,72 @@ func GetPopularCategories(c *gin.Context){
 		"count" : 6,
 	})
 }
+
+func GetProductByID(c *gin.Context){
+	find := c.Query("id")
+	var product model.Product
+
+	result := loader.DB.First(&product, find)
+
+	id, err := strconv.Atoi(c.Query("id"))
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "no id included",
+		})
+		return
+	}
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Product not found",
+		})
+		return
+	}
+
+
+	var shop model.Shop
+	result = loader.DB.First(&shop, product.ShopID)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Shop owner not found",
+		})
+		return
+	}
+
+	if shop.Status == "Banned"{
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Banned",
+		})
+		return
+	}
+
+	type ProductWithCategory struct {
+		ID					int
+		ShopID             int
+		ProductCategoryID  int 
+		Name               string
+		Image              string
+		Description        string
+		Price              int
+		Stock              int
+		Details            string
+		ProductCategoryName string
+	}
+
+	var products ProductWithCategory
+	
+	if err := loader.DB.Table("products").Select("products.*, product_categories.product_category_name as product_category_name").Joins("JOIN product_categories ON products.product_category_id = product_categories.id").Where("products.id = ?", id).Find(&products).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Error occured",
+		})
+		return;
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":  products,
+		"shop": shop,
+	})
+
+}

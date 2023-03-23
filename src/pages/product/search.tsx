@@ -1,17 +1,11 @@
 import SelectPage from "@/components/actions/SelectPage";
 import Layout from "@/components/layout/Layout";
 import ProductGrid from "@/components/ui/grid/ProductGrid";
-import Loading from "@/components/ui/Loading";
-import ModalAddProduct from "@/components/ui/modal/ModalAddProduct";
-import { useAxios } from "@/hooks/useAxios";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
-import { IProductData } from "@/interfaces/IProduct";
 import AuthContext from "@/store/Authcontext";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage, NextPageContext } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import style from "../../components/styles/Shop.module.scss";
 

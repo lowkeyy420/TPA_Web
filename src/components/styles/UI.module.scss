@@ -150,6 +150,10 @@
       align-self: center;
     }
 
+    .image:hover {
+      cursor: pointer;
+    }
+
     .price {
       font-size: 29px;
       font-weight: bold;
@@ -323,6 +327,19 @@
   position: fixed;
   top: 20vh;
   left: calc(50% - 15rem);
+
+  .image_container {
+    width: 20rem;
+    height: 20rem;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .image {
+    object-fit: contain;
+    width: 200px;
+    height: 200px;
+  }
 }
 
 .modal_form_container {
