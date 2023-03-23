@@ -10,6 +10,7 @@ func UserRoute(r *gin.Engine) {
 	r.POST("/getuser", controller.GetUser )
 	r.POST("/signup", controller.SignUp )
 	r.POST("/login", controller.Login )
+	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
 }
 
 func ShopRoute(r *gin.Engine){

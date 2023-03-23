@@ -55,6 +55,7 @@ function Carousel({ slides, reload }: ImageSlider) {
   useEffect(() => {
     if (successPromotion) {
       alert("Successfully Added New Promotion");
+      setCurrIdx(0);
       reload();
       closeModalHandler();
     } else if (errorPromotion) {

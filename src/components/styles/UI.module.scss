@@ -317,6 +317,11 @@
   .filter_container {
     width: 15rem;
   }
+
+  .category_container,
+  .category_outer_container {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {
@@ -331,6 +336,11 @@
 
   .filter_container {
     width: 18rem;
+  }
+
+  .category_container,
+  .category_outer_container {
+    display: flex;
   }
 }
 

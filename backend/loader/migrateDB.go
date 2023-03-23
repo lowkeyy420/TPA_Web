@@ -13,4 +13,5 @@ func SyncDatabase() {
 	DB.AutoMigrate(&model.Voucher{})
 	DB.AutoMigrate(&model.Promotion{})  
 	DB.AutoMigrate(&model.CustomerReview{})  
+	DB.AutoMigrate(&model.Notification{})  
 }

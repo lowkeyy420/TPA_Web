@@ -1,9 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useEffect } from "react";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../styles/Action.module.scss";
+import { useAxios } from "@/hooks/useAxios";
 
-function SelectAddress() {
+function SelectAddress(props: any) {
+  let url = process.env.BASE_URL + `get-address?email=${props.email}`;
+
+  const [loading, address, failed, request] = useAxios({
+    method: "GET",
+    url: url,
+  });
+
   return (
     <div className={style.address_selector}>
       <div className={style.address_left}>
@@ -14,7 +22,11 @@ function SelectAddress() {
           <p>Hello</p>
         </div>
         <div className={style.address_rbottom}>
-          <p>Select Address</p>
+          <p>
+            {!address && props.country === "en" && "Select Address"}
+            {!address && props.country === "id" && "Pilih Alamat"}
+            {address && address.data.Address}
+          </p>
         </div>
       </div>
     </div>

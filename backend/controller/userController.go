@@ -384,3 +384,38 @@ func UpdateUserStatus(c *gin.Context){
 	c.JSON(http.StatusOK, user)
 
 }
+
+func GetUserAddress(c *gin.Context){
+	email := c.Query("email")
+
+	
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", email); result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "No user with that email",
+        })
+        return
+    }
+	
+	var address model.Address
+	res := loader.DB.First(&address, "user_id = ?", user.ID)
+
+	if res.Error != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "No Address Yet",
+        })
+        return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : address,
+	})
+
+
+
+}
+
+func GetUserNotification(c *gin.Context){
+	
+
+}

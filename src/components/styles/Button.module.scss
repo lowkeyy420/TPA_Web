@@ -60,11 +60,9 @@
 
 .returnOrderBtn {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  // padding: 0 px;
-  border-radius: 100px;
+  flex-direction: column;
   transition: background-color 0.1s linear;
   font-family: $main-font;
   font-size: 0.9rem;
@@ -183,6 +181,20 @@
   background-color: #f8dae9;
 }
 
+.balanceBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--text-color) !important;
+  padding: 2px;
+}
+
+.balanceBtn:hover {
+  cursor: pointer;
+  background-color: var(--hover-color);
+  transition: 0.3s ease;
+}
+
 @media (min-width: 100px) {
   .nav_childsupportBtn {
     p {
@@ -203,6 +215,10 @@
   .notificationBtn {
     display: none;
   }
+
+  .balanceBtn {
+    display: none;
+  }
 }
 
 @media (min-width: 640px) {
@@ -218,11 +234,21 @@
 
   .returnOrderBtn,
   .returnOrderBtn_bottom {
-    display: initial;
+    display: flex;
     font-size: 0.9rem;
   }
 
   .notificationBtn {
     display: flex;
+  }
+  .balanceBtn {
+    display: none;
+  }
+}
+
+@media (min-width: 1008px) {
+  .balanceBtn {
+    display: flex;
+    flex-direction: row;
   }
 }

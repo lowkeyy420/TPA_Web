@@ -1,22 +1,32 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlagUsa } from "@fortawesome/free-solid-svg-icons";
 import style from "../../styles/Button.module.scss";
 import ReactCountryFlag from "react-country-flag";
 
-function CountryButton() {
+function CountryButton(props: any) {
   return (
-    <div className={style.countryBtn}>
-      {/* <FontAwesomeIcon icon={faFlagUsa} className={style.icon} /> */}
-      <ReactCountryFlag
-        countryCode="US"
-        svg
-        style={{
-          width: "1em",
-          height: "1em",
-        }}
-        title="Select Country"
-      />
+    <div className={style.countryBtn} onClick={props.onClick}>
+      {props.country === "en" && (
+        <ReactCountryFlag
+          countryCode="US"
+          svg
+          style={{
+            width: "1em",
+            height: "1em",
+          }}
+          title="Select Country"
+        />
+      )}
+
+      {props.country === "id" && (
+        <ReactCountryFlag
+          countryCode="ID"
+          svg
+          style={{
+            width: "1em",
+            height: "1em",
+          }}
+          title="Select Country"
+        />
+      )}
     </div>
   );
 }

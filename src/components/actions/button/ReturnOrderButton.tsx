@@ -1,14 +1,14 @@
 import React from "react";
 import style from "../../styles/Button.module.scss";
 
-function ReturnOrderButton() {
+function ReturnOrderButton(props: any) {
   return (
     <div className={style.returnOrderBtn}>
       <div className={style.returnOrderBtn_top}>
-        <p>Returns</p>
+        <p>{props.country === "en" ? "Returns" : "Pengembalian"}</p>
       </div>
       <div className={style.returnOrderBtn_bottom}>
-        <p>& Orders</p>
+        <p>{props.country === "en" ? "& Orders" : "& Pesanan"}</p>
       </div>
     </div>
   );

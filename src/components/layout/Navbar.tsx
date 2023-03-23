@@ -20,12 +20,13 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "@/store/Authcontext";
 import Logo from "../ui/Logo";
 import RoleOnlyButton from "../actions/button/RoleOnlyButton";
+import BalanceVoucherButton from "../actions/button/BalanceVoucherButton";
 
-function LoginRegisterButton({ Name }: { Name: string }) {
+function LoginRegisterButton(props: any) {
   return (
     <Link href="/auth/login">
       <div className={style.loginBtn}>
@@ -34,10 +35,14 @@ function LoginRegisterButton({ Name }: { Name: string }) {
         </div>
         <div className={style.loginBtn_right}>
           <div className={style.loginBtn_top}>
-            <p>Welcome</p>
+            <p>{props.country === "en" ? "Welcome" : "Selamat Datang"}</p>
           </div>
           <div className={style.loginBtn_bottom}>
-            {Name ? Name : "Sign In / Register"}
+            {props.Name
+              ? props.Name
+              : props.country === "en"
+              ? "Sign In / Register"
+              : "Masuk / Daftar"}
           </div>
         </div>
       </div>
@@ -45,43 +50,50 @@ function LoginRegisterButton({ Name }: { Name: string }) {
   );
 }
 
-const FeedBackButton = () => {
+const FeedBackButton = (props: any) => {
   return (
     <div className={btn.nav_childsupportBtn}>
-      {/* <FontAwesomeIcon icon="comment-alt-smile" /> */}
       <FontAwesomeIcon icon={faCommentAlt} className={btn.icon} />
-      <p>FEEDBACK</p>
+      <p>{props.country === "en" ? "FEEDBACK" : "MASUKAN"}</p>
     </div>
   );
 };
 
-const HelpCenterButton = () => {
+const HelpCenterButton = (props: any) => {
   return (
     <div className={btn.nav_childsupportBtn}>
       <FontAwesomeIcon icon={faCircleQuestion} className={btn.icon} />
-      <p>HELP CENTER</p>
+      <p>{props.country === "en" ? "HELP CENTER" : "PUSAT BANTUAN"}</p>
     </div>
   );
 };
 
 export default function Navbar() {
   const authCtx: any = useContext(AuthContext);
+  const [lang, setLang] = useState("en");
+
+  function toggleLanguageHandler() {
+    setLang(lang === "en" ? "id" : "en");
+  }
 
   return (
     <nav className={style.navbar_container}>
       <div className={style.nav_top}>
         <HamburgerToggle />
         <Logo height={50} />
-        <SelectAddress />
+        <SelectAddress country={lang} email={authCtx.user["Email"]} />
         <SearchField />
         <NotifButton />
-        <CountryButton />
+        <CountryButton onClick={toggleLanguageHandler} country={lang} />
         <ThemeToggle />
         {authCtx.user["RoleID"] > 1 && (
           <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
         )}
-        <LoginRegisterButton Name={authCtx.user["Name"]} />
-        <ReturnOrderButton />
+        {authCtx.user["RoleID"] === 1 && (
+          <BalanceVoucherButton balance={authCtx.user["Balance"]} />
+        )}
+        <LoginRegisterButton Name={authCtx.user["Name"]} country={lang} />
+        <ReturnOrderButton country={lang} />
         <CartButton />
       </div>
 
@@ -100,8 +112,8 @@ export default function Navbar() {
 
         <div className={style.nav_bottom_right}>
           <NavbarLink variant="business" />
-          <SupportButton element={<FeedBackButton />} />
-          <SupportButton element={<HelpCenterButton />} />
+          <SupportButton element={<FeedBackButton country={lang} />} />
+          <SupportButton element={<HelpCenterButton country={lang} />} />
         </div>
       </div>
     </nav>

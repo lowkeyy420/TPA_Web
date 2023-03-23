@@ -101,14 +101,19 @@
   .loginBtn_right {
     display: none;
   }
-  .logo {
-    display: none;
+
+  .image {
+    width: 4rem;
+    object-fit: scale-down;
   }
 }
 
 @media (min-width: 640px) {
   .loginBtn {
-    padding-left: 10px;
+    font-size: 10px;
+    p {
+      font-size: 10px;
+    }
   }
 
   .nav_top {
@@ -118,18 +123,25 @@
   .nav_bottom {
     padding: 0 15px 10px;
   }
+
+  .image {
+    width: initial;
+  }
 }
 
 @media (min-width: 1008px) {
-  .logo {
-    display: unset;
-  }
   .loginBtn {
     padding-left: unset;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 0.9rem;
+    p {
+      font-size: 0.8rem;
+    }
   }
   .loginBtn_right {
     display: unset;
-    max-width: 40%;
   }
 }
 
