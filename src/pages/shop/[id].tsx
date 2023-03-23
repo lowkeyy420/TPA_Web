@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useContext } from "react";
 import style from "../../components/styles/Shop.module.scss";
 
-function MyShop() {
+function ShopInfoPage() {
   const authCtx: any = useContext(AuthContext);
 
   return (
@@ -63,4 +63,4 @@ function MyShop() {
   );
 }
 
-export default MyShop;
+export default ShopInfoPage;

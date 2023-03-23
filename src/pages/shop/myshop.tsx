@@ -14,6 +14,7 @@ import { IProductData } from "@/interfaces/IProduct";
 import AuthContext from "@/store/Authcontext";
 import { NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import style from "../../components/styles/Shop.module.scss";
 
@@ -189,6 +190,7 @@ const MyShop: NextPage<Props> = ({ page }) => {
             {!product && "0"}
           </p>
           <ActionButton add onClick={showAddModalHandler} />
+          <Link href="myreview">Shop Review</Link>
         </div>
         {shop && shop["Status"] === "Banned" && <Banned />}
 
