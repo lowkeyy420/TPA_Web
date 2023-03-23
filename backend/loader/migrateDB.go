@@ -14,4 +14,8 @@ func SyncDatabase() {
 	DB.AutoMigrate(&model.Promotion{})  
 	DB.AutoMigrate(&model.CustomerReview{})  
 	DB.AutoMigrate(&model.Notification{})  
+	DB.AutoMigrate(&model.TransactionHeader{})  
+	DB.AutoMigrate(&model.TransactionDetail{})  
+	DB.AutoMigrate(&model.Review{})  
+	
 }

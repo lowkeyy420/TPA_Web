@@ -7,10 +7,19 @@ import { useAxios } from "@/hooks/useAxios";
 function SelectAddress(props: any) {
   let url = process.env.BASE_URL + `get-address?email=${props.email}`;
 
-  const [loading, address, failed, request] = useAxios({
-    method: "GET",
-    url: url,
-  });
+  const [loading, address, failed, request] = useAxios(
+    {
+      method: "GET",
+      url: url,
+    },
+    false
+  );
+
+  useEffect(() => {
+    if (props.email) {
+      request();
+    }
+  }, [props.email]);
 
   return (
     <div className={style.address_selector}>

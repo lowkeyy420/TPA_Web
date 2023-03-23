@@ -12,3 +12,13 @@ type Shop struct {
 	Image string 
 	RoleID int `gorm:"default:2"`
 }
+
+type Review struct{
+	gorm.Model	
+	UserID         int
+	TransactionDetailID  int
+	Rating         int
+	Detail        string
+	CountHelpful   int
+	CountUnhelpful int
+}

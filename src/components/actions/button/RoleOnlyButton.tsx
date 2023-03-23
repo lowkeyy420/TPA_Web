@@ -10,7 +10,7 @@ function RoleOnlyButton(props: number | any) {
   return (
     <div className={style.roleBtn}>
       {props.roleid === 2 && (
-        <Link href="/shop">
+        <Link href="/shop/myshop">
           <FontAwesomeIcon icon={faShop} className={style.icon} />
         </Link>
       )}

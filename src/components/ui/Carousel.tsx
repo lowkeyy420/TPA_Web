@@ -46,7 +46,7 @@ function Carousel({ slides, reload }: ImageSlider) {
       () =>
         setCurrIdx((prevIndex) => {
           setTimeoutRefresh(!timeoutRefresh);
-          return prevIndex === slides.length - 1 ? 0 : prevIndex + 1;
+          return prevIndex >= slides.length - 1 ? 0 : prevIndex + 1;
         }),
       delay
     );

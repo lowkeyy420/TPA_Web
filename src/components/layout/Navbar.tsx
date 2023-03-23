@@ -83,7 +83,7 @@ export default function Navbar() {
         <Logo height={50} />
         <SelectAddress country={lang} email={authCtx.user["Email"]} />
         <SearchField />
-        <NotifButton />
+        <NotifButton id={authCtx.user["ID"]} />
         <CountryButton onClick={toggleLanguageHandler} country={lang} />
         <ThemeToggle />
         {authCtx.user["RoleID"] > 1 && (

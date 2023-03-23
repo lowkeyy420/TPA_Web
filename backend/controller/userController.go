@@ -391,7 +391,7 @@ func GetUserAddress(c *gin.Context){
 	
 	var user model.User
     if result := loader.DB.First(&user, "email = ?", email); result.Error != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusNotFound, gin.H{
 			"error": "No user with that email",
         })
         return
@@ -401,7 +401,7 @@ func GetUserAddress(c *gin.Context){
 	res := loader.DB.First(&address, "user_id = ?", user.ID)
 
 	if res.Error != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusNotFound, gin.H{
 			"error": "No Address Yet",
         })
         return
@@ -416,6 +416,35 @@ func GetUserAddress(c *gin.Context){
 }
 
 func GetUserNotification(c *gin.Context){
+	id := c.Query("id")
+
+	var user model.User
+
+	//check user exists
+	result := loader.DB.First(&user, id)
+
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})	
+	}
+
+
+	var notifications []model.Notification
+
+	find := loader.DB.Model(model.Notification{}).Where("user_id = ?", user.ID).Find(&notifications)
+
+
+	if find.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "No Notification",
+		})
+	}
+
 	
+	c.JSON(http.StatusOK, gin.H{
+		"data" : notifications,
+	})
 
 }

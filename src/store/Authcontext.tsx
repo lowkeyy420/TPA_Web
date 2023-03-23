@@ -124,7 +124,7 @@ export const AuthContextProvider = (props: MyProps) => {
     if (user.RoleID === 4) {
       router.push("/admin");
     } else if (user.RoleID === 2) {
-      router.push("/");
+      router.push("/shop/myshop");
     } else {
       router.push("/");
     }

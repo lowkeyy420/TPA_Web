@@ -10,16 +10,12 @@ interface MyProps {
   onClick?: any;
 }
 
-function ActionButton({
-  add,
-  update,
-  onClick,
-  text = "Edit My Property",
-}: MyProps) {
+function ActionButton({ add, update, onClick, text }: MyProps) {
   if (add) {
     return (
       <button onClick={onClick} className={style.alertBtn}>
         <FontAwesomeIcon icon={faPlus} className={style.icon} />
+        {text && <p>{text}</p>}
       </button>
     );
   }
@@ -28,13 +24,14 @@ function ActionButton({
     return (
       <button onClick={onClick} className={style.alertBtn}>
         <FontAwesomeIcon icon={faCircleChevronUp} className={style.icon} />
+        {text && <p>{text}</p>}
       </button>
     );
   }
 
   return (
     <button onClick={onClick} className={style.alertBtn}>
-      <p>{text}</p>
+      {text ? <p>{text}</p> : <p>Edit My Property</p>}
     </button>
   );
 }

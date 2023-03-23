@@ -11,18 +11,19 @@ func UserRoute(r *gin.Engine) {
 	r.POST("/signup", controller.SignUp )
 	r.POST("/login", controller.Login )
 	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
+	r.GET("/get-notification", middleware.RequireAuth, controller.GetUserNotification)
 }
 
 func ShopRoute(r *gin.Engine){
 	r.GET("/shop/get-all-shop",  controller.GetAllShop)
 	r.GET("/shop/get-shop", controller.GetShopById)
-	
+	r.GET("/shop/add-shop", middleware.RequireAuth, controller.AddProduct)
 	r.GET("/shop/get-shop-rating", controller.GetShopById)
 
 }
 
 func ProductRoute(r *gin.Engine){
-	r.GET("/product/get", )
+	r.GET("/product/get", controller.GetProductsByShopID)
 	r.POST("/product/insert-new-product", middleware.RequireAuth,)
 	r.POST("/product/update-product", middleware.RequireAuth, )
 	r.POST("/product/remove-product", middleware.RequireAuth,)
@@ -34,6 +35,7 @@ func PromotionRoute(r *gin.Engine){
 
 func VoucherRoute(r *gin.Engine){
 	r.GET("/voucher-info", controller.GetVoucherByCode)
+	r.POST("/user-voucher", )
 }
 
 func AdminRoute(r *gin.Engine){

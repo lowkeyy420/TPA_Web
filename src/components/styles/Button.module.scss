@@ -83,7 +83,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 50px;
   height: 40px;
   border-radius: 34px;
 }
@@ -243,6 +242,10 @@
   }
   .balanceBtn {
     display: none;
+  }
+
+  .cartBtn {
+    min-width: 50px;
   }
 }
 

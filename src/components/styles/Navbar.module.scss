@@ -91,7 +91,7 @@
 
 @media (min-width: 100px) {
   .nav_top {
-    padding: 0px 0px;
+    padding: unset;
   }
 
   .nav_bottom {
@@ -103,7 +103,7 @@
   }
 
   .image {
-    width: 4rem;
+    width: 2.5rem;
     object-fit: scale-down;
   }
 }

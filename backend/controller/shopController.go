@@ -208,11 +208,11 @@ func UpdateShopStatus(c *gin.Context) {
 
 
 func GetShopById(c *gin.Context) {
-	id := c.Query("id")
+	find := c.Query("id")
 	var shop model.Shop
 
 	//check shop exists
-	result := loader.DB.First(&shop, id)
+	result := loader.DB.First(&shop, find)
 
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -221,6 +221,57 @@ func GetShopById(c *gin.Context) {
 		return
 	}
 
+	//AVG RATING
+	query := `SELECT AVG(rev.rating) 
+	FROM reviews rev 
+		JOIN transaction_details TD 
+			ON rev.transaction_detail_id = TD.id
+		JOIN products prod 
+			ON prod.id = TD.product_id
+	WHERE shop_id = ` + find
+
+	rows,_ := loader.DB.Raw(query).Rows()
+
+	type Statistics struct {
+		AverageRating float64
+		NumberOfSales int
+	}
+
+	var stats Statistics
+
+	if rows.Next(){
+		err := rows.Scan(&stats.AverageRating)
+		if err != nil {
+			stats.AverageRating = 0
+		}
+	}
+
+	//Number Of Sales
+	query = `SELECT COUNT(TD.product_id)
+	FROM transaction_details TD
+		JOIN products prod ON TD.product_id = prod.id
+	WHERE shop_id = ` + find
+
+	rows, _ = loader.DB.Raw(query).Rows()
+
+	if rows.Next() {
+		err := rows.Scan(&stats.NumberOfSales)
+		if err != nil {
+			stats.NumberOfSales = 0
+		}
+	}
+
+	fmt.Println(shop.ID,
+	 shop.Name,
+	 shop.Email,
+	 shop.Description,
+	 shop.Status,
+	 shop.Image,
+	 shop.RoleID,
+	 stats.AverageRating,
+	 stats.NumberOfSales,)
+
+	
 	c.JSON(http.StatusOK, gin.H{
 		"ID": shop.ID,
 		"Name": shop.Name,
@@ -229,6 +280,8 @@ func GetShopById(c *gin.Context) {
 		"Status": shop.Status,
 		"Image": shop.Image,
 		"RoleID": shop.RoleID,
+		"AverageRating" : stats.AverageRating,
+		"Sales" : stats.NumberOfSales,
 	})
 
 }
