@@ -32,16 +32,19 @@ const ManageShop: NextPage<Props> = ({ page }) => {
   let url2 = process.env.BASE_URL + `admin/add-shop`;
   let url3 = process.env.BASE_URL + `admin/notify-created-shop`;
 
+  //get all shops
   const [loading, shop, error, request] = useAxios({
     method: "GET",
     url: url,
   });
 
+  //add shop
   const [shopLoading, successShop, errorShop, shopRequest] = useAxiosPost({
     method: "POST",
     url: url2,
   });
 
+  //notify user
   const [requestloading, successEmail, errorEmail, sendEmail] = useAxiosPost({
     method: "POST",
     url: url3,
@@ -55,7 +58,7 @@ const ManageShop: NextPage<Props> = ({ page }) => {
     if (successShop) {
       alert("Created shop for " + successShop["email"]);
       closeModalHandler();
-      // sendEmail({ email: successShop["email"] });
+      sendEmail({ email: successShop["email"] });
     }
 
     if (errorShop) {

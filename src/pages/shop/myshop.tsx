@@ -4,28 +4,45 @@ import Backdrop from "@/components/ui/Backdrop";
 import Banned from "@/components/ui/Banned";
 import Loading from "@/components/ui/Loading";
 import ModalAddProduct from "@/components/ui/modal/ModalAddProduct";
-import ModalUpdateProduct from "@/components/ui/modal/ModalUpdateProduct";
 import { useAxios } from "@/hooks/useAxios";
+import { useAxiosPost } from "@/hooks/useAxiosPost";
+import { IProductData } from "@/interfaces/IProduct";
 import AuthContext from "@/store/Authcontext";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NextPage } from "next";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import style from "../../components/styles/Shop.module.scss";
 
-function MyShop() {
+interface Props {
+  page: number;
+}
+
+const MyShop: NextPage<Props> = ({ page }) => {
   const authCtx: any = useContext(AuthContext);
 
+  const [currentPage, setCurrentPage] = useState(page);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const [newProduct, setNewProduct] = useState<IProductData>();
+  const [uploadStatus, setUploadStatus] = useState("");
 
   let url =
     process.env.BASE_URL +
     `product/get?id=${authCtx.user["ID"]}&page=${currentPage}`;
 
   let url2 = process.env.BASE_URL + `shop/get-shop?id=${authCtx.user["ID"]}`;
+  let url3 =
+    process.env.BASE_URL +
+    `product/insert-new-product?id=${authCtx.user["ID"]}`;
+  let url4 =
+    process.env.BASE_URL + `product/update-product?id=${authCtx.user["ID"]}`;
 
+  let url5 = process.env.BASE_URL + `product/remove-product`;
+
+  //get all products
   const [loading, product, error, request] = useAxios(
     {
       method: "GET",
@@ -34,6 +51,7 @@ function MyShop() {
     false
   );
 
+  //get current shop details
   const [shopLoading, shop, shopError, shopRequest] = useAxios(
     {
       method: "GET",
@@ -42,17 +60,92 @@ function MyShop() {
     false
   );
 
+  //add product
+  const [
+    addProductLoading,
+    successAddProduct,
+    errorAddProduct,
+    addProductRequest,
+  ] = useAxiosPost({
+    method: "POST",
+    url: url3,
+  });
+
+  //update product
+  const [
+    updateProductLoading,
+    successUpdateProduct,
+    errorUpdateProduct,
+    updateProductRequest,
+  ] = useAxiosPost({
+    method: "POST",
+    url: url4,
+  });
+
+  const [
+    deleteProductLoading,
+    successDeleteProduct,
+    errorDeleteProduct,
+    deleteProductRequest,
+  ] = useAxiosPost({
+    method: "POST",
+    url: url5,
+  });
+
+  //get all products
   useEffect(() => {
     if (authCtx.user["ID"]) {
       request();
     }
-  }, [authCtx.user["ID"], currentPage]);
+  }, [
+    authCtx.user["ID"],
+    currentPage,
+    successAddProduct,
+    successUpdateProduct,
+    successDeleteProduct,
+  ]);
 
+  //get current shop details
   useEffect(() => {
     if (authCtx.user["ID"]) {
       shopRequest();
     }
   }, [authCtx.user["ID"]]);
+
+  //successfully added product
+  useEffect(() => {
+    if (successAddProduct) {
+      alert("Successfully Added Product...");
+      closeAddModalHandler();
+    }
+
+    if (errorAddProduct) {
+      alert(errorAddProduct);
+    }
+  }, [successAddProduct, errorAddProduct]);
+
+  //successfully updated product
+  useEffect(() => {
+    if (successUpdateProduct) {
+      alert("Successfully Update Product...");
+      closeUpdateModalHandler();
+    }
+
+    if (errorUpdateProduct) {
+      alert(errorUpdateProduct);
+    }
+  }, [successUpdateProduct, errorUpdateProduct]);
+
+  //image upload
+  useEffect(() => {
+    if (uploadStatus === "Success Add") {
+      addProductRequest(newProduct);
+    } else if (uploadStatus === "Success Update") {
+      updateProductRequest(newProduct);
+    } else if (uploadStatus === "Error") {
+      alert("Failed uploading image...");
+    }
+  }, [uploadStatus]);
 
   function showAddModalHandler() {
     setAddModalIsOpen(true);
@@ -70,6 +163,69 @@ function MyShop() {
     setAddModalIsOpen(false);
   }
 
+  function addHandler(
+    ProductCategoryID: number,
+    Name: string,
+    Description: string,
+    Price: number,
+    Stock: number,
+    Details: string
+  ) {
+    const link =
+      process.env.STORAGE_URL +
+      "product%2F" +
+      authCtx.user["Email"] +
+      "%2F" +
+      Name +
+      "%2Fimage?alt=media";
+
+    setNewProduct({
+      ShopID: authCtx.user["ID"],
+      ProductCategoryID: ProductCategoryID,
+      Name: Name,
+      Image: link,
+      Description: Description,
+      Price: Price,
+      Stock: Stock,
+      Details: Details,
+    });
+  }
+
+  function updateHandler({
+    ID,
+    ShopID,
+    ProductCategoryID,
+    Name,
+    Image,
+    Description,
+    Price,
+    Stock,
+    Details,
+  }: IProductData) {
+    const link =
+      process.env.STORAGE_URL +
+      "product%2F" +
+      authCtx.user["Email"] +
+      "%2F" +
+      Name +
+      "%2Fimage?alt=media";
+
+    setNewProduct({
+      ID: ID,
+      ShopID: ShopID,
+      ProductCategoryID: ProductCategoryID,
+      Name: Name,
+      Image: Image,
+      Description: Description,
+      Price: Price,
+      Stock: Stock,
+      Details: Details,
+    });
+  }
+
+  function deleteHandler({ ID, ShopID }: IProductData) {
+    deleteProductRequest({ id: ID, shopid: ShopID });
+  }
   return (
     <Layout>
       <main className={style.myshop_container}>
@@ -137,8 +293,16 @@ function MyShop() {
             }
           />
         )}
-        {/* {addModalIsOpen && <ModalAddProduct/>} */}
-        {updateModalIsOpen && <ModalUpdateProduct />}
+        {addModalIsOpen && (
+          <ModalAddProduct
+            onCancel={closeAddModalHandler}
+            onConfirm={addHandler}
+            setUploadStatus={setUploadStatus}
+            shopID={authCtx.user["ID"]}
+            email={authCtx.user["Email"]}
+          />
+        )}
+        {/* {updateModalIsOpen && <ModalUpdateProduct />} */}
         {error && error}
         <div>asdas</div>
         <div>asdas</div>
@@ -146,6 +310,12 @@ function MyShop() {
       </main>
     </Layout>
   );
-}
+};
+
+MyShop.getInitialProps = async ({ query }) => {
+  const { page = "1" } = query;
+  const pageNumber = parseInt(page as string, 10);
+  return { page: pageNumber };
+};
 
 export default MyShop;

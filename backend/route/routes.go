@@ -24,9 +24,10 @@ func ShopRoute(r *gin.Engine){
 
 func ProductRoute(r *gin.Engine){
 	r.GET("/product/get", controller.GetProductsByShopID)
-	r.POST("/product/insert-new-product", middleware.RequireAuth,)
-	r.POST("/product/update-product", middleware.RequireAuth, )
-	r.POST("/product/remove-product", middleware.RequireAuth,)
+	r.GET("/product/get-categories", controller.GetCategories)
+	r.POST("/product/insert-new-product", middleware.RequireAuth, controller.AddProduct)
+	r.POST("/product/update-product", middleware.RequireAuth, controller.UpdateProduct)
+	r.POST("/product/remove-product", middleware.RequireAuth, controller.DeleteProduct)
 }
 
 func PromotionRoute(r *gin.Engine){

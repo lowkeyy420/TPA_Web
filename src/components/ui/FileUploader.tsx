@@ -8,14 +8,38 @@ interface MyProps {
   email: string | undefined;
   setUploadStatus: any;
   reload: boolean;
+  product?: boolean;
+  add?: boolean;
+  update?: boolean;
+  name?: string;
 }
 
-function FileUpload({ email, setUploadStatus, reload }: MyProps) {
+function FileUpload({
+  email,
+  setUploadStatus,
+  reload,
+  product,
+  add,
+  update,
+  name,
+}: MyProps) {
   const [file, setFile] = useState<any>();
   const [fileIsSelected, setFileIsSelected] = useState(false);
 
   let storageURL: any =
     process.env.STORAGE_URL + "shop%2F" + email + "%2Fimage";
+
+  if (product) {
+    storageURL =
+      process.env.STORAGE_URL +
+      "product%2F" +
+      email +
+      "%2F" +
+      name +
+      "%2Fimage?alt=media";
+  }
+
+  console.log(storageURL);
 
   useEffect(() => {
     if (reload) {
@@ -41,8 +65,18 @@ function FileUpload({ email, setUploadStatus, reload }: MyProps) {
       data: formData,
       headers: { "Content-Type": "multipart/form-data" },
     })
-      .then((res: any) => setUploadStatus("Success"))
-      .catch((err: any) => setUploadStatus("Error"));
+      .then((res: any) => {
+        if (add) {
+          setUploadStatus("Success Add");
+        } else if (update) {
+          setUploadStatus("Success Update");
+        } else {
+          setUploadStatus("Success");
+        }
+      })
+      .catch((err: any) => {
+        setUploadStatus("Error");
+      });
   }
 
   return (

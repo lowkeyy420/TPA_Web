@@ -11,8 +11,6 @@ function CustomerReview() {
     url: url,
   });
 
-  console.log(review);
-
   return (
     <Layout>
       {loading && <Loading />}
@@ -29,8 +27,6 @@ function CustomerReview() {
           <tbody>
             {review &&
               review.reviews.map((item: any, i: any) => {
-                console.log(item);
-
                 return (
                   <tr key={item["id"]}>
                     <td>

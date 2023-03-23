@@ -18,8 +18,8 @@ function NotifButton(props: any) {
   );
 
   function showNotificationHandler() {
-    setNotificationIsOpen(!notificationIsOpen);
     request();
+    setNotificationIsOpen(!notificationIsOpen);
   }
 
   return (

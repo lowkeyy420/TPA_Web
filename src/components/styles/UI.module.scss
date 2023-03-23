@@ -241,7 +241,7 @@
   padding: 1rem;
   text-align: center;
   width: 30rem;
-  height: auto;
+  height: 30rem;
   z-index: 10;
   position: fixed;
   top: 20vh;
@@ -251,9 +251,7 @@
 .modal_form_container {
   display: flex;
   flex-direction: column;
-  height: 20rem;
-  justify-content: space-evenly;
-  gap: 15px;
+  gap: 10px;
 
   p {
     font-size: 20px;
@@ -262,9 +260,6 @@
 
   input,
   textarea {
-    align-self: center;
-    width: 90%;
-    max-width: 95%;
     border: 0.2px solid rgb(207, 125, 38);
     padding: 4px 10px;
     outline: none;
@@ -274,7 +269,7 @@
     height: 2rem;
   }
   textarea {
-    height: 10rem;
+    height: 4rem;
     resize: none;
   }
 }
@@ -322,6 +317,12 @@
   .category_outer_container {
     display: none;
   }
+
+  .modal {
+    width: 20rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
 }
 
 @media (min-width: 640px) {
@@ -341,6 +342,12 @@
   .category_container,
   .category_outer_container {
     display: flex;
+  }
+
+  .modal {
+    width: 30rem;
+    left: calc(50% - 15rem);
+    transform: unset;
   }
 }
 
