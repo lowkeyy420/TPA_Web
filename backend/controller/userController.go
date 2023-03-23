@@ -714,3 +714,40 @@ func SignInForgoPasswordCode(c *gin.Context) {
 	return;
 
 }
+
+
+
+func SubscribeToEmail(c *gin.Context) {
+	var req struct {
+		ID int
+	}
+	
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "id = ?", req.ID); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+        })
+        return
+    }
+
+	user.SubscribeToEmail = true
+
+	if err := loader.DB.Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to subcribe email",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message"  : "Successfuly subscribed",
+	})
+}
+

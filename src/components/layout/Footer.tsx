@@ -36,11 +36,11 @@ export default function Footer() {
         </div>
         <div className={style.my_account}>
           <p>MY ACCOUNT</p>
-          <Link href="#">Login / Register</Link>
-          <Link href="#">Order History</Link>
+          <Link href="/auth/login">Login / Register</Link>
+          <Link href="/order/my-order">Order History</Link>
           <Link href="#">Returns History</Link>
           <Link href="#">Address Book</Link>
-          <Link href="#">Wish Lists</Link>
+          <Link href="/wishlist/my-wishlist">Wish Lists</Link>
           <Link href="#">My Build Lists</Link>
           <Link href="#">My Build Showcase</Link>
           <Link href="#">Email Notifications</Link>
@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
         <div className={style.company_information}>
           <p>COMPANY INFORMATION</p>
-          <Link href="#">About Newegg</Link>
+          <Link href="https://newegg.com/">About Newegg</Link>
           <Link href="#">Inverstor Relations</Link>
           <Link href="#">Awards/Rankings</Link>
           <Link href="#">Hours and Locations</Link>
@@ -62,7 +62,7 @@ export default function Footer() {
         </div>
         <div className={style.tools_resources}>
           <p>TOOLS & RESOURCES</p>
-          <Link href="#">Sell on Newegg</Link>
+          <Link href="/shop/myshop">Sell on Newegg</Link>
           <Link href="#">For Your Business</Link>
           <Link href="#">Newegg Partner Services</Link>
           <Link href="#">Become an Affiliate</Link>

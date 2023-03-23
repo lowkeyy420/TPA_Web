@@ -18,5 +18,5 @@ func SyncDatabase() {
 	DB.AutoMigrate(&model.TransactionDetail{})  
 	DB.AutoMigrate(&model.Review{})  
 	DB.AutoMigrate(&model.OneTimeCode{})  
-	
+	DB.AutoMigrate(&model.SearchQuery{})  
 }

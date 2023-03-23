@@ -142,6 +142,37 @@
   }
 }
 
+/* subscribe email*/
+.subscribe_email_container {
+  background-color: var(--primary-color-light);
+  border-radius: 15px;
+  width: 80%;
+  height: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+  p {
+    color: var(--text-color);
+    padding-right: 10px;
+  }
+
+  button {
+    background-color: var(--tertiary-color);
+    width: 5rem;
+    height: 2rem;
+    color: var(--background-color);
+  }
+
+  button:hover {
+    background-color: var(--hover-color);
+  }
+}
+
 @media (min-width: 100px) {
   .address_selector {
     padding: 0px;
