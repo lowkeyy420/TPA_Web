@@ -346,3 +346,60 @@ func GetRecommendedProducts(c *gin.Context){
 	})
 
 }
+
+
+
+func SearchProduct(c *gin.Context){
+	var req struct {
+		Keyword         string
+		InnerKeyword    string
+		IsAvailableOnly bool  
+	}
+
+	if c.Bind(&req) != nil{
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil || page < 1 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid page number",
+		})
+		return
+	}
+
+	var count int64
+	
+	offset := (page - 1) * loader.ITEM_PER_PAGE
+	limit := loader.ITEM_PER_PAGE
+	
+	products := []model.Product{}
+
+	if req.IsAvailableOnly {
+		loader.DB.Model(model.Product{}).Where("name ILIKE ?", "%"+req.Keyword+"%").Where("name ILIKE ?", "%"+req.InnerKeyword+"%").Where("stock > 0").Limit(limit).Offset(offset).Find(&products)
+		loader.DB.Model(&model.Product{}).Where("name ILIKE ?", "%"+req.Keyword+"%").Where("name ILIKE ?", "%"+req.InnerKeyword+"%").Where("stock > 0").Count(&count)
+
+	} else {
+
+		loader.DB.Model(model.Product{}).Where("name ILIKE ?", "%"+req.Keyword+"%").Where("name ILIKE ?", "%"+req.InnerKeyword+"%").Limit(limit).Offset(offset).Find(&products)
+		loader.DB.Model(model.Product{}).Where("name ILIKE ?", "%"+req.Keyword+"%").Where("name ILIKE ?", "%"+req.InnerKeyword+"%").Count(&count)
+	}
+
+	if(count < 1){
+		c.JSON(http.StatusOK, gin.H{
+			"data": nil,
+			"count": 0,
+		})
+	}
+
+	
+	c.JSON(http.StatusOK, gin.H{
+		"data":  products,
+		"count": count,
+	})
+
+}

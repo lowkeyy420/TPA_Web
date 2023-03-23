@@ -747,7 +747,51 @@ func SubscribeToEmail(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message"  : "Successfuly subscribed",
+		"message"  : "Successfully subscribed",
 	})
 }
 
+func SaveQuery(c *gin.Context) {
+	
+	var req struct{
+		Email string
+		Keyword string
+		InnerKeyword string
+		IsAvailableOnly bool
+
+	}
+	
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var countSearchQueries int64
+	loader.DB.Model(model.SearchQuery{}).Where("email = ?", req.Email).Count(&countSearchQueries)
+
+	if countSearchQueries >= 10 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "You already have 10 or more search queries",
+		})
+		return;
+	}
+
+	query := model.SearchQuery{Email: req.Email, Keyword: req.Keyword, InnerKeyword: req.Keyword, IsAvailableOnly: req.IsAvailableOnly}
+
+	
+	result := loader.DB.Create(&query)
+
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to save search query",
+		})
+		return;
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message"  : "Successfully Created Search Query",
+	})
+	
+}

@@ -19,6 +19,9 @@ func UserRoute(r *gin.Engine) {
 	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
 	r.GET("/get-notification", middleware.RequireAuth, controller.GetUserNotification)
 	r.POST("/subscribe-email", middleware.RequireAuth, controller.SubscribeToEmail)
+
+
+	r.POST("/save-query", controller.SaveQuery)
 }
 
 func ShopRoute(r *gin.Engine){
@@ -41,7 +44,7 @@ func ProductRoute(r *gin.Engine){
 
 	r.GET("/product/get-recommended", controller.GetRecommendedProducts)
 
-	r.GET("/search", controller.GetRecommendedProducts)
+	r.POST("/product/search", controller.SearchProduct)
 }
 
 func PromotionRoute(r *gin.Engine){
