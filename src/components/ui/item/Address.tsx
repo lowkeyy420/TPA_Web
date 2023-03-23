@@ -9,11 +9,9 @@ import AuthContext from "@/store/Authcontext";
 interface MyProps {
   data: any;
   reload: any;
-  pricereload: any;
-  wishlist?: boolean;
 }
 
-function CartItem({ data, reload, pricereload, wishlist }: MyProps) {
+function CartItem({ data, reload }: MyProps) {
   const [quantity, setQuantity] = useState(data.Quantity);
   const authCtx: any = useContext(AuthContext);
 
@@ -35,7 +33,6 @@ function CartItem({ data, reload, pricereload, wishlist }: MyProps) {
       if (updatecart) {
         alert(updatecart.message);
         reload();
-        pricereload();
       }
       if (updateerror) {
         alert(updateerror);
@@ -110,7 +107,7 @@ function CartItem({ data, reload, pricereload, wishlist }: MyProps) {
           />
           <ActionButton text="Change" onClick={updateQuantityHandler} />
         </div>
-        {wishlist && <WishlistSelector />}
+        <WishlistSelector />
       </div>
 
       <div className={style.right}>

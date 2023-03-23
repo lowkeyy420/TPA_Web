@@ -122,6 +122,7 @@ function Product(props: MyProps) {
           <p style={{ color: "red", fontWeight: "bolder" }}>Out Of Stock</p>
         )}
         {props.Stock >= 1 && <p>Stock : {props.Stock}</p>}
+        {props.Quantity && <p>Quantity : {props.Quantity}</p>}
 
         <div className={style.product_action_container}>
           {props.update && (

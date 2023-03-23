@@ -3,7 +3,7 @@
   color: var(--text-color);
   background-color: var(--tertiary-color-light);
   border-radius: 10px;
-  height: 8rem;
+  height: 10rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,4 +31,24 @@
     flex-direction: column;
     padding-right: 20px;
   }
+}
+
+@media (min-width: 100px) {
+  .cart_item {
+    flex-direction: column;
+    height: 30rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .cart_item {
+    flex-direction: row;
+    height: 10rem;
+  }
+}
+
+@media (min-width: 1008px) {
+}
+
+@media (min-width: 1366px) {
 }

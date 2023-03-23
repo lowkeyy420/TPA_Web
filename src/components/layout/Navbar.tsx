@@ -87,7 +87,9 @@ export default function Navbar() {
         <CountryButton onClick={toggleLanguageHandler} country={lang} />
         <ThemeToggle />
 
-        <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
+        {authCtx.user["RoleID"] > 0 && (
+          <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
+        )}
 
         {authCtx.user["RoleID"] === 1 && (
           <BalanceVoucherButton balance={authCtx.user["Balance"]} />
@@ -97,7 +99,7 @@ export default function Navbar() {
           country={lang}
           user={authCtx.user}
         />
-        <ReturnOrderButton country={lang} />
+        <ReturnOrderButton country={lang} userid={authCtx.user["RoleID"]} />
         <CartButton />
       </div>
 

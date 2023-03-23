@@ -4,6 +4,7 @@ import { useAxiosPost } from "@/hooks/useAxiosPost";
 import AuthContext from "@/store/Authcontext";
 import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import style from "../../components/styles/UI.module.scss";
+import Link from "next/link";
 
 function AccountSettingsPage() {
   const authCtx: any = useContext(AuthContext);
@@ -102,6 +103,11 @@ function AccountSettingsPage() {
   return (
     <Layout>
       <main className={style.account_container}>
+        <div style={{ display: "flex", gap: "20px" }}>
+          <Link href="/build-pc">BUILD PC</Link>
+          <Link href="/chat">CHAT</Link>
+          <Link href="/review/myreview"> MY REVIEWS</Link>
+        </div>
         <div className={style.upper}>
           {authCtx && authCtx.user && <p>Full Name : {authCtx.user["Name"]}</p>}
           {authCtx && authCtx.user && <p>Email : {authCtx.user["Email"]}</p>}

@@ -20,4 +20,11 @@ func SyncDatabase() {
 	DB.AutoMigrate(&model.OneTimeCode{})  
 	DB.AutoMigrate(&model.SearchQuery{})
 	DB.AutoMigrate(&model.Cart{})
+	DB.AutoMigrate(&model.Wishlist{})
+	DB.AutoMigrate(&model.WishlistInfo{})
+	DB.AutoMigrate(&model.SavedProduct{})
+	
+	DB.AutoMigrate(&model.PaymentMethod{})
+	DB.AutoMigrate(&model.DeliveryType{})
+
 }

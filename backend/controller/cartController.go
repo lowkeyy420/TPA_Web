@@ -78,7 +78,8 @@ func GetItemsInCart(c *gin.Context) {
 	var carts []model.Cart
 	loader.DB.Model(model.Cart{}).Where("user_id = ?", id).Find(&carts)
 
-	type ResponseBody struct {
+	type Response struct {
+		CartID			   int
 		UserID             int      
 		ProductID          int
 		Quantity           int      
@@ -93,14 +94,15 @@ func GetItemsInCart(c *gin.Context) {
 		
 	}
 
-	var products []ResponseBody
+	var products []Response
 	length := len(carts)
 
 	for i := 0; i < length; i++ {
 		var product model.Product
 		loader.DB.Model(model.Product{}).Where("id = ?", carts[i].ProductID).First(&product)
 
-		var response ResponseBody
+		var response Response
+		response.CartID = int(carts[i].ID)
 		response.UserID = carts[i].UserID
 		response.ProductID = carts[i].ProductID
 		response.Quantity = carts[i].Quantity
@@ -224,5 +226,85 @@ func GetCartPrice(c *gin.Context){
 
 	c.JSON(http.StatusOK, totalPrice)
 
+
+}
+
+
+
+
+func SaveProductForLater(c *gin.Context) {
+	var req struct{
+		UserID int
+		ProductID int
+		Quantity int
+		CartID int
+	}
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	
+	savedProduct := model.SavedProduct{UserID: req.UserID,ProductID: req.ProductID, Quantity: req.Quantity}
+	result := loader.DB.Create(&savedProduct)
+	
+
+	
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to save product",
+		})
+		return;
+	}
+
+	//delete the selected item in cart
+	
+	var toDelete model.Cart
+	loader.DB.Model(model.Cart{}).Where("id = ?", req.CartID).Find(&toDelete)
+
+	loader.DB.Delete(&toDelete)
+
+	//response
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Successfully saved for later",
+	})
+
+}
+
+func GetSavedProduct(c *gin.Context) {
+	id := c.Query("id")
+	var user model.User
+
+	//check user exists
+	result := loader.DB.First(&user, id)
+
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	var saved []model.SavedProduct
+	loader.DB.Model(model.SavedProduct{}).Where("user_id = ?", id).Find(&saved)
+
+	type Response struct {
+		SavedProduct      model.SavedProduct
+		Product           model.Product
+	}
+
+	var response []Response
+
+	length := len(saved)
+	for i := 0; i < length; i++ {
+		var entry Response
+		entry.SavedProduct = saved[i]
+		loader.DB.Model(model.Product{}).Where("id = ?", saved[i].ProductID).Find(&entry.Product)
+		response = append(response, entry)
+	}
+	c.JSON(http.StatusOK,response)
 
 }

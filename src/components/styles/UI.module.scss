@@ -348,6 +348,9 @@
     width: 200px;
     height: 200px;
   }
+
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .modal_form_container {
@@ -441,6 +444,11 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+
+    .method_container {
+      display: flex;
+      justify-content: space-around;
+    }
   }
 
   .right {

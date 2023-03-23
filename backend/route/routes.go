@@ -16,21 +16,20 @@ func UserRoute(r *gin.Engine) {
 	r.POST("/get-forgotpassword-otc", controller.RequestForgotPassword )
 	r.POST("/login-forgotpassword-otc", controller.SignInForgoPasswordCode )
 
-	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
 	r.GET("/get-notification", middleware.RequireAuth, controller.GetUserNotification)
 	r.POST("/subscribe-email", middleware.RequireAuth, controller.SubscribeToEmail)
 	
 	
-	r.POST("/save-query", controller.SaveQuery)
+	r.POST("/save-query",middleware.RequireAuth, controller.SaveQuery)
 	r.GET("/get-popular-query", controller.GetPopularQueries)
 
 
-	r.POST("/change-password", controller.ChangeUserPassword)
-	r.POST("/update-phone", controller.UpdatePhoneNumber)
-	r.POST("/enable-2FA", controller.Enable2FA)
+	r.POST("/change-password",middleware.RequireAuth, controller.ChangeUserPassword)
+	r.POST("/update-phone",middleware.RequireAuth, controller.UpdatePhoneNumber)
+	r.POST("/enable-2FA",middleware.RequireAuth, controller.Enable2FA)
 
 
-	r.GET("/get-cart", controller.GetCartPrice)
+	r.GET("/get-cart", middleware.RequireAuth, controller.GetCartPrice)
 }
 
 func ShopRoute(r *gin.Engine){
@@ -44,6 +43,15 @@ func ShopRoute(r *gin.Engine){
 
 
 	r.GET("/shop/get-recommended", controller.GetShopRecommended)
+
+}
+
+func AddressRoute(r *gin.Engine){
+	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
+
+	r.GET("/get-all-address", middleware.RequireAuth, controller.GetAddresses)
+	r.POST("/add-address", middleware.RequireAuth, controller.CreateAddress)
+	r.POST("/remove-address", middleware.RequireAuth, controller.RemoveAddress)
 
 }
 
@@ -77,10 +85,40 @@ func VoucherRoute(r *gin.Engine){
 }
 
 func TransactionRoute(r *gin.Engine){
-	r.POST("/product/add-to-cart", controller.AddToCart)
-	r.GET("/product/get-cart-item", controller.GetItemsInCart)
-	r.POST("/product/update-cart", controller.UpdateItemsInCart)
-	r.POST("/product/remove-from-cart", controller.RemoveItemsInCart)
+	//cart
+	r.POST("/product/add-to-cart", middleware.RequireAuth, controller.AddToCart)
+	r.GET("/product/get-cart-item", middleware.RequireAuth, controller.GetItemsInCart)
+	r.POST("/product/update-cart", middleware.RequireAuth, controller.UpdateItemsInCart)
+	r.POST("/product/remove-from-cart",middleware.RequireAuth, controller.RemoveItemsInCart)
+	
+	//save product
+	r.POST("/product/save-for-later", middleware.RequireAuth, controller.SaveProductForLater)
+	r.GET("/product/get-saved-product", middleware.RequireAuth, controller.GetSavedProduct)
+	
+	
+	//wishlist
+	r.POST("/wishlist/add-wishlist", middleware.RequireAuth, controller.CreateNewWishlist)
+	r.POST("/wishlist/update-wishlist", middleware.RequireAuth, controller.UpdateWishList)
+	r.GET("/wishlist/get-wishlist-selection", middleware.RequireAuth, controller.UpdateWishList)
+	r.GET("/wishlist/get-wishlist-products", middleware.RequireAuth, controller.UpdateWishList)
+	r.GET("/wishlist/get-wishlist-all", controller.UpdateWishList)
+
+
+	r.GET("/wishlist/get-public-wishlist", controller.GetAllPublicWishlists)
+
+
+	r.POST("/product/add-to-wishlist", controller.AddProductToWishlist)
+
+	//transaction
+	r.POST("/checkout", middleware.RequireAuth, controller.CreateTransaction)
+	r.GET("/get-delivery", controller.GetDeliveryType)
+	r.GET("/get-payment", controller.GetPaymentMethod)
+	
+	r.POST("/transaction/mark-as-finished", middleware.RequireAuth, controller.MarkTransactionAsFinished)
+	r.POST("/get-transaction-user", middleware.RequireAuth, controller.GetUserTransactions)
+	r.POST("/get-transaction-shop", middleware.RequireAuth, controller.GetShopTransactions)
+
+
 }
 
 func AdminRoute(r *gin.Engine){
@@ -128,6 +166,7 @@ func UseAllRoutes(r *gin.Engine){
 	PromotionRoute(r)
 	VoucherRoute(r)
 	TransactionRoute(r)
+	AddressRoute(r)
 	AdminRoute(r)
 	ChatRoute(r)
 }

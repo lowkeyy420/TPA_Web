@@ -1,9 +1,18 @@
 import React from "react";
 import style from "../../styles/Button.module.scss";
+import { useRouter } from "next/router";
 
 function ReturnOrderButton(props: any) {
+  const router = useRouter();
+
+  function redirectHandler() {
+    if (props.userid) {
+      router.push("/order/myorder");
+    }
+  }
+
   return (
-    <div className={style.returnOrderBtn}>
+    <div className={style.returnOrderBtn} onClick={redirectHandler}>
       <div className={style.returnOrderBtn_top}>
         <p>{props.country === "en" ? "Returns" : "Pengembalian"}</p>
       </div>

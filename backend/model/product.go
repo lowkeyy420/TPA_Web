@@ -13,3 +13,12 @@ type Product struct {
 	Stock				int
 	Details				string
 }
+
+
+
+type SavedProduct struct {
+	gorm.Model
+	UserID int
+	ProductID int
+	Quantity int
+}

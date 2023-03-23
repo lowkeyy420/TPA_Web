@@ -137,7 +137,7 @@
 
 .alertBtn {
   height: 40px;
-  width: 50px;
+  width: 80px;
   background-color: var(--tertiary-color);
 
   color: white;
@@ -147,6 +147,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0px 1rem;
 }
 
 .alertBtn:hover {
