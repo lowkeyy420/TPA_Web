@@ -19,9 +19,15 @@ func UserRoute(r *gin.Engine) {
 	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
 	r.GET("/get-notification", middleware.RequireAuth, controller.GetUserNotification)
 	r.POST("/subscribe-email", middleware.RequireAuth, controller.SubscribeToEmail)
-
-
+	
+	
 	r.POST("/save-query", controller.SaveQuery)
+	r.GET("/get-popular-query", controller.GetPopularQueries)
+
+
+	r.POST("/change-password", controller.ChangeUserPassword)
+	r.POST("/update-phone", controller.UpdatePhoneNumber)
+	r.POST("/enable-2FA", controller.Enable2FA)
 }
 
 func ShopRoute(r *gin.Engine){
@@ -32,6 +38,10 @@ func ShopRoute(r *gin.Engine){
 	r.POST("/shop/get-review",middleware.RequireAuth, controller.GetShopReviews)
 	r.POST("/shop/get-top-shop",middleware.RequireAuth, controller.GetTopShops)
 	r.GET("/shop/get-top-three", controller.GetTop3Shop)
+
+
+	r.GET("/shop/get-recommended", controller.GetShopRecommended)
+
 }
 
 func ProductRoute(r *gin.Engine){
@@ -46,6 +56,12 @@ func ProductRoute(r *gin.Engine){
 	r.GET("/product/get-recommended", controller.GetRecommendedProducts)
 	r.POST("/product/search", controller.SearchProduct)
 	r.GET("/product/popular-categories", controller.GetPopularCategories)
+
+
+
+	r.GET("/product/frequently-bought", controller.GetFrequentlyBoughtWithProducts)
+	r.GET("/product/similar-product", controller.GetSimilarProducts)
+
 }
 
 func PromotionRoute(r *gin.Engine){
@@ -54,12 +70,14 @@ func PromotionRoute(r *gin.Engine){
 
 func VoucherRoute(r *gin.Engine){
 	r.GET("/voucher-info", controller.GetVoucherByCode)
-	r.POST("/user-voucher", )
+	r.POST("/use-voucher", middleware.RequireAuth, controller.UseVoucher )
 }
 
 func TransactionRoute(r *gin.Engine){
 	r.POST("/product/add-to-cart", controller.AddToCart)
-
+	r.GET("/product/get-cart-item", controller.GetItemsInCart)
+	r.POST("/product/update-cart", controller.UpdateItemsInCart)
+	r.POST("/product/remove-from-cart", controller.RemoveItemsInCart)
 }
 
 func AdminRoute(r *gin.Engine){
@@ -106,6 +124,7 @@ func UseAllRoutes(r *gin.Engine){
 	ProductRoute(r)
 	PromotionRoute(r)
 	VoucherRoute(r)
+	TransactionRoute(r)
 	AdminRoute(r)
 	ChatRoute(r)
 }

@@ -32,8 +32,7 @@ function SubscribeEmail() {
 
   return (
     <div className={style.subscribe_email_container}>
-      {authCtx.isLoggedIn &&
-        authCtx.user &&
+      {authCtx.user["ID"] &&
         authCtx.user["RoleID"] != 2 &&
         !authCtx.user["SubscribeToEmail"] && (
           <>
@@ -42,7 +41,7 @@ function SubscribeEmail() {
           </>
         )}
 
-      {authCtx.user &&
+      {authCtx.user["ID"] &&
         authCtx.user["RoleID"] != 2 &&
         authCtx.user["SubscribeToEmail"] && (
           <>
@@ -50,7 +49,7 @@ function SubscribeEmail() {
           </>
         )}
 
-      {!authCtx.isLoggedIn && <p>Log In First</p>}
+      {!authCtx.user["ID"] && <p>Log In First</p>}
     </div>
   );
 }

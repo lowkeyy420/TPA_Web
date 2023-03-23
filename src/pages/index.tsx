@@ -118,6 +118,8 @@ function HomePage() {
         )}
 
         <SubscribeEmail />
+        <HomeHeader text="Popular Queries" />
+        <PopularDisplayer type="query" />
       </Layout>
     </>
   );

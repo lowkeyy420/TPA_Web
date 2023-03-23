@@ -301,6 +301,14 @@
       border-radius: 10px;
     }
   }
+
+  .prod_popular_grid {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    overflow-x: scroll;
+  }
 }
 
 /* Backdrop */
@@ -425,6 +433,33 @@
 
   .popular_grid {
     flex-direction: column;
+  }
+}
+
+// Account settings page
+
+.account_container {
+  padding: 20px;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-color);
+
+  button {
+    padding: 8px;
+    border-radius: 10px;
+    background-color: var(--category-color);
+    color: var(--text-color);
+  }
+
+  .upper,
+  .password,
+  .phone {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 }
 

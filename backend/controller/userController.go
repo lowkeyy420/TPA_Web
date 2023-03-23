@@ -295,6 +295,7 @@ func GetUser(c *gin.Context) {
 				"RoleID": user.RoleID,
 				"Status": user.Status,
 				"Balance" : user.Balance,
+				"SubscribeToEmail" : user.SubscribeToEmail,
 			})
 		}
 		
@@ -815,10 +816,140 @@ func SaveQuery(c *gin.Context) {
 func GetPopularQueries(c *gin.Context){
 	var queries []model.SearchQuery
 
-	loader.DB.Model(model.SearchQuery{}).Distinct("keyword").Limit(4).Find(&queries);
+	loader.DB.Model(model.SearchQuery{}).Limit(4).Find(&queries);
 
 	c.JSON(http.StatusOK, gin.H{
 		"data" : queries,
-		"count" : 4,
 	})
+}
+
+
+func ChangeUserPassword(c *gin.Context){
+	var req struct {
+		Email			string
+		OldPassword	    string
+		NewPassword		string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+        c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "User Not Found",
+        })
+        return
+    }
+
+	if user.ID != 0 {
+		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.OldPassword))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Inccorect pass",
+			})
+			return;
+		}
+	}
+
+	//password hashing
+	hashed, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), 10)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to hash password",
+		})
+		return
+	}
+
+	user.Password = string(hashed)
+
+	loader.DB.Save(&user)
+
+		
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Successfuly Changed Password For " + req.Email,
+	})
+
+}
+
+
+func UpdatePhoneNumber(c *gin.Context){
+	var req struct {
+		Email			string
+		Phone			string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+        c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "User Not Found",
+        })
+        return
+    }
+	user.Phone = req.Phone
+	loader.DB.Save(&user)
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Successfuly Updated phone number to " + req.Phone,
+	})
+
+}
+
+func Enable2FA(c *gin.Context) {
+	var req struct {
+		Email string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	var user model.User
+
+	result := loader.DB.First(&user, "email = ?", req.Email); 
+	
+	if result.Error != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Email Not Found",
+		})
+		return
+	}
+
+	smtpUsername := os.Getenv("EMAIL")
+	smtpPassword := os.Getenv("PASS")
+
+
+	var to []string
+	to = append(to, user.Email)
+
+	message := "Subject: " + "Two Factor Authentication Enabled!" + "\n\n" + "Your Account has successfully activated 2FA"
+
+	auth := smtp.PlainAuth("", smtpUsername, smtpPassword, "smtp.gmail.com")
+
+	err := smtp.SendMail("smtp.gmail.com:587",auth,smtpUsername,to,[]byte(message))
+
+	if err != nil {
+		c.String(http.StatusConflict, "Failed to send email...")
+		panic(err)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Successfully Enabled 2FA, Please check your email",
+	})
+
 }

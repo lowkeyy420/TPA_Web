@@ -47,7 +47,7 @@ const retrieveStoredToken = () => {
   };
 };
 
-const GetUser = (token: string | any, setuser: any) => {
+const GetUser = (token: string | any, setuser: any, isLoggedIn: any) => {
   const url = process.env.BASE_URL + "getuser";
 
   const header = {
@@ -75,6 +75,7 @@ const GetUser = (token: string | any, setuser: any) => {
         };
 
         setuser(user);
+        isLoggedIn = true;
       }
     })
     .catch((error) => {});
@@ -95,7 +96,7 @@ export const AuthContextProvider = (props: MyProps) => {
   const [user, setUser] = useState<any>([]);
 
   // if token is empty return false else true
-  const userIsLoggedIn = !!token;
+  let userIsLoggedIn = !!token;
 
   const logoutHandler = () => {
     setToken(null);
@@ -137,7 +138,7 @@ export const AuthContextProvider = (props: MyProps) => {
     if (tokenData) {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
       if (user && user.length < 1) {
-        GetUser("bearer " + tokenData.token, setUser);
+        GetUser("bearer " + tokenData.token, setUser, userIsLoggedIn);
       }
     }
   }, [tokenData]);

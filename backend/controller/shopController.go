@@ -494,3 +494,26 @@ func GetTop3Shop(c *gin.Context){
 	})
 }
 
+func GetShopRecommended(c *gin.Context){
+	id := c.Query("id")
+	var shop model.Shop
+
+	result := loader.DB.First(&shop, id)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Shop not found",
+		})
+		return
+	}
+
+	var products []model.Product
+	loader.DB.Model(model.Product{}).Where("shop_id = ?", shop.ID).Limit(4).Find(&products)
+
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : products,
+	} )
+}
+
+

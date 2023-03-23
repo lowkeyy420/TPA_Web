@@ -28,7 +28,7 @@ import BalanceVoucherButton from "../actions/button/BalanceVoucherButton";
 
 function LoginRegisterButton(props: any) {
   return (
-    <Link href="/auth/login">
+    <Link href={props.user["ID"] ? "/user/account" : "/auth/login"}>
       <div className={style.loginBtn}>
         <div className={style.loginBtn_left}>
           <FontAwesomeIcon icon={faUser} className={style.loginBtn_icon} />
@@ -92,7 +92,11 @@ export default function Navbar() {
         {authCtx.user["RoleID"] === 1 && (
           <BalanceVoucherButton balance={authCtx.user["Balance"]} />
         )}
-        <LoginRegisterButton Name={authCtx.user["Name"]} country={lang} />
+        <LoginRegisterButton
+          Name={authCtx.user["Name"]}
+          country={lang}
+          user={authCtx.user}
+        />
         <ReturnOrderButton country={lang} />
         <CartButton />
       </div>

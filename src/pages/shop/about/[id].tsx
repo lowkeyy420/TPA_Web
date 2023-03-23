@@ -10,7 +10,7 @@ import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext } from "react";
-import style from "../../components/styles/Shop.module.scss";
+import style from "../../../components/styles/Shop.module.scss";
 
 interface Props {
   id: number;
@@ -43,9 +43,11 @@ const ShopInfoPage: NextPage<Props> = ({ id }) => {
             )}
             <div className={style.inner_profile}>
               <p className={style.name}>{shop && shop["Name"]}</p>
-              <p>Number of Sales : {shop && shop["Sales"]}</p>
-              <p>About Us : {shop && shop["Description"]}</p>
-              <p>Average Rating : {shop && shop["AverageRating"]}</p>
+
+              <div className={style.inner_profile_button_container}>
+                <button className={style.innerBtn}>Follow</button>
+                <button className={style.innerBtn}>Contact</button>
+              </div>
             </div>
           </div>
         </div>

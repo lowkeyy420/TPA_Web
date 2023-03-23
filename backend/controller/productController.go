@@ -407,13 +407,34 @@ func SearchProduct(c *gin.Context){
 func GetPopularCategories(c *gin.Context){
 	var categories []model.ProductCategory
 
-	loader.DB.Model(model.ProductCategory{}).Distinct("product_category_name").Offset(6).Limit(6).Find(&categories);
+	loader.DB.Model(model.ProductCategory{}).Offset(2).Limit(6).Find(&categories);
 
 	c.JSON(http.StatusOK, gin.H{
 		"data" : categories,
 		"count" : 6,
 	})
 }
+
+func GetSimilarProducts(c *gin.Context){
+	var products []model.Product
+
+	loader.DB.Model(model.Product{}).Limit(6).Find(&products);
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : products,
+	})
+}
+
+func GetFrequentlyBoughtWithProducts(c *gin.Context){
+	var products []model.Product
+
+	loader.DB.Model(model.Product{}).Order("id DESC").Limit(6).Find(&products);
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : products,
+	})
+}
+
 
 func GetProductByID(c *gin.Context){
 	find := c.Query("id")
@@ -444,13 +465,6 @@ func GetProductByID(c *gin.Context){
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": "Shop owner not found",
-		})
-		return
-	}
-
-	if shop.Status == "Banned"{
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Banned",
 		})
 		return
 	}

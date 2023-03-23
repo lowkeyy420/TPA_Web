@@ -1,0 +1,32 @@
+/*  Product Page */
+
+.product_page_container {
+  padding: 20px;
+  color: var(--text-color);
+
+  .upper {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 20px;
+    align-items: flex-end;
+  }
+  .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
+.imageShop {
+  border-radius: 10px;
+}
+.imageShop:hover {
+  cursor: pointer;
+}
