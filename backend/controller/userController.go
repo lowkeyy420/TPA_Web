@@ -3,7 +3,9 @@ package controller
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"net/http"
+	"net/smtp"
 	"os"
 	"strconv"
 	"time"
@@ -223,7 +225,7 @@ func GetUser(c *gin.Context) {
 
 	token,_ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}	
 			return []byte(os.Getenv("SECRET")), nil
 		})
@@ -446,5 +448,269 @@ func GetUserNotification(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{
 		"data" : notifications,
 	})
+
+}
+
+
+func GetOneTimeSignInCode(c *gin.Context) {
+
+	var req struct {
+		Email string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "No user with that email",
+        })
+        return
+    }
+
+	var code model.OneTimeCode
+	code.Email = req.Email
+
+	code.Code = strconv.Itoa(100000 + rand.Intn(999999-100000))
+
+	var countEmail int64
+	loader.DB.Model(model.OneTimeCode{}).Where("email = ?", code.Email).Count(&countEmail)
+
+	if countEmail == 0 {
+		loader.DB.Create(&code)
+	} else {
+		var userCode model.OneTimeCode
+		loader.DB.Model(model.OneTimeCode{}).Where("email = ?", code.Email).First(&userCode)
+		userCode.Code = code.Code
+		loader.DB.Save(&userCode)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : code,
+	})
+}
+
+func SignInWithOneTimeCode(c *gin.Context) {
+
+	var req struct {
+		Email string 
+		Code  string 
+	}
+
+	
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "No user with that email",
+        })
+        return
+    }
+
+	var code model.OneTimeCode
+	loader.DB.Model(model.OneTimeCode{}).Where("email = ?", req.Email).Where("code = ?", req.Code).First(&code)
+
+	if code.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Invalid Code",
+        })
+        return
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sbj" : user.ID, //subject
+		"role" : user.RoleID,
+		"exp" : time.Now().Add(time.Hour * 24 * 30).Unix(),  //expiration
+	})
+
+	generatedToken, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed creating token",
+		})
+		return;
+	}
+	
+	//auto set cookie
+	c.SetSameSite(http.SameSiteLaxMode)
+	
+	
+	//expiration time
+	exp := 3600*24
+	c.SetCookie("token", generatedToken, exp, "", "", false, false)
+
+	// Check if Code is Still Valid
+    // Check if the last updated time is less than 2 minutes ago
+    if time.Since(code.UpdatedAt) > 15*time.Minute {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Token is no longer valid",
+		})
+        return
+    }
+
+	c.JSON(http.StatusOK, gin.H{
+		"token" : generatedToken,
+		"expiresin" : exp,
+		"user" : user,
+	})
+	return;
+
+}
+
+
+func RequestForgotPassword(c *gin.Context){
+	
+	var req struct {
+		Email string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "No user with that email",
+        })
+        return
+    }
+
+	var code model.OneTimeCode
+	code.Email = req.Email
+	code.Code = strconv.Itoa(100000 + rand.Intn(999999-100000))
+
+	var countEmail int64
+	loader.DB.Model(model.OneTimeCode{}).Where("email = ?", code.Email).Count(&countEmail)
+
+	if countEmail == 0 {
+		loader.DB.Create(&code)
+	} else {
+		var userCode model.OneTimeCode
+		loader.DB.Model(model.OneTimeCode{}).Where("email = ?", code.Email).First(&userCode)
+
+
+		if time.Since(userCode.UpdatedAt) < 2*time.Minute {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "You must wait 2 minutes before requesting another code !",
+			})
+			return
+		}
+
+		userCode.Code = code.Code
+		loader.DB.Save(&userCode)
+		
+	}
+
+	smtpUsername := os.Getenv("EMAIL")
+	smtpPassword := os.Getenv("PASS")
+
+	message := "Subject: " + "Forgot Password Code !" + "\n\n" + "Use this code to sign in : " + code.Code
+
+
+	auth := smtp.PlainAuth("", smtpUsername, smtpPassword, "smtp.gmail.com")
+	var to []string
+	to = append(to, code.Email)
+
+	err := smtp.SendMail("smtp.gmail.com:587",auth,smtpUsername,to,[]byte(message))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed sending email..",
+		})
+		panic(err)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : "Please Check your email for the code...",
+	})
+}
+
+func SignInForgoPasswordCode(c *gin.Context) {
+
+	var req struct {
+		Email string 
+		Code  string 
+	}
+
+	
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "No user with that email",
+        })
+        return
+    }
+
+	var code model.OneTimeCode
+	loader.DB.Model(model.OneTimeCode{}).Where("email = ?", req.Email).Where("code = ?", req.Code).First(&code)
+
+	if code.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Invalid Code",
+        })
+        return
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sbj" : user.ID, //subject
+		"role" : user.RoleID,
+		"exp" : time.Now().Add(time.Hour * 24 * 30).Unix(),  //expiration
+	})
+
+	generatedToken, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed creating token",
+		})
+		return;
+	}
+	
+	//auto set cookie
+	c.SetSameSite(http.SameSiteLaxMode)
+	
+	
+	//expiration time
+	exp := 3600*24
+	c.SetCookie("token", generatedToken, exp, "", "", false, false)
+
+	// Check if Code is Still Valid
+    // Check if the last updated time is less than 2 minutes ago
+    if time.Since(code.UpdatedAt) > 5*time.Minute {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Token is no longer valid",
+		})
+        return
+    }
+
+	c.JSON(http.StatusOK, gin.H{
+		"token" : generatedToken,
+		"expiresin" : exp,
+		"user" : user,
+	})
+	return;
 
 }

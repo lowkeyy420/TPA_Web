@@ -48,7 +48,8 @@ function ModalAddProduct({
       detailsInputRef.current.value
     );
 
-    setReload(!reload);
+    setReload(false);
+    setReload(true);
   }
 
   const [loading, category, error, request] = useAxios({

@@ -8,8 +8,6 @@ interface Mydata {
 }
 
 function ProductGrid(props: Mydata) {
-  console.log(props);
-
   return (
     <div className={style.data_grid_container}>
       {props.data["data"].map((product: any) => {

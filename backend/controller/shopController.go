@@ -141,8 +141,10 @@ func GetAllShop(c *gin.Context) {
 	var count int64
 	loader.DB.Model(&model.Shop{}).Count(&count)
 
-	offset := (page - 1) * loader.ITEM_PER_PAGE
-	limit := loader.ITEM_PER_PAGE
+	SHOP_PER_PAGE := 50
+
+	offset := (page - 1) * SHOP_PER_PAGE
+	limit := SHOP_PER_PAGE
 
 	max := int(math.Ceil(float64(count) / float64(limit)))
 
@@ -270,6 +272,95 @@ func GetShopById(c *gin.Context) {
 		"RoleID": shop.RoleID,
 		"AverageRating" : stats.AverageRating,
 		"Sales" : stats.NumberOfSales,
+	})
+
+}
+
+
+func UpdateShopInfo(c *gin.Context){
+	var req struct {
+		Name    	string
+		Email		string
+		Description string
+		Image       string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	var shop model.Shop
+    if result := loader.DB.First(&shop, "email = ?", req.Email); result.Error != nil {
+        c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "Shop Not Found",
+        })
+        return
+    }
+	
+	shop.Name = req.Name;
+	shop.Description = req.Description;
+	shop.Image = req.Image;
+
+	loader.DB.Save(&shop)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Successfuly Updated Shop",
+	})
+}
+
+func ChangeShopPassword(c *gin.Context){
+	var req struct {
+		Email			string
+		OldPassword	    string
+		NewPassword		string
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	//check if email exists in user throw error
+	var shop model.Shop
+    if result := loader.DB.First(&shop, "email = ?", req.Email); result.Error != nil {
+        c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+            "error": "Shop Not Found",
+        })
+        return
+    }
+
+	if shop.ID != 0 {
+		err := bcrypt.CompareHashAndPassword([]byte(shop.Password), []byte(req.OldPassword))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Inccorect pass",
+			})
+			return;
+		}
+	}
+
+	//password hashing
+	hashed, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), 10)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to hash password",
+		})
+		return
+	}
+
+	shop.Password = string(hashed)
+
+	loader.DB.Save(&shop)
+
+		
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Successfuly Changed Password For " + req.Email,
 	})
 
 }

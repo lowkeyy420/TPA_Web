@@ -200,6 +200,11 @@
   background-color: var(--tertiary-color-light);
 }
 
+.shop_actionBtn:hover {
+  cursor: pointer;
+  background-color: var(--hover-color);
+}
+
 @media (min-width: 100px) {
   .nav_childsupportBtn {
     p {

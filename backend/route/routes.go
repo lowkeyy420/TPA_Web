@@ -10,6 +10,12 @@ func UserRoute(r *gin.Engine) {
 	r.POST("/getuser", controller.GetUser )
 	r.POST("/signup", controller.SignUp )
 	r.POST("/login", controller.Login )
+	r.POST("/get-otc", controller.GetOneTimeSignInCode )
+	r.POST("/login-otc", controller.SignInWithOneTimeCode )
+	
+	r.POST("/get-forgotpassword-otc", controller.RequestForgotPassword )
+	r.POST("/login-forgotpassword-otc", controller.SignInForgoPasswordCode )
+
 	r.GET("/get-address", middleware.RequireAuth, controller.GetUserAddress)
 	r.GET("/get-notification", middleware.RequireAuth, controller.GetUserNotification)
 }
@@ -17,9 +23,9 @@ func UserRoute(r *gin.Engine) {
 func ShopRoute(r *gin.Engine){
 	r.GET("/shop/get-all-shop",  controller.GetAllShop)
 	r.GET("/shop/get-shop", controller.GetShopById)
-	r.GET("/shop/add-shop", middleware.RequireAuth, controller.AddProduct)
 	r.GET("/shop/get-shop-rating", controller.GetShopById)
-
+	r.POST("/shop/update-shop", middleware.RequireAuth,controller.UpdateShopInfo)
+	r.POST("/shop/change-password",middleware.RequireAuth, controller.ChangeShopPassword)
 }
 
 func ProductRoute(r *gin.Engine){

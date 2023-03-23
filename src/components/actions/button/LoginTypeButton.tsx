@@ -1,17 +1,19 @@
 import style from "../../styles/Button.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAppleAlt, faSignIn } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
 interface MyProps {
   mode?: string;
   text?: string;
   height?: string | number;
   width?: string | number;
+  onClick?: any;
 }
 
-function LoginTypeButton({ mode, text, height, width }: MyProps) {
+function LoginTypeButton({ mode, text, height, width, onClick }: MyProps) {
   return (
-    <button type="button" className={style.authBtn_login}>
+    <button type="button" className={style.authBtn_login} onClick={onClick}>
       {mode && (
         <FontAwesomeIcon
           icon={mode === "APPLE" ? faAppleAlt : faSignIn}

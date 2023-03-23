@@ -1,8 +1,8 @@
 //signup
 export interface IShopData {
   Name: string;
-  Email: string;
-  Password: string;
+  Email?: string;
+  Password?: string;
   Description: string;
   Image: string;
 }

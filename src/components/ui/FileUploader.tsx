@@ -39,8 +39,6 @@ function FileUpload({
       "%2Fimage?alt=media";
   }
 
-  console.log(storageURL);
-
   useEffect(() => {
     if (reload) {
       uploadHandler();
@@ -66,6 +64,7 @@ function FileUpload({
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then((res: any) => {
+        setUploadStatus("");
         if (add) {
           setUploadStatus("Success Add");
         } else if (update) {

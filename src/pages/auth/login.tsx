@@ -6,11 +6,13 @@ import { useAxiosPost } from "@/hooks/useAxiosPost";
 import { IUserLogin } from "@/interfaces/IUser";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FormEvent, useRef } from "react";
 import style from "../../components/styles/auth/AuthPage.module.scss";
 import btn from "../../components/styles/Button.module.scss";
 
 function Login() {
+  const router = useRouter();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const url = process.env.BASE_URL + "login";
@@ -32,6 +34,15 @@ function Login() {
       Email: email,
       Password: pass,
     });
+  }
+
+  function redirectHandler() {
+    const email: any = emailInputRef.current?.value;
+    if (email?.length > 7) {
+      router.push(`login-one-time?email=${email}`);
+    } else {
+      alert("Please enter a valid email");
+    }
   }
 
   return (
@@ -71,8 +82,12 @@ function Login() {
           <button type="submit" className={btn.authBtn}>
             SIGN IN
           </button>
-          <LoginTypeButton text="GET ONE TIME SIGN IN CODE" />
+          <LoginTypeButton
+            text="GET ONE TIME SIGN IN CODE"
+            onClick={redirectHandler}
+          />
           <Link href="#">{"What's"} The One Time Code?</Link>
+          <Link href="/auth/forgot-password">Forgot Password</Link>
           <div className={style.toggleAuthContainer}>
             New to Newegg? <Link href="/auth/register">Sign Up</Link>
           </div>

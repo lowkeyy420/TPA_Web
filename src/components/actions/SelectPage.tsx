@@ -13,10 +13,15 @@ interface MyProps {
   setPage: any;
   reload: any;
   count: number;
+  shop?: boolean;
 }
 
 function SelectPage(props: MyProps) {
-  const totalPage: number = Math.ceil(props.count / ITEM_PER_PAGE);
+  let totalPage: number = Math.ceil(props.count / ITEM_PER_PAGE);
+
+  if (props.shop) {
+    totalPage = Math.ceil(props.count / 50);
+  }
 
   function previousPageHandler(jump?: boolean | any) {
     if (props.currentPage === 1) {

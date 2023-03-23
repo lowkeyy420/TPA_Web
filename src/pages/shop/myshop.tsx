@@ -256,8 +256,11 @@ const MyShop: NextPage<Props> = ({ page }) => {
             </div>
           </div>
           <div className={style.shop_action_container}>
-            <ShopInfoButton id={authCtx.user["ID"]} />
-            <ShopPasswordButton id={authCtx.user["ID"]} />
+            <ShopPasswordButton email={authCtx.user["Email"]} />
+            <ShopInfoButton
+              email={authCtx.user["Email"]}
+              reload={shopRequest}
+            />
           </div>
         </div>
         <div className={style.shop_banner_bottom}>
@@ -267,6 +270,7 @@ const MyShop: NextPage<Props> = ({ page }) => {
               setPage={setCurrentPage}
               reload={request}
               count={product.count}
+              shop
             />
           )}
 
