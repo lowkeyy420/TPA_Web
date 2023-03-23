@@ -205,3 +205,15 @@ func GetCustomerServiceReview(c *gin.Context){
         "reviews": reviews,
     })
 }
+
+func GetVisualizationData(c *gin.Context) {
+	
+	var count int64
+	err := loader.DB.Model(&model.Product{}).Where("extract(year from created_at) = ?", 2023).Count(&count).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve product count"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"count": count})
+}

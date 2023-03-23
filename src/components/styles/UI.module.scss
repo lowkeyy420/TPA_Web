@@ -58,9 +58,16 @@
 
 /* Data visualization*/
 .datavisual_container {
-  height: 26vh;
-  padding: 20px 10px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
   color: var(--text-color);
+  width: 100%;
+
+  .chart_container {
+    padding: 20px;
+  }
 }
 
 /* Manage Page Container*/
@@ -324,6 +331,10 @@
     left: 50%;
     transform: translate(-50%, 0);
   }
+
+  .datavisual_container {
+    flex-direction: column;
+  }
 }
 
 @media (min-width: 640px) {
@@ -361,5 +372,9 @@
 @media (min-width: 1366px) {
   .data_grid_container {
     grid-template-columns: repeat(4, 4fr);
+  }
+
+  .datavisual_container {
+    flex-direction: row;
   }
 }
