@@ -768,6 +768,21 @@ func SaveQuery(c *gin.Context) {
 		return;
 	}
 
+	if req.Email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "You must sign in first",
+		})
+		return;
+	}
+
+	var user model.User
+    if result := loader.DB.First(&user, "email = ?", req.Email); result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "No user with that email",
+        })
+        return
+    }
+
 	var countSearchQueries int64
 	loader.DB.Model(model.SearchQuery{}).Where("email = ?", req.Email).Count(&countSearchQueries)
 
@@ -778,7 +793,7 @@ func SaveQuery(c *gin.Context) {
 		return;
 	}
 
-	query := model.SearchQuery{Email: req.Email, Keyword: req.Keyword, InnerKeyword: req.Keyword, IsAvailableOnly: req.IsAvailableOnly}
+	query := model.SearchQuery{Email: req.Email, Keyword: req.Keyword, InnerKeyword: req.InnerKeyword, IsAvailableOnly: req.IsAvailableOnly}
 
 	
 	result := loader.DB.Create(&query)
@@ -794,4 +809,16 @@ func SaveQuery(c *gin.Context) {
 		"message"  : "Successfully Created Search Query",
 	})
 	
+}
+
+
+func GetPopularQueries(c *gin.Context){
+	var queries []model.SearchQuery
+
+	loader.DB.Model(model.SearchQuery{}).Distinct("keyword").Limit(4).Find(&queries);
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : queries,
+		"count" : 4,
+	})
 }

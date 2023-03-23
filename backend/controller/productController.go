@@ -403,3 +403,14 @@ func SearchProduct(c *gin.Context){
 	})
 
 }
+
+func GetPopularCategories(c *gin.Context){
+	var categories []model.ProductCategory
+
+	loader.DB.Model(model.ProductCategory{}).Distinct("product_category_name").Offset(6).Limit(6).Find(&categories);
+
+	c.JSON(http.StatusOK, gin.H{
+		"data" : categories,
+		"count" : 6,
+	})
+}

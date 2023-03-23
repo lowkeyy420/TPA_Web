@@ -1,10 +1,5 @@
-import ActionButton from "@/components/actions/button/ActionButton";
-import ShopInfoButton from "@/components/actions/button/ShopInfoButton";
-import ShopPasswordButton from "@/components/actions/button/ShopPasswordButton";
 import SelectPage from "@/components/actions/SelectPage";
 import Layout from "@/components/layout/Layout";
-import Backdrop from "@/components/ui/Backdrop";
-import Banned from "@/components/ui/Banned";
 import ProductGrid from "@/components/ui/grid/ProductGrid";
 import Loading from "@/components/ui/Loading";
 import ModalAddProduct from "@/components/ui/modal/ModalAddProduct";
@@ -73,6 +68,8 @@ const Search: NextPage<Props> = ({ page, keyword }) => {
       InnerKeyword: innerKeyWord,
       IsAvailableOnly: isAvailableOnly,
     });
+
+    // console.log(authCtx.user["Email"], keyword, innerKeyWord, isAvailableOnly);
   }
 
   function reload() {

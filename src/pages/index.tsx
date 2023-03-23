@@ -25,6 +25,7 @@ import ProductGrid from "@/components/ui/grid/ProductGrid";
 import { useEffect, useState } from "react";
 import HomeHeader from "@/components/ui/HomeHeader";
 import SubscribeEmail from "@/components/ui/SubscribeEmail";
+import PopularDisplayer from "@/components/ui/grid/PopularDisplayer";
 
 function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,7 +65,7 @@ function HomePage() {
         window.innerHeight + document.documentElement.scrollTop ===
         document.documentElement.offsetHeight
       ) {
-        const totalPage = Math.ceil(product.count / 8);
+        const totalPage = Math.ceil((product ? product.count : 10) / 8);
         if (currentPage >= totalPage) {
           return;
         } else {
@@ -105,9 +106,10 @@ function HomePage() {
         {loading && <Loading />}
 
         <HomeHeader text="Popular Categories" />
+        <PopularDisplayer type="category" />
 
-        <HomeHeader text="Featured Brand" />
         <HomeHeader text="Top Shop" />
+        <PopularDisplayer type="shop" />
 
         <HomeHeader text="Products" />
 

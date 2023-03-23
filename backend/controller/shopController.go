@@ -483,3 +483,14 @@ func GetTopShops(c *gin.Context) {
 
 }
 
+
+func GetTop3Shop(c *gin.Context){
+	var shops []model.Shop
+	loader.DB.Model(model.Shop{}).Distinct("name").Limit(3).Find(&shops);
+	
+	c.JSON(http.StatusOK, gin.H{
+		"data" : shops,
+		"count" : 3,
+	})
+}
+
