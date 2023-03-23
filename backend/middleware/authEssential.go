@@ -40,18 +40,37 @@ func RequireAuth(c *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		
-		//find user with token subject
-		var user model.User
-		loader.DB.First(&user, claims["sbj"])
-		
 
-		if user.ID == 0 {
-			c.AbortWithStatus(http.StatusUnauthorized)
+		role := claims["role"].(float64)
+
+		if role == 1 {
+			//find user with token subject
+			var user model.User
+			loader.DB.First(&user, claims["sbj"])
+			
+	
+			if user.ID == 0 {
+				c.AbortWithStatus(http.StatusUnauthorized)
+			}
+			
+	
+			//attach to request
+			c.Set("user", user)
 		}
-
-		//attach to request
-		c.Set("user", user)
+		
+		if role == 2 {
+			var user model.Shop
+			loader.DB.First(&user, claims["sbj"])
+			
+	
+			if user.ID == 0 {
+				c.AbortWithStatus(http.StatusUnauthorized)
+			}
+			
+			//attach to request
+			c.Set("user", user)
+			
+		}
 
 		//continue
 		c.Next()
@@ -87,7 +106,13 @@ func AdminAuth(c *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		
+
+		role := claims["role"].(float64)
+
+		if role != 4 {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+
 		//find user with token subject
 		var user model.User
 		loader.DB.First(&user, claims["sbj"])
@@ -95,7 +120,7 @@ func AdminAuth(c *gin.Context) {
 		if user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-
+		
 		if user.RoleID != 4 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

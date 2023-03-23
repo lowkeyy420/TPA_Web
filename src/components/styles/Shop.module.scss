@@ -1,9 +1,5 @@
 /* My Shop Page*/
 
-.myshop_container {
-  //   padding: 0px 20px;
-}
-
 .shop_banner_container {
   height: 10rem;
   display: flex;
@@ -58,6 +54,13 @@
   align-items: center;
 }
 
+.shop_action_container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 10px;
+}
+
 .search_contaier {
   padding-right: 15px;
 }
@@ -94,6 +97,11 @@
       display: none;
     }
   }
+
+  .shop_banner_bottom {
+    flex-direction: column;
+    height: 9rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -101,5 +109,9 @@
     input {
       display: initial;
     }
+  }
+  .shop_banner_bottom {
+    height: initial;
+    flex-direction: row;
   }
 }

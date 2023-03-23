@@ -1,15 +1,17 @@
 import ActionButton from "@/components/actions/button/ActionButton";
+import ShopInfoButton from "@/components/actions/button/ShopInfoButton";
+import ShopPasswordButton from "@/components/actions/button/ShopPasswordButton";
+import SelectPage from "@/components/actions/SelectPage";
 import Layout from "@/components/layout/Layout";
 import Backdrop from "@/components/ui/Backdrop";
 import Banned from "@/components/ui/Banned";
+import ProductGrid from "@/components/ui/grid/ProductGrid";
 import Loading from "@/components/ui/Loading";
 import ModalAddProduct from "@/components/ui/modal/ModalAddProduct";
 import { useAxios } from "@/hooks/useAxios";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
 import { IProductData } from "@/interfaces/IProduct";
 import AuthContext from "@/store/Authcontext";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
@@ -117,6 +119,7 @@ const MyShop: NextPage<Props> = ({ page }) => {
     if (successAddProduct) {
       alert("Successfully Added Product...");
       closeAddModalHandler();
+      setNewProduct(undefined);
     }
 
     if (errorAddProduct) {
@@ -129,6 +132,7 @@ const MyShop: NextPage<Props> = ({ page }) => {
     if (successUpdateProduct) {
       alert("Successfully Update Product...");
       closeUpdateModalHandler();
+      setNewProduct(undefined);
     }
 
     if (errorUpdateProduct) {
@@ -226,6 +230,7 @@ const MyShop: NextPage<Props> = ({ page }) => {
   function deleteHandler({ ID, ShopID }: IProductData) {
     deleteProductRequest({ id: ID, shopid: ShopID });
   }
+
   return (
     <Layout>
       <main className={style.myshop_container}>
@@ -250,21 +255,21 @@ const MyShop: NextPage<Props> = ({ page }) => {
               </div>
             </div>
           </div>
-          <div className={style.search_contaier}>
-            <div className={style.search}>
-              <input
-                type="text"
-                id="search"
-                name="search"
-                placeholder="Search Store.."
-              />
-              <label htmlFor="search">
-                <FontAwesomeIcon icon={faSearch} className={style.logo} />
-              </label>
-            </div>
+          <div className={style.shop_action_container}>
+            <ShopInfoButton id={authCtx.user["ID"]} />
+            <ShopPasswordButton id={authCtx.user["ID"]} />
           </div>
         </div>
         <div className={style.shop_banner_bottom}>
+          {product && (
+            <SelectPage
+              currentPage={currentPage}
+              setPage={setCurrentPage}
+              reload={request}
+              count={product.count}
+            />
+          )}
+
           <p>
             {"Products : "}
             {product && product.count}
@@ -275,16 +280,6 @@ const MyShop: NextPage<Props> = ({ page }) => {
         {shop && shop["Status"] === "Banned" && <Banned />}
 
         {loading && <Loading />}
-        {shop && (
-          <Image
-            priority
-            className={style.banner_img}
-            src={shop["Image"]}
-            alt={shop["Name"]}
-            height={1920}
-            width={1080}
-          />
-        )}
 
         {(addModalIsOpen || updateModalIsOpen) && (
           <Backdrop
@@ -304,9 +299,8 @@ const MyShop: NextPage<Props> = ({ page }) => {
         )}
         {/* {updateModalIsOpen && <ModalUpdateProduct />} */}
         {error && error}
-        <div>asdas</div>
-        <div>asdas</div>
-        <div>asdas</div>
+
+        {product && <ProductGrid data={product} reload={request} />}
       </main>
     </Layout>
   );

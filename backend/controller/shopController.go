@@ -84,7 +84,6 @@ func GetShop(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("TOKENPOST : " + header)
 	tokenString := header[7:]
 
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -147,7 +146,6 @@ func GetAllShop(c *gin.Context) {
 
 	max := int(math.Ceil(float64(count) / float64(limit)))
 
-	fmt.Println("max ", max, " page ", page)
 
 	if page > max {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -260,16 +258,6 @@ func GetShopById(c *gin.Context) {
 			stats.NumberOfSales = 0
 		}
 	}
-
-	fmt.Println(shop.ID,
-	 shop.Name,
-	 shop.Email,
-	 shop.Description,
-	 shop.Status,
-	 shop.Image,
-	 shop.RoleID,
-	 stats.AverageRating,
-	 stats.NumberOfSales,)
 
 	
 	c.JSON(http.StatusOK, gin.H{

@@ -4,8 +4,6 @@ import {
   faAngleDoubleRight,
   faAngleLeft,
   faAngleRight,
-  faArrowLeft,
-  faTruckArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "../styles/Action.module.scss";

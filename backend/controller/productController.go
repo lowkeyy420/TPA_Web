@@ -23,9 +23,6 @@ func AddProduct(c *gin.Context){
 		Details				string
 	}
 
-	user,_ := c.Get("user")
-
-	fmt.Println(user)
 
 	if c.Bind(&req) != nil{
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -41,6 +38,19 @@ func AddProduct(c *gin.Context){
 	if store.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid Store",
+		})
+		return;
+	}
+
+	user, exists := c.Get("user")
+	if !exists {
+		return;
+	}
+	currentUserID := user.(model.Shop).ID
+
+	if store.ID != currentUserID {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "You are not this shop owner!",
 		})
 		return;
 	}
@@ -112,6 +122,20 @@ func UpdateProduct(c *gin.Context){
 		return;
 	}
 
+
+	user, exists := c.Get("user")
+	if !exists {
+		return;
+	}
+	currentUserID := user.(model.Shop).ID
+
+	if store.ID != currentUserID {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "You are not this shop owner!",
+		})
+		return;
+	}
+
 	//check if category exists
 	var category model.ProductCategory
 	loader.DB.First(&category, "id =?", req.ProductCategoryID)
@@ -132,6 +156,8 @@ func UpdateProduct(c *gin.Context){
 		})
 		return;
 	}
+
+
 
 	product.ProductCategoryID = req.ProductCategoryID
 	product.Name = req.Name
@@ -209,9 +235,27 @@ func GetProductsByShopID (c *gin.Context){
 		return
 	}
 
-	var products []model.Product
-	loader.DB.Joins("JOIN product_categories PC ON PC.id = products.product_category_id").
-	Where("store_id = ?", id).Offset(offset).Order("id").Limit(limit).Find(&products)
+	type ProductWithCategory struct {
+		ID					int
+		ShopID             int
+		ProductCategoryID  int 
+		Name               string
+		Image              string
+		Description        string
+		Price              int
+		Stock              int
+		Details            string
+		ProductCategoryName string
+	}
+
+	var products []ProductWithCategory
+	
+	if err := loader.DB.Table("products").Select("products.*, product_categories.product_category_name as product_category_name").Joins("JOIN product_categories ON products.product_category_id = product_categories.id").Where("products.shop_id = ?", id).Offset(offset).Order("id").Limit(limit).Find(&products).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Error occured",
+		})
+		return;
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"data":  products,

@@ -194,6 +194,12 @@
   transition: 0.3s ease;
 }
 
+/*Shop btn*/
+.shop_actionBtn {
+  padding: 10px;
+  background-color: var(--tertiary-color-light);
+}
+
 @media (min-width: 100px) {
   .nav_childsupportBtn {
     p {
