@@ -26,7 +26,6 @@ const MyShop: NextPage<Props> = ({ page }) => {
 
   const [currentPage, setCurrentPage] = useState(page);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
-  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
 
   const [newProduct, setNewProduct] = useState<IProductData>();
   const [uploadStatus, setUploadStatus] = useState("");
@@ -39,10 +38,6 @@ const MyShop: NextPage<Props> = ({ page }) => {
   let url3 =
     process.env.BASE_URL +
     `product/insert-new-product?id=${authCtx.user["ID"]}`;
-  let url4 =
-    process.env.BASE_URL + `product/update-product?id=${authCtx.user["ID"]}`;
-
-  let url5 = process.env.BASE_URL + `product/remove-product`;
 
   //get all products
   const [loading, product, error, request] = useAxios(
@@ -73,39 +68,12 @@ const MyShop: NextPage<Props> = ({ page }) => {
     url: url3,
   });
 
-  //update product
-  const [
-    updateProductLoading,
-    successUpdateProduct,
-    errorUpdateProduct,
-    updateProductRequest,
-  ] = useAxiosPost({
-    method: "POST",
-    url: url4,
-  });
-
-  const [
-    deleteProductLoading,
-    successDeleteProduct,
-    errorDeleteProduct,
-    deleteProductRequest,
-  ] = useAxiosPost({
-    method: "POST",
-    url: url5,
-  });
-
   //get all products
   useEffect(() => {
     if (authCtx.user["ID"]) {
       request();
     }
-  }, [
-    authCtx.user["ID"],
-    currentPage,
-    successAddProduct,
-    successUpdateProduct,
-    successDeleteProduct,
-  ]);
+  }, [authCtx.user["ID"], currentPage, successAddProduct]);
 
   //get current shop details
   useEffect(() => {
@@ -127,25 +95,10 @@ const MyShop: NextPage<Props> = ({ page }) => {
     }
   }, [successAddProduct, errorAddProduct]);
 
-  //successfully updated product
-  useEffect(() => {
-    if (successUpdateProduct) {
-      alert("Successfully Update Product...");
-      closeUpdateModalHandler();
-      setNewProduct(undefined);
-    }
-
-    if (errorUpdateProduct) {
-      alert(errorUpdateProduct);
-    }
-  }, [successUpdateProduct, errorUpdateProduct]);
-
   //image upload
   useEffect(() => {
     if (uploadStatus === "Success Add") {
       addProductRequest(newProduct);
-    } else if (uploadStatus === "Success Update") {
-      updateProductRequest(newProduct);
     } else if (uploadStatus === "Error") {
       alert("Failed uploading image...");
     }
@@ -156,14 +109,6 @@ const MyShop: NextPage<Props> = ({ page }) => {
   }
 
   function closeAddModalHandler() {
-    setAddModalIsOpen(false);
-  }
-
-  function showUpdateModalHandler() {
-    setUpdateModalIsOpen(true);
-  }
-
-  function closeUpdateModalHandler() {
     setAddModalIsOpen(false);
   }
 
@@ -193,42 +138,6 @@ const MyShop: NextPage<Props> = ({ page }) => {
       Stock: Stock,
       Details: Details,
     });
-  }
-
-  function updateHandler({
-    ID,
-    ShopID,
-    ProductCategoryID,
-    Name,
-    Image,
-    Description,
-    Price,
-    Stock,
-    Details,
-  }: IProductData) {
-    const link =
-      process.env.STORAGE_URL +
-      "product%2F" +
-      authCtx.user["Email"] +
-      "%2F" +
-      Name +
-      "%2Fimage?alt=media";
-
-    setNewProduct({
-      ID: ID,
-      ShopID: ShopID,
-      ProductCategoryID: ProductCategoryID,
-      Name: Name,
-      Image: Image,
-      Description: Description,
-      Price: Price,
-      Stock: Stock,
-      Details: Details,
-    });
-  }
-
-  function deleteHandler({ ID, ShopID }: IProductData) {
-    deleteProductRequest({ id: ID, shopid: ShopID });
   }
 
   return (
@@ -285,13 +194,7 @@ const MyShop: NextPage<Props> = ({ page }) => {
 
         {loading && <Loading />}
 
-        {(addModalIsOpen || updateModalIsOpen) && (
-          <Backdrop
-            exitHandler={
-              addModalIsOpen ? closeAddModalHandler : closeUpdateModalHandler
-            }
-          />
-        )}
+        {addModalIsOpen && <Backdrop exitHandler={closeAddModalHandler} />}
         {addModalIsOpen && (
           <ModalAddProduct
             onCancel={closeAddModalHandler}
@@ -301,10 +204,9 @@ const MyShop: NextPage<Props> = ({ page }) => {
             email={authCtx.user["Email"]}
           />
         )}
-        {/* {updateModalIsOpen && <ModalUpdateProduct />} */}
         {error && error}
 
-        {product && <ProductGrid data={product} reload={request} />}
+        {product && <ProductGrid data={product} reload={request} update />}
       </main>
     </Layout>
   );

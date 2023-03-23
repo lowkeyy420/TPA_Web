@@ -1,63 +1,41 @@
 import { IProductData } from "@/interfaces/IProduct";
-import axios from "axios";
 import Image from "next/image";
+import { useState } from "react";
 import style from "../../styles/UI.module.scss";
+import Backdrop from "../Backdrop";
+import ModalUpdateProduct from "../modal/ModalUpdateProduct";
 
 type MyProps = IProductData | any;
 
 function Product(props: MyProps) {
-  const URL = process.env.BASE_URL + "admin/update-product-status";
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  function unBanHandler(ID: number) {
-    axios
-      .put(
-        URL,
-        {
-          status: "Active",
-        },
-        {
-          params: {
-            id: ID,
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        props.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  function toggleModalHandler() {
+    setModalIsOpen(!modalIsOpen);
   }
 
-  function banHandler(ID: number) {
-    axios
-      .put(
-        URL,
-        {
-          status: "Banned",
-        },
-        {
-          params: {
-            id: ID,
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        props.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  function closeModalHandler() {
+    setModalIsOpen(false);
+  }
+
+  function addCartHandler(ID: number) {
+    console.log(ID);
+  }
+
+  function refreshPage() {
+    props.reload();
   }
 
   return (
     <div className={style.product_outer_container}>
+      {modalIsOpen && <Backdrop exitHandler={closeModalHandler} />}
+      {modalIsOpen && (
+        <ModalUpdateProduct
+          onCancel={closeModalHandler}
+          productID={props.ID}
+          refreshPage={refreshPage}
+        />
+      )}
       <div className={style.product_container}>
         {props.Image && (
           <Image
@@ -69,34 +47,29 @@ function Product(props: MyProps) {
             className={style.image}
           />
         )}
+        <p>{props.ProductCategoryName}</p>
 
-        <p>ID : {props.ID}</p>
-        <p>Name :{props.Name}</p>
-        <p>Details : {props.Details}</p>
-        <p>Description : {props.Description}</p>
-        <p>Price : {props.Price}</p>
-        <p>Stock : {props.Stock}</p>
+        <p>{props.Name}</p>
+        <p>{props.Details}</p>
+        <p className={style.price}>${props.Price}</p>
+        {props.Stock < 1 && (
+          <p style={{ color: "red", fontWeight: "bolder" }}>Out Of Stock</p>
+        )}
+        {props.Stock >= 1 && <p>Stock : {props.Stock}</p>}
+
         <div className={style.product_action_container}>
-          {props.Status === "Active" ? (
-            <button
-              className={style.banBtn}
-              onClick={() => banHandler(props.ID)}
-            >
-              Ban
+          {props.update && (
+            <button className={style.updateBtn} onClick={toggleModalHandler}>
+              Update
             </button>
-          ) : (
-            <button className={style.disabledBtn} disabled></button>
           )}
-
-          {props.Status === "Banned" ? (
+          {props.cart && (
             <button
-              className={style.unbanBtn}
-              onClick={() => unBanHandler(props.ID)}
+              className={style.cartBtn}
+              onClick={() => addCartHandler(props.ID)}
             >
-              UnBan
+              Add To Cart
             </button>
-          ) : (
-            <button className={style.disabledBtn} disabled></button>
           )}
         </div>
       </div>

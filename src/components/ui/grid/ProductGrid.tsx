@@ -5,11 +5,13 @@ import Product from "../item/Product";
 interface Mydata {
   data: IProductData[] | any;
   reload: any;
+  update?: boolean;
+  cart?: boolean;
 }
 
 function ProductGrid(props: Mydata) {
   return (
-    <div className={style.data_grid_container}>
+    <div className={style.product_grid_container}>
       {props.data["data"].map((product: any) => {
         return (
           <Product
@@ -23,6 +25,8 @@ function ProductGrid(props: Mydata) {
             Stock={product.Stock}
             Price={product.Price}
             reload={props.reload}
+            update={props.update}
+            cart={props.cart}
           />
         );
       })}

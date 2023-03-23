@@ -85,7 +85,8 @@
 
 /* User Grid*/
 
-.data_grid_container {
+.data_grid_container,
+.product_grid_container {
   height: auto;
   padding: 20px;
   display: grid;
@@ -94,7 +95,7 @@
   justify-content: center;
 }
 
-/* User Item / Shop Item */
+/* User Item / Shop Item / Product Item */
 .user_container {
   padding: 20px;
   background-color: var(--category-color);
@@ -124,6 +125,55 @@
   justify-content: space-evenly;
   gap: 8px;
   border-radius: 10px;
+}
+
+.product_outer_container {
+  padding: 20px 15px 40px;
+  width: 80%;
+  background-color: var(--navbar-background-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+  .product_container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+
+    .image {
+      width: 100%;
+      align-self: center;
+    }
+
+    .price {
+      font-size: 29px;
+      font-weight: bold;
+    }
+
+    button {
+      height: 33px;
+      width: 120px;
+      border: 1px solid black;
+      border-radius: 30px;
+      background-color: white;
+      color: var(--text-color);
+      font-weight: bold;
+    }
+
+    button:hover {
+      cursor: pointer;
+      background-color: var(--hover-color);
+    }
+
+    .product_action_container {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 }
 
 .user_action_container,
@@ -307,7 +357,8 @@
 }
 
 @media (min-width: 100px) {
-  .data_grid_container {
+  .data_grid_container,
+  .product_grid_container {
     align-items: center;
     justify-items: center;
     grid-template-columns: repeat(1, 1fr);
@@ -338,7 +389,8 @@
 }
 
 @media (min-width: 640px) {
-  .data_grid_container {
+  .data_grid_container,
+  .product_grid_container {
     grid-template-columns: repeat(2, 2fr);
   }
 
@@ -364,8 +416,13 @@
 }
 
 @media (min-width: 1008px) {
-  .data_grid_container {
+  .data_grid_container,
+  .product_grid_container {
     grid-template-columns: repeat(3, 3fr);
+  }
+
+  .product_outer_container {
+    width: 16rem;
   }
 }
 

@@ -36,7 +36,7 @@ function FileUpload({
       email +
       "%2F" +
       name +
-      "%2Fimage?alt=media";
+      "%2Fimage";
   }
 
   useEffect(() => {
@@ -56,6 +56,8 @@ function FileUpload({
   function uploadHandler() {
     const formData = new FormData();
     formData.append("image", file);
+
+    console.log("UPLOADING...");
 
     axios({
       method: "POST",
