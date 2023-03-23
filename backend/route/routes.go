@@ -28,6 +28,9 @@ func UserRoute(r *gin.Engine) {
 	r.POST("/change-password", controller.ChangeUserPassword)
 	r.POST("/update-phone", controller.UpdatePhoneNumber)
 	r.POST("/enable-2FA", controller.Enable2FA)
+
+
+	r.GET("/get-cart", controller.GetCartPrice)
 }
 
 func ShopRoute(r *gin.Engine){

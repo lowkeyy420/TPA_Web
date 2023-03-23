@@ -1,8 +1,9 @@
+import { useAxiosPost } from "@/hooks/useAxiosPost";
 import { IProductData } from "@/interfaces/IProduct";
 import AuthContext from "@/store/Authcontext";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "../../styles/UI.module.scss";
 import Backdrop from "../Backdrop";
 import ModalProductDetail from "../modal/ModalProductDetail";
@@ -18,6 +19,13 @@ function Product(props: MyProps) {
   const [detailModalIsOpen, setDetailModalIsOpen] = useState(false);
   let timeout: any = null;
 
+  const url2 = process.env.BASE_URL + `product/add-to-cart`;
+
+  const [cartloading, cart, carterror, cartrequest] = useAxiosPost({
+    method: "POST",
+    url: url2,
+  });
+
   function toggleModalHandler() {
     setModalIsOpen(!modalIsOpen);
   }
@@ -27,13 +35,28 @@ function Product(props: MyProps) {
   }
 
   function addCartHandler(ID: number) {
-    if (!authCtx.isLoggedIn) {
+    if (!authCtx.user["ID"]) {
       alert("Please login first");
       return;
     }
 
-    console.log(ID);
+    cartrequest({
+      UserID: authCtx.user["ID"],
+      ProductID: ID,
+      Quantity: 1,
+    });
   }
+
+  useEffect(() => {
+    if (!cartloading) {
+      if (cart) {
+        alert("1 " + cart.message);
+      }
+      if (carterror) {
+        alert(carterror);
+      }
+    }
+  }, [cartloading]);
 
   function redirectPageHandler(ID: number) {
     router.push(`/product/${ID}`);
@@ -46,7 +69,7 @@ function Product(props: MyProps) {
   const handleMouseEnter = () => {
     timeout = setTimeout(() => {
       setDetailModalIsOpen(true);
-    }, 2000); // Show modal after 2 seconds
+    }, 4000); // Show modal after 2 seconds
   };
 
   const handleMouseLeave = () => {

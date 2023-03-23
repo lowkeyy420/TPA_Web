@@ -16,7 +16,7 @@ interface Props {
   id: number;
 }
 
-const ShopInfoPage: NextPage<Props> = ({ id }) => {
+const ShopAboutPage: NextPage<Props> = ({ id }) => {
   const authCtx: any = useContext(AuthContext);
 
   let url = process.env.BASE_URL + `shop/get-shop?id=${id}`;
@@ -79,20 +79,21 @@ const ShopInfoPage: NextPage<Props> = ({ id }) => {
             <h2 style={{ padding: "20px", background: "orange" }}>Products</h2>
           </Link>
         </div>
-        <HomeHeader text="Popular Categories" />
-        <PopularDisplayer type="category" />
-
-        <HomeHeader text="Shop Recommendation" />
-        {shop && <PopularDisplayer id={shop["ID"]} type="recommendedbyshop" />}
+        <div style={{ textAlign: "center", padding: "50px 15px" }}>
+          <h1 className={style.name}>{shop && shop["Name"]}</h1>
+          <h2>Number of Sales : {shop && shop["Sales"]}</h2>
+          <h2>About Us : {shop && shop["Description"]}</h2>
+          <h2>Average Rating : {shop && shop["AverageRating"]}</h2>
+        </div>
       </main>
     </Layout>
   );
 };
 
-ShopInfoPage.getInitialProps = async ({ query }) => {
+ShopAboutPage.getInitialProps = async ({ query }) => {
   const { id = "1" } = query;
   const idNum = parseInt(id as string, 10);
   return { id: idNum };
 };
 
-export default ShopInfoPage;
+export default ShopAboutPage;

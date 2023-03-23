@@ -95,7 +95,7 @@ const ProductPage: NextPage<Props> = ({ id }) => {
                   } else if (e.target.value <= 1) {
                     setQuantity(1);
                   } else {
-                    setQuantity(e.target.value);
+                    setQuantity(parseInt(e.target.value, 10));
                   }
                 }}
                 value={quantity}

@@ -86,9 +86,9 @@ export default function Navbar() {
         <NotifButton id={authCtx.user["ID"]} />
         <CountryButton onClick={toggleLanguageHandler} country={lang} />
         <ThemeToggle />
-        {authCtx.user["RoleID"] > 1 && (
-          <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
-        )}
+
+        <RoleOnlyButton roleid={authCtx.user["RoleID"]} />
+
         {authCtx.user["RoleID"] === 1 && (
           <BalanceVoucherButton balance={authCtx.user["Balance"]} />
         )}

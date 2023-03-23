@@ -187,3 +187,42 @@ func RemoveItemsInCart(c *gin.Context) {
 	})
 
 }
+
+func GetCartPrice(c *gin.Context){
+	id := c.Query("id")
+	var user model.User
+
+	//check user exists
+	result := loader.DB.First(&user, id)
+
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	var carts []model.Cart
+	loader.DB.Model(model.Cart{}).Where("user_id = ?", id).Find(&carts)	
+
+	totalPrice := 0
+
+	length := len(carts)
+
+	if length < 0 {
+		c.JSON(http.StatusOK, totalPrice)
+		return
+	}
+
+	for i := 0; i < length; i++ {
+		var product model.Product
+		loader.DB.Model(model.Product{}).Where("id = ?", carts[i].ProductID).First(&product)
+		totalPrice += product.Price * carts[i].Quantity
+	}
+
+
+	c.JSON(http.StatusOK, totalPrice)
+
+
+}

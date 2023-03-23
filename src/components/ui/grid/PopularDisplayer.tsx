@@ -37,8 +37,6 @@ function PopularDisplayer({ type, id }: MyProps) {
     url: url,
   });
 
-  console.log(data);
-
   return (
     <div className={style.popular_container}>
       {data && type === "category" && (
