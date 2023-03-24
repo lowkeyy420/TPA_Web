@@ -50,7 +50,7 @@ func CreateTransaction(c *gin.Context) {
 
 
 	var address model.Address
-	loader.DB.Model(model.Address{}).Where("id = ?", req.AddressID).First(&address)
+	loader.DB.Model(model.Address{}).Where("id = ? AND user_id = ?", req.AddressID, user.ID).First(&address)
 	
 	if address.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -119,7 +119,7 @@ func CreateTransaction(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message"  : "Successfully Transactioned",
+		"message"  : "Successfully Ordered",
 	})
 }
 
@@ -141,7 +141,7 @@ func GetShopTransactions(c *gin.Context) {
 	}
 
 	type ProductIDsByShopID struct {
-		ProductID string `json:"product_id"`
+		ID string
 	}
 	var productsByShopID []ProductIDsByShopID
 
@@ -150,7 +150,7 @@ func GetShopTransactions(c *gin.Context) {
 	length := len(productsByShopID)
 	var productIDs []string
 	for i := 0; i < length; i++ {
-		productIDs = append(productIDs, productsByShopID[i].ProductID)
+		productIDs = append(productIDs, productsByShopID[i].ID)
 	}
 
 	var transactions []model.TransactionDetail
@@ -169,7 +169,8 @@ func GetShopTransactions(c *gin.Context) {
 		loader.DB.Model(model.TransactionDetail{}).Where("product_id IN ?", productIDs).Where("status = ?", "Cancelled").Find(&temp)
 		transactions = append(transactions, temp...)
 
-	}
+	} 
+	
 
 	type Response struct {
 		Header  model.TransactionHeader 
@@ -194,7 +195,7 @@ func GetShopTransactions(c *gin.Context) {
 func MarkTransactionAsFinished(c *gin.Context) {
 
 	var req struct {
-		TransactionDetailID uint `json:"transaction_detail_id"`
+		TransactionDetailID int
 	}
 	
 	if c.Bind(&req) != nil {

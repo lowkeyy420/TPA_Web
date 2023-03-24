@@ -99,13 +99,13 @@ func TransactionRoute(r *gin.Engine){
 	//wishlist
 	r.POST("/wishlist/add-wishlist", middleware.RequireAuth, controller.CreateNewWishlist)
 	r.POST("/wishlist/update-wishlist", middleware.RequireAuth, controller.UpdateWishList)
-	r.GET("/wishlist/get-wishlist-selection", middleware.RequireAuth, controller.UpdateWishList)
-	r.GET("/wishlist/get-wishlist-products", middleware.RequireAuth, controller.UpdateWishList)
-	r.GET("/wishlist/get-wishlist-all", controller.UpdateWishList)
 
+	r.GET("/wishlist/get-wishlist-products", controller.GetWishlistWithProductsByUserID)
+	r.GET("/wishlist/get-wishlist", controller.GetWishlistByUserID)
+	
+	r.GET("/wishlist/get-wishlist-selection", middleware.RequireAuth, controller.GetWishlistByUserID)
 
 	r.GET("/wishlist/get-public-wishlist", controller.GetAllPublicWishlists)
-
 
 	r.POST("/product/add-to-wishlist", controller.AddProductToWishlist)
 

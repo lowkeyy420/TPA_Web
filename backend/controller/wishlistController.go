@@ -50,6 +50,7 @@ func UpdateWishList(c *gin.Context) {
 		ID			int
 		Name 		string
 		IsPublic    bool
+		Description string
 	}
 
 
@@ -66,7 +67,7 @@ func UpdateWishList(c *gin.Context) {
 		return;
 	}
 	
-	currentUserID := user.(model.Shop).ID
+	currentUserID := user.(model.User).ID
 
 	var wishlist model.Wishlist
 	loader.DB.First(&wishlist, "id =?", req.ID)
@@ -81,6 +82,7 @@ func UpdateWishList(c *gin.Context) {
 	
 	wishlist.Name = req.Name
 	wishlist.IsPublic = req.IsPublic
+	wishlist.Description = req.Description
 
 	if err := loader.DB.Save(&wishlist).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -91,7 +93,7 @@ func UpdateWishList(c *gin.Context) {
 
 	//response
 	c.JSON(http.StatusOK, gin.H{
-		"message" : "Successfully created wishlist",
+		"message" : "Successfully Updated wishlist",
 	})
 }
 
@@ -211,7 +213,7 @@ func GetAllPublicWishlists(c *gin.Context) {
 
     limit, err := strconv.Atoi(c.Query("limit"))
     if err != nil || limit < 1 {
-        limit = 8;
+        limit = 15;
         return
     }
 

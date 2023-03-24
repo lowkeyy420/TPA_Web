@@ -14,6 +14,7 @@ interface MyProps {
   reload: any;
   count: number;
   shop?: boolean;
+  perpage?: number;
 }
 
 function SelectPage(props: MyProps) {
@@ -22,6 +23,10 @@ function SelectPage(props: MyProps) {
 
   if (props.shop) {
     totalPage = Math.ceil(props.count / PRODUCT_PER_PAGE);
+  }
+
+  if (props.perpage) {
+    totalPage = Math.ceil(props.count / props.perpage);
   }
 
   function previousPageHandler(jump?: boolean | any) {

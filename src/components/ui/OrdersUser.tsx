@@ -1,5 +1,4 @@
 import AuthContext from "@/store/Authcontext";
-import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useAxiosPost } from "@/hooks/useAxiosPost";
 import OrderItem from "./item/OrderItem";
@@ -85,7 +84,7 @@ const OrderuserPage = () => {
       {!success ? (
         <h1>No Order Yet</h1>
       ) : (
-        <div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           {success?.map((order: any) => {
             return (
               <OrderItem key={order?.Header.ID} data={order} reload={request} />
