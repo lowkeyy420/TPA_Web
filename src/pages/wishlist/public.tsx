@@ -16,7 +16,7 @@ interface Props {
   limit: number;
 }
 
-const MyWishlistPage: NextPage<Props> = ({ page, limit }) => {
+const PublicWishListPage: NextPage<Props> = ({ page, limit }) => {
   const authCtx: any = useContext(AuthContext);
 
   const [currentPage, setCurrentPage] = useState(page);
@@ -26,38 +26,16 @@ const MyWishlistPage: NextPage<Props> = ({ page, limit }) => {
     process.env.BASE_URL +
     `wishlist/get-public-wishlist?page=${currentPage}&limit=${perpage}`;
 
-  let url2 = process.env.BASE_URL + `wishlist/add-wishlist`;
-
   const [loading, success, error, request] = useAxios({
     method: "GET",
     url: url,
   });
-
-  const [followloading, followsuccess, followerror, followrequest] =
-    useAxiosPost({
-      method: "POST",
-      url: url2,
-    });
 
   useEffect(() => {
     if (authCtx.user["ID"]) {
       request();
     }
   }, [authCtx.user["ID"]]);
-
-  useEffect(() => {
-    if (!followloading) {
-      if (followsuccess) {
-        alert(followsuccess.message);
-        request();
-      }
-      if (followerror) {
-        alert(followerror);
-      }
-    }
-  }, [followloading]);
-
-  function followHandler() {}
 
   return (
     <Layout>
@@ -83,7 +61,6 @@ const MyWishlistPage: NextPage<Props> = ({ page, limit }) => {
             </select>
           </div>
         </div>
-        {perpage}
         <ActionButton text="Price" />
         <ActionButton text="Date" />
         <ActionButton text="Rating" />
@@ -105,13 +82,13 @@ const MyWishlistPage: NextPage<Props> = ({ page, limit }) => {
       )}
 
       {success && success.data && (
-        <WishListGrid data={success} reload={request} />
+        <WishListGrid data={success} reload={request} follow />
       )}
     </Layout>
   );
 };
 
-MyWishlistPage.getInitialProps = async ({
+PublicWishListPage.getInitialProps = async ({
   query,
 }: NextPageContext): Promise<Props> => {
   const { page = "1", limit = "15" } = query;
@@ -120,4 +97,4 @@ MyWishlistPage.getInitialProps = async ({
   return { page: pageNumber, limit: limitNumber };
 };
 
-export default MyWishlistPage;
+export default PublicWishListPage;

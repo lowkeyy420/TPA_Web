@@ -140,7 +140,7 @@ const ShopProductPage: NextPage<Props> = ({ id, page }) => {
             {!product && "0"}
           </p>
 
-          <Link href="myreview">Shop Review</Link>
+          <Link href={`/shop/review/${id}`}>Shop Review</Link>
           <ActionButton text="Price" onClick={filerByPrice} />
         </div>
 

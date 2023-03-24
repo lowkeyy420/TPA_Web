@@ -17,3 +17,9 @@ type WishlistInfo struct {
 	ProductID	int
 	Quantity    int
 }
+
+type Follow struct {
+	gorm.Model
+	UserID     int
+	WishlistID int
+}

@@ -6,6 +6,8 @@ import WishlistCard from "../item/WishListCard";
 interface Mydata {
   data: any;
   reload: any;
+  follow?: boolean;
+  removefollow?: boolean;
 }
 
 const WishListGrid = (props: Mydata) => {
@@ -20,6 +22,8 @@ const WishListGrid = (props: Mydata) => {
             Description={item.Description}
             IsPublic={item.IsPublic}
             reload={props.reload}
+            follow={props.follow}
+            removefollow={props.removefollow}
           />
         );
       })}

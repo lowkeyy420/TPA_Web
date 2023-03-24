@@ -4,7 +4,12 @@ import React from "react";
 function BuildPCPage() {
   return (
     <Layout>
-      <div>BuildPCPage</div>
+      <main>
+        <div style={{ justifyContent: "center" }}>
+          <h2>Insert Budget</h2>
+          <input type="number" />
+        </div>
+      </main>
     </Layout>
   );
 }

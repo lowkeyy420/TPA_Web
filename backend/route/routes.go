@@ -106,8 +106,16 @@ func TransactionRoute(r *gin.Engine){
 	r.GET("/wishlist/get-wishlist-selection", middleware.RequireAuth, controller.GetWishlistByUserID)
 
 	r.GET("/wishlist/get-public-wishlist", controller.GetAllPublicWishlists)
-
+	
 	r.POST("/product/add-to-wishlist", controller.AddProductToWishlist)
+	
+	
+	r.GET("/wishlist/get-followed-wishlist", controller.GetFollowedWishlists)
+	r.POST("/wishlist/follow", controller.FollowWishlist)
+	r.POST("/wishlist/unfollow", controller.Unfollowishlist)
+	
+
+
 
 	//transaction
 	r.POST("/checkout", middleware.RequireAuth, controller.CreateTransaction)
@@ -153,7 +161,7 @@ func AdminRoute(r *gin.Engine){
 }
 
 func ChatRoute(r *gin.Engine){
-	r.GET("/message", middleware.RequireAuth ,controller.SendMessage)
+	r.GET("/ws/sendMessage" ,controller.SendMessage)
 }
 
 
@@ -162,8 +170,8 @@ func ChatRoute(r *gin.Engine){
 func UseAllRoutes(r *gin.Engine){
 	UserRoute(r)
 	ShopRoute(r)
-	ProductRoute(r)
 	PromotionRoute(r)
+	ProductRoute(r)
 	VoucherRoute(r)
 	TransactionRoute(r)
 	AddressRoute(r)

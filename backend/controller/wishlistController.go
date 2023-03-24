@@ -241,3 +241,108 @@ func GetAllPublicWishlists(c *gin.Context) {
 	})
 
 }
+
+
+
+func FollowWishlist(c *gin.Context) {
+
+	var req struct{
+		UserID     int
+		WishlistID int
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var search model.Follow
+	loader.DB.Model(model.Follow{}).Where("user_id = ?", req.UserID).Where("wishlist_id = ?", req.WishlistID).First(&search)
+
+	if search.ID == 0 {
+
+		follow := model.Follow{WishlistID: req.WishlistID ,UserID: req.UserID }
+		loader.DB.Model(model.Follow{}).Create(&follow)
+		
+		loader.DB.Create(&follow)
+
+		c.JSON(http.StatusOK, gin.H{
+			"message" : "Successfully Followd",
+		})
+
+
+	} else {
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "You already follow this",
+		})
+		return;
+
+	}
+
+}
+
+func GetFollowedWishlists(c *gin.Context) {
+
+	find := c.Query("id")
+	var user model.User
+
+	//check user exists
+	result := loader.DB.First(&user, find)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	var follows []model.Follow
+	loader.DB.Model(model.Follow{}).Where("user_id = ?", user.ID).Find(&follows)
+
+	// Get Wislists
+	var wishlists []model.Wishlist
+
+	length := len(follows)
+	
+	for i := 0; i < length; i++ {
+
+		var wishlist model.Wishlist
+		loader.DB.Model(model.Wishlist{}).Where("id = ?", follows[i].WishlistID).First(&wishlist)
+
+		wishlists = append(wishlists, wishlist)
+
+	}
+
+	c.JSON(http.StatusOK, wishlists)
+
+
+}
+
+func Unfollowishlist(c *gin.Context) {
+
+
+	var req struct{
+		UserID     int
+		WishlistID int
+	}
+
+	if c.Bind(&req) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return;
+	}
+
+	var toDelete model.Follow
+	loader.DB.Model(model.Follow{}).Where("user_id = ?", req.UserID).Where("wishlist_id = ?", req.WishlistID).Find(&toDelete)
+	loader.DB.Model(model.Follow{}).Delete(&toDelete)
+
+
+	c.JSON(http.StatusOK, gin.H{
+		"message" : "Removed from following",
+	})
+
+}

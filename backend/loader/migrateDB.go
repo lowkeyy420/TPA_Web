@@ -27,4 +27,6 @@ func SyncDatabase() {
 	DB.AutoMigrate(&model.PaymentMethod{})
 	DB.AutoMigrate(&model.DeliveryType{})
 
+	DB.AutoMigrate(&model.Follow{})
+
 }

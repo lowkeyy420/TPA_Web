@@ -116,9 +116,10 @@ function MyWishlistPage() {
             })}
         </div>
         <div className={style.right}>
-          <h2 style={{ paddingBottom: "10px" }}>Followed Wishlist</h2>
+          <h2 style={{ paddingBottom: "10px" }}>My Wishlist</h2>
           <Link href="/wishlist/public">Public Wishlist</Link>
-          <Link href="/user/wishlist">My Wishlist</Link>
+          <Link href="/wishlist/following">Followed Wishlist</Link>
+          <Link href="/wishlist/mywishlistdetail">My Wishlist Details</Link>
         </div>
       </main>
     </Layout>
